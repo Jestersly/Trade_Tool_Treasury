@@ -48,7 +48,13 @@ This Code visualizes every Trade and Liquidation that was made or triggered thro
 - A red number for transactions means a Short-Trade (or Sell) was made
 - A red number for liquidations means somebody has closed his/her portfolio with profits (Portfolio Take-Profit got triggered or manual close with profits)
 
-
+- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
+- Thi Code only provides the following symbols:
+  'BTC': '🟡BTC     ', 'ETH': '💠ETH     ', 'SOL': '👾SOL     ', 'BNB': '🔶BNB     ', 'DOGE': '🐶DOGE    ',
+  'USDC': '💵USDC    ', 'XRP': '⚫XRP     ', 'ADA': '🔵ADA     ', 'MATIC': '🟣MATIC   ',
+  'TON': '🎮TON     ', 'LINK': '🔗LINK    ', 'TRX': '⚙️ TRX     ', 'NEAR': '🔍NEAR    ', 'XLM': '🌟XLM     ',
+  'RNDR': '🎨RNDR    ', 'DOT': '⚪DOT     ', 'UNI': '🦄UNI     ', 'ATOM': '⚛️ ATOM    ', 'XMR': '👽XMR     ',
+  'LDO': '🧪LDO     ', 'GMX': '🌀GMX     
 
 
 **❓But what are Liquidations and Transactions❓**
