@@ -22,7 +22,7 @@ symbols = [
 websocket_url_base_binance = 'wss://fstream.binance.com/ws/'
 websocket_url_base_coinbase = 'wss://ws-feed.exchange.coinbase.com'
 websocket_url_liq = 'wss://fstream.binance.com/ws/!forceOrder@arr'
-xlsx_filename = '/home/nilas/Schreibtisch/Programming/_Algo_Trade_Edge/Backtesting/⭐Big_Trade_and_Liq_History.xlsx'
+xlsx_filename = '/home/user/File.xlsx'            #Specify a File, where you can save all made Trades bigger than 5,000,000$
 print("📡 Konfiguration geladen")
 
 # Initialize Maps and Files
@@ -109,18 +109,6 @@ async def process_trade(symbol, price, quantity, trade_time, is_buyer_maker):
     write_to_excel(trade_time, symbol, trade_type, price, quantity, usd_size)
     update_trade_count(SYMBL, get_stars(usd_size), trade_type)
 
-def add_color_border(text, usd_size):
-    color = 'green' if usd_size > 0 else 'red'
-    lines = text.split('\n')
-    width = max(len(line) for line in lines)
-    top_border = colored('+' + '-' * (68) + '+', color, attrs=['bold'])
-    bottom_border = colored('+' + '-' * (68) + '+', color, attrs=['bold'])
-    bordered_text = top_border + '\n'
-    for line in lines:
-        bordered_text += colored('|', color, attrs=['bold']) + ' ' + line + ' ' * (width - len(line)) + colored('|', color, attrs=['bold']) + '\n'
-    bordered_text += bottom_border
-    return bordered_text
-
 def get_stars(usd_size):
     if usd_size >= 500000000:
         return '❓💰🃏💰❓'
@@ -150,9 +138,9 @@ def get_stars(usd_size):
         return '    🐠    '
 
 def get_attrs_trades(usd_size):
-    if usd_size >= 5000000:
+    if usd_size >= 20000000:
         return ['bold', 'blink']
-    elif usd_size >= 1000000:
+    elif usd_size >= 10000000:
         return ['bold']
     else:
         return []
@@ -187,11 +175,6 @@ async def process_liquidation(symbol, side, timestamp, usd_size):
     liquidation_type = '📈 ' if side == 'SELL' else '📉 '
     cumulative_sum = update_cumulative_sum_liq(SYMBL, usd_size, liquidation_type)
     output = f"{name_map[SYMBL]}{'|'}{get_liq_stars(usd_size)}{'|'}{format_trade_time(timestamp)}{'|'}{liquidation_type}{format_usd_size(usd_size, liquidation_type)}{'|'} 💧🟰 {cumulative_sum}"
-
-    if usd_size > 5000000:
-        output = add_color_border(output, usd_size)
-    elif usd_size < -5000000:
-        output = add_color_border(output, usd_size)
 
     cprint(output, 'white', attrs=get_attrs_liquidations(usd_size))
     write_to_excel(timestamp, SYMBL, liquidation_type, None, None, usd_size)
@@ -231,9 +214,9 @@ def get_liq_stars(usd_size):
         return '    💦    '
 
 def get_attrs_liquidations(usd_size):
-    if usd_size >= 250000:
+    if usd_size >= 5000000:
         return ['bold', 'blink']
-    elif usd_size >= 100000:
+    elif usd_size >= 1000000:
         return ['bold']
     else:
         return []
