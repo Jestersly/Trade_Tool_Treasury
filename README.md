@@ -51,7 +51,7 @@ This Code visualizes every Trade and Liquidation that was made or triggered thro
 
 
 
-**What are Liquidations and Transactions?**
+###**❓What are Liquidations and Transactions❓**
 
 
 ### Definitions
