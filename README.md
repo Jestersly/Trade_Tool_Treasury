@@ -53,7 +53,7 @@ This Code visualizes every trade and liquidation that was made or triggered thro
 
 
 - A green number for transactions means a Long-Trade (or Buy) was made
-- A green number for liquidations means somebody got liquidated (Portfolio Stop-Loss got triggered)
+- A green number for liquidations means somebody got liquidated (Portfolio Stop-Loss(Margin) got triggered)
 - A red number for transactions means a Short-Trade (or Sell) was made
 - A red number for liquidations means somebody has closed his/her portfolio with profits (Portfolio Take-Profit got triggered or manual close with profits)
 - On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program  
