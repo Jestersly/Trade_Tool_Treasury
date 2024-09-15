@@ -1,5 +1,5 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
-This Code visualizes every Trade and Liquidation that was made or triggered through Binance and Coinbase, over a   given Treshhold. There are 3 different codes for 3 different scales of trades and Liquidations. 
+This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a   given treshhold. There are 3 different codes for 3 different scales of trades and liquidations. 
  
   **Trade Magnitudes**                                         
        
