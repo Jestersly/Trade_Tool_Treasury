@@ -151,13 +151,13 @@ This Code creates a cumulative sum over all trades that are made with the given 
 
  **🃏Funding Rates🃏**
  
-🟨| Funding Rate is between -5% to 5%
-🟩| Funding Rate is between 5% to 10%
-🟩🟩| Funding Rate is between 10% to 20%
-🟩🟩🟩| Funding Rate is more than 20%
-🟥|  Funding Rate is between -10% to -5%
-🟥🟥| Funding Rate is between -10% to -20%
-🟥🟥🟥| Funding Rate is less than -20% 
+🟨| Funding Rate is between -5% to 5%                                                            
+🟩| Funding Rate is between 5% to 10%                                                                
+🟩🟩| Funding Rate is between 10% to 20%                                                                                    
+🟩🟩🟩| Funding Rate is more than 20%                                                    
+🟥|  Funding Rate is between -10% to -5%                                                  
+🟥🟥| Funding Rate is between -10% to -20%                                                  
+🟥🟥🟥| Funding Rate is less than -20%                                                   
 
 
 **Funding Rates** are a mechanism primarily used in crypto derivatives markets, especially in perpetual futures contracts. They play a crucial role in maintaining the price alignment between the perpetual futures market and the underlying spot market.
