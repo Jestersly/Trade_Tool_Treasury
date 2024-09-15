@@ -1,5 +1,14 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
-This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a   given treshhold. There are 3 different codes for 3 different scales of trades and liquidations.
+
+These Codes only provides the following symbols:                                      
+  🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX   
+-----------------------------------------------------------------------
+
+**🃏Liq's & Trades🃏**
+
+
+This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a  given treshhold. There are 3 different codes for 3 different scales of trades and liquidations.
+
  
   **Trade Magnitudes**                                         
        
@@ -47,51 +56,8 @@ This Code visualizes every trade and liquidation that was made or triggered thro
 - A green number for liquidations means somebody got liquidated (Portfolio Stop-Loss got triggered)
 - A red number for transactions means a Short-Trade (or Sell) was made
 - A red number for liquidations means somebody has closed his/her portfolio with profits (Portfolio Take-Profit got triggered or manual close with profits)
+- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program  
 
-- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
-- Thi Code only provides the following symbols:
-  🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX     
-
-
------------------------------------------------------------------------------------------------------------------------------------
-**The Daily Trade Summary**
-
-This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program, and visualizes their time dependent behavoir. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple hours
-
-9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
-8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
-7️⃣ 📈📈📈📈📈📈📈       |The Cumulative Sum is >= to 1/1,000 of the market cap                                                                      
-6️⃣ 📈📈📈📈📈📈         |The Cumulative Sum is >= to 1/10,000 of the market cap                                                                       
-5️⃣ 📈📈📈📈📈           |The Cumulative Sum is >= to 1/100,000 of the market cap                                                                      
-4️⃣ 📈📈📈📈             |The Cumulative Sum is >= to 1/1,000,000 of the market cap                                                                
-3️⃣ 📈📈📈               |The Cumulative Sum is >= to 1/10,000,000 of the market cap                                                                  
-2️⃣ 📈📈                 |The Cumulative Sum is >= to 1/100,000,000 of the market cap                                                                             
-1️⃣ 📈                   |The Cumulative Sum is >= to 1/1,000,000,000 of the market cap                                                                  
-
-9️⃣ 📉📉📉📉📉📉📉📉📉  |The Cumulative Sum is <= to -1/10 of the market cap                                                                
-8️⃣ 📉📉📉📉📉📉📉📉    |The Cumulative Sum is <= to -1/100 of the market cap                                                                   
-7️⃣ 📉📉📉📉📉📉📉      |The Cumulative Sum is <= to -1/1,000 of the market cap                                                                  
-6️⃣ 📉📉📉📉📉📉        |The Cumulative Sum is <= to -1/10,000 of the market cap                                                                         
-5️⃣ 📉📉📉📉📉          |The Cumulative Sum is <= to -1/100,000 of the market cap                                                                               
-4️⃣ 📉📉📉📉            |The Cumulative Sum is <= to -1/1,000,000 of the market cap                                                                     
-3️⃣ 📉📉📉              |The Cumulative Sum is <= to -1/10,000,000 of the market cap                                                                        
-2️⃣ 📉📉                |The Cumulative Sum is <= to -1/100,000,000 of the market cap                                                                              
-1️⃣ 📉                  |The Cumulative Sum is <= to -1/1,000,000,000 of the market cap    
-
-🟨                     |The Cumulative Sum changed between -5% and 5%                                                                
-🟩                     |The Cumulative Sum changed between 5% and 10%                                                                         
-🟩🟩                   |The Cumulative Sum changed between 10% and 20%                                                                                 
-🟩🟩🟩                 |The Cumulative Sum changed between 20% and 40%                                                                                    
-🟩🟩🟩🟩               |The Cumulative Sum changed between 40% and 80%                                                                                 
-🟩🟩🟩🟩🟩             |The Cumulative Sum changed more than 80%                                                                               
-🟥                     |The Cumulative Sum changed between -5% and -10%                                                                                
-🟥🟥                   |The Cumulative Sum changed between -10% and -20%                                                                                      
-🟥🟥🟥                 |The Cumulative Sum changed between -20% and -40%                                                                                                                                                       
-🟥🟥🟥🟥               |The Cumulative Sum changed between -40% and -80%                                                                                 
-🟥🟥🟥🟥🟥             |The Cumulative Sum changed more than -80%                                                                        
-
-------------------------------------------------------------------------------------------------------------------------------------------
-**❓But what are Liquidations and Transactions❓**
 
 
 ### Definitions
@@ -144,8 +110,92 @@ This Code creates a cumulative sum over all trades that are made with the given 
 If your portfolio was liquidated, it means that one or more of your positions were forcibly closed due to unfavorable market movements and the use of leverage. The liquidation occurs because the margin amount you posted was no longer sufficient to cover the losses. As a result, you lose the entire margin amount you posted for the leveraged position, and the position was closed to prevent further debt.
 
 
+-----------------------------------------------------------------------------------------------------------------------------------
+**🃏The Daily Trade Summary🃏**
+
+This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program, and visualizes their time dependent behavoir. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple hours. 
+
+9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
+8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
+7️⃣ 📈📈📈📈📈📈📈       |The Cumulative Sum is >= to 1/1,000 of the market cap                                                                      
+6️⃣ 📈📈📈📈📈📈         |The Cumulative Sum is >= to 1/10,000 of the market cap                                                                       
+5️⃣ 📈📈📈📈📈           |The Cumulative Sum is >= to 1/100,000 of the market cap                                                                      
+4️⃣ 📈📈📈📈             |The Cumulative Sum is >= to 1/1,000,000 of the market cap                                                                
+3️⃣ 📈📈📈               |The Cumulative Sum is >= to 1/10,000,000 of the market cap                                                                  
+2️⃣ 📈📈                 |The Cumulative Sum is >= to 1/100,000,000 of the market cap                                                                             
+1️⃣ 📈                   |The Cumulative Sum is >= to 1/1,000,000,000 of the market cap                                                                  
+
+9️⃣ 📉📉📉📉📉📉📉📉📉  |The Cumulative Sum is <= to -1/10 of the market cap                                                                
+8️⃣ 📉📉📉📉📉📉📉📉    |The Cumulative Sum is <= to -1/100 of the market cap                                                                   
+7️⃣ 📉📉📉📉📉📉📉      |The Cumulative Sum is <= to -1/1,000 of the market cap                                                                  
+6️⃣ 📉📉📉📉📉📉        |The Cumulative Sum is <= to -1/10,000 of the market cap                                                                         
+5️⃣ 📉📉📉📉📉          |The Cumulative Sum is <= to -1/100,000 of the market cap                                                                               
+4️⃣ 📉📉📉📉            |The Cumulative Sum is <= to -1/1,000,000 of the market cap                                                                     
+3️⃣ 📉📉📉              |The Cumulative Sum is <= to -1/10,000,000 of the market cap                                                                        
+2️⃣ 📉📉                |The Cumulative Sum is <= to -1/100,000,000 of the market cap                                                                              
+1️⃣ 📉                  |The Cumulative Sum is <= to -1/1,000,000,000 of the market cap    
+
+🟨                     |The Cumulative Sum changed between -5% and 5%                                                                
+🟩                     |The Cumulative Sum changed between 5% and 10%                                                                         
+🟩🟩                   |The Cumulative Sum changed between 10% and 20%                                                                                 
+🟩🟩🟩                 |The Cumulative Sum changed between 20% and 40%                                                                                    
+🟩🟩🟩🟩               |The Cumulative Sum changed between 40% and 80%                                                                                 
+🟩🟩🟩🟩🟩             |The Cumulative Sum changed more than 80%                                                                               
+🟥                     |The Cumulative Sum changed between -5% and -10%                                                                                
+🟥🟥                   |The Cumulative Sum changed between -10% and -20%                                                                                      
+🟥🟥🟥                 |The Cumulative Sum changed between -20% and -40%                                                                                                                                                       
+🟥🟥🟥🟥               |The Cumulative Sum changed between -40% and -80%                                                                                 
+🟥🟥🟥🟥🟥             |The Cumulative Sum changed more than -80%                                                                        
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+ **🃏Funding Rates🃏**
+ 
+🟨| Funding Rate is between -5% to 5%
+🟩| Funding Rate is between 5% to 10%
+🟩🟩| Funding Rate is between 10% to 20%
+🟩🟩🟩| Funding Rate is more than 20%
+🟥|  Funding Rate is between -10% to -5%
+🟥🟥| Funding Rate is between -10% to -20%
+🟥🟥🟥| Funding Rate is less than -20% 
+
+
+**Funding Rates** are a mechanism primarily used in crypto derivatives markets, especially in perpetual futures contracts. They play a crucial role in maintaining the price alignment between the perpetual futures market and the underlying spot market.
+
+### **How Funding Rates Work**
+
+1. **Definition**: Funding rates are periodic payments between long (buyers) and short (sellers) positions in perpetual futures markets. These payments typically occur every 8 hours, but the frequency can vary depending on the exchange.
+
+2. **Mechanism**:
+   - When the funding rate is positive, long positions (buyers) pay short positions (sellers).
+   - When the funding rate is negative, short positions (sellers) pay long positions (buyers).
+
+3. **Purpose**: The primary purpose of funding rates is to keep the price of perpetual futures closely aligned with the price of the underlying asset. This is achieved by adjusting the demand for long or short positions:
+   - If the perpetual price is higher than the spot price, positive funding rates discourage long positions because they incur additional costs.
+   - If the perpetual price is lower than the spot price, negative funding rates discourage short positions because they incur additional costs.
+
+### **Interpretation of Funding Rates**
+
+1. **Positive Funding Rates**:
+   - Indicates that most traders hold long positions and the market is generally bullish.
+   - A high positive funding rate may suggest that the market is overheated and a correction could be imminent.
+
+2. **Negative Funding Rates**:
+   - Indicates that most traders hold short positions and the market is generally bearish.
+   - A high negative funding rate may suggest that the market is oversold and a rally could be forthcoming.
+
+3. **Extreme Values**:
+   - Extremely high or low funding rates can signal an impending trend reversal, as such extremes often indicate excessive market positioning.
+
+4. **Strategic Use**:
+   - Traders can use funding rates as an indicator to assess market sentiment and identify potential trend reversal points.
+   - In cases of extremely positive or negative funding rates, a strategy might be to trade in the opposite direction, as the market may be preparing for a correction.
+
+In summary, funding rates are an important tool for maintaining the balance between futures and spot markets and can be used as an indicator of market sentiment and potential future price movements.
+ 
+
 -----------------------------------------------------------------
-**Own Opinion💡**
+**🃏Own Opinion🃏**
 
 
-I think these data streams will give you alternative informations, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier and the cumulative trade summary gives you a good alternative way to interpret the changes that happen over time. 
+I think these data streams will give you alternative informations, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier and the cumulative trade summary gives you a good alternative way to interpret the changes that happen over time. The funding rates are especially important if you trade with contracts but give you also information about the behaviour in the spot market
