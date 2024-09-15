@@ -1,5 +1,5 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
-This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a   given treshhold. There are 3 different codes for 3 different scales of trades and liquidations. 
+This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a   given treshhold. There are 3 different codes for 3 different scales of trades and liquidations.
  
   **Trade Magnitudes**                                         
        
@@ -53,6 +53,44 @@ This Code visualizes every trade and liquidation that was made or triggered thro
   🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX     
 
 
+-----------------------------------------------------------------------------------------------------------------------------------
+**The Daily Trade Summary**
+
+This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program, and visualizes their time dependent behavoir. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple hours
+
+9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
+8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
+7️⃣ 📈📈📈📈📈📈📈       |The Cumulative Sum is >= to 1/1,000 of the market cap                                                                      
+6️⃣ 📈📈📈📈📈📈         |The Cumulative Sum is >= to 1/10,000 of the market cap                                                                       
+5️⃣ 📈📈📈📈📈           |The Cumulative Sum is >= to 1/100,000 of the market cap                                                                      
+4️⃣ 📈📈📈📈             |The Cumulative Sum is >= to 1/1,000,000 of the market cap                                                                
+3️⃣ 📈📈📈               |The Cumulative Sum is >= to 1/10,000,000 of the market cap                                                                  
+2️⃣ 📈📈                 |The Cumulative Sum is >= to 1/100,000,000 of the market cap                                                                             
+1️⃣ 📈                   |The Cumulative Sum is >= to 1/1,000,000,000 of the market cap                                                                  
+
+9️⃣ 📉📉📉📉📉📉📉📉📉  |The Cumulative Sum is <= to -1/10 of the market cap                                                                
+8️⃣ 📉📉📉📉📉📉📉📉    |The Cumulative Sum is <= to -1/100 of the market cap                                                                   
+7️⃣ 📉📉📉📉📉📉📉      |The Cumulative Sum is <= to -1/1,000 of the market cap                                                                  
+6️⃣ 📉📉📉📉📉📉        |The Cumulative Sum is <= to -1/10,000 of the market cap                                                                         
+5️⃣ 📉📉📉📉📉          |The Cumulative Sum is <= to -1/100,000 of the market cap                                                                               
+4️⃣ 📉📉📉📉            |The Cumulative Sum is <= to -1/1,000,000 of the market cap                                                                     
+3️⃣ 📉📉📉              |The Cumulative Sum is <= to -1/10,000,000 of the market cap                                                                        
+2️⃣ 📉📉                |The Cumulative Sum is <= to -1/100,000,000 of the market cap                                                                              
+1️⃣ 📉                  |The Cumulative Sum is <= to -1/1,000,000,000 of the market cap    
+
+🟨                     |The Cumulative Sum changed between -5% and 5%                                                                
+🟩                     |The Cumulative Sum changed between 5% and 10%                                                                         
+🟩🟩                   |The Cumulative Sum changed between 10% and 20%                                                                                 
+🟩🟩🟩                 |The Cumulative Sum changed between 20% and 40%                                                                                    
+🟩🟩🟩🟩               |The Cumulative Sum changed between 40% and 80%                                                                                 
+🟩🟩🟩🟩🟩             |The Cumulative Sum changed more than 80%                                                                               
+🟥                     |The Cumulative Sum changed between -5% and -10%                                                                                
+🟥🟥                   |The Cumulative Sum changed between -10% and -20%                                                                                      
+🟥🟥🟥                 |The Cumulative Sum changed between -20% and -40%                                                                                                                                                       
+🟥🟥🟥🟥               |The Cumulative Sum changed between -40% and -80%                                                                                 
+🟥🟥🟥🟥🟥             |The Cumulative Sum changed more than -80%                                                                        
+
+------------------------------------------------------------------------------------------------------------------------------------------
 **❓But what are Liquidations and Transactions❓**
 
 
@@ -104,3 +142,10 @@ This Code visualizes every trade and liquidation that was made or triggered thro
 ### What Does It Mean if My Portfolio Was Liquidated?
 
 If your portfolio was liquidated, it means that one or more of your positions were forcibly closed due to unfavorable market movements and the use of leverage. The liquidation occurs because the margin amount you posted was no longer sufficient to cover the losses. As a result, you lose the entire margin amount you posted for the leveraged position, and the position was closed to prevent further debt.
+
+
+-----------------------------------------------------------------
+**Own Opinion💡**
+
+
+I think these data streams will give you alternative informations, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier and the cumulative trade summary gives you a good alternative way to interpret the changes that happen over time. 
