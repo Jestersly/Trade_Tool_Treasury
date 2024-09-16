@@ -20,11 +20,12 @@ websocket_url_base_binance = 'wss://fstream.binance.com/ws/'  # Base URL for Bin
 websocket_url_base_coinbase = 'wss://ws-feed.pro.coinbase.com'  # Base URL for Coinbase WebSocket connections
 
 # Defines the mapping of symbol names to emojis and colored texts
+# You maybe need to indent the Symbols "🖥️RNDR, ⚙️TRX, ⚛️ATOM". This depends on your terminal and the fact that some don#t recognize these emojis 
 name_map = {
     'BTC': '🟡BTC  ', 'ETH': '💠ETH  ', 'SOL': '👾SOL  ', 'BNB': '🔶BNB  ',
     'DOGE': '🐶DOGE ', 'USDC': '💵USDC ', 'XRP': '⚫XRP  ', 'ADA': '🔵ADA  ',
     'MATIC': '🟣MATIC', 'TON': '🎮TON  ', 'LINK': '🔗LINK ', 'TRX': '⚙️TRX  ',
-    'NEAR': '🔍NEAR ', 'XLM': '🌟XLM  ', 'RNDR': '🖥️RNDR ', 'DOT': '⚪DOT  ',
+    'NEAR': '🔍NEAR ', 'XLM': '🌟XLM  ', 'RNDR':  ', 'DOT': '⚪DOT  ',
     'UNI': '🦄UNI  ', 'ATOM': '⚛️ATOM ', 'XMR': '👽XMR  ', 'LDO': '🧪LDO  ',
     'GMX': '🌀GMX  '
 }
