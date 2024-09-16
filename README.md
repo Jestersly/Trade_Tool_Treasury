@@ -1,13 +1,16 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
 
-These Codes only provides the following symbols:                                      
-  🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX   
+## These Codes only provides the following symbols:                                      
+ ### 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX   
+
+### Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX and 🎨RNDR" a bit different such that you maybe have to indent them correctly (just add or delete a space btwn the emoji and the name in "name_map")
 -----------------------------------------------------------------------
 
-**🃏Liq's & Trades🃏**
+# **🃏Liq's & Trades🃏**
 
 
-This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a  given treshhold. There are 3 different codes for 3 different scales of trades and liquidations.
+This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a  given treshhold. There are 3 different codes for 3 different magnitudes of trades and liquidations. 
+
 
  
   **Trade Magnitudes**                                         
@@ -111,7 +114,7 @@ If your portfolio was liquidated, it means that one or more of your positions we
 
 
 -----------------------------------------------------------------------------------------------------------------------------------
-**🃏The Daily Trade Summary🃏**
+# **🃏The Daily Trade Summary🃏**
 
 This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program, and visualizes their time dependent behavoir. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple hours. 
 
@@ -149,7 +152,7 @@ This Code creates a cumulative sum over all trades that are made with the given 
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
- **🃏Funding Rates🃏**
+ # **🃏Funding Rates🃏**
  
 🟨| Funding Rate is between -5% to 5%                                                            
 🟩| Funding Rate is between 5% to 10%                                                                
@@ -195,7 +198,7 @@ In summary, funding rates are an important tool for maintaining the balance betw
  
 
 -----------------------------------------------------------------
-**🃏Own Opinion🃏**
+## **🃏Own Opinion🃏**
 
 
 I think these data streams will give you alternative informations, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier and the cumulative trade summary gives you a good alternative way to interpret the changes that happen over time. The funding rates are especially important if you trade with contracts but give you also information about the behaviour in the spot market
