@@ -303,12 +303,12 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
 
             # Print the summary including the total usd_size and the difference
             print(f"--------------------------------------------------------------------\n🎣 A total of {trades_count} Trades above {trade_threshold}$ since {start_time}")
-            print(colored(f"📈: {trades_long_count}  | Total USD Size 📈: {total_usd_size_long:,.2f}$ ({long_percentage:.2f}%)", 'white', 'on_green'))
-            print(colored(f"📉: {trades_short_count} | Total USD Size 📉: {total_usd_size_short:,.2f}$ ({short_percentage:.2f}%)", 'white', 'on_red'))
+            print(colored(f"📈Total Count: {trades_long_count}  | 📈Total Size: {total_usd_size_long:,.2f}$ ({long_percentage:.2f}%)", 'white', 'on_green'))
+            print(colored(f"📉Total Count: {trades_short_count} | 📉Total Size: {total_usd_size_short:,.2f}$ ({short_percentage:.2f}%)", 'white', 'on_red'))
             print(colored(f"Difference: {usd_size_difference:,.2f}$", difference_color, 'on_white', attrs=['bold']))
             print(f"\n🌊 A total of {liquidations_count} Liquidations above {liquidation_threshold}$ since {start_time}")
-            print(colored(f"📈: {liquidations_long_count}  | Total USD Size 📈: {total_usd_size_long_liq:,.2f}$", 'white', 'on_green'))
-            print(colored(f"📉: {liquidations_short_count} | Total USD Size 📉: {total_usd_size_short_liq:,.2f}$", 'white', 'on_red'))
+            print(colored(f"📈Total Count: {liquidations_long_count}  | 📈Total Size: {total_usd_size_long_liq:,.2f}$", 'white', 'on_green'))
+            print(colored(f"📉Total Count: {liquidations_short_count} | 📉Total Size: {total_usd_size_short_liq:,.2f}$", 'white', 'on_red'))
             print(colored(f"Difference: {usd_size_difference_liq:,.2f}$", difference_color, 'on_white', attrs=['bold']))
 
             # Generate filenames that include the threshold values
