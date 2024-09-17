@@ -1,15 +1,13 @@
 import asyncio
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 from websockets import connect, ConnectionClosed
 from termcolor import colored, cprint
 from colorama import init
 import pandas as pd
 import xlsxwriter
-
-
 
 # Initialize Colorama
 init()
@@ -58,7 +56,8 @@ liquidation_threshold = 0
 
 
 def format_trade_time(trade_time):
-    berlin = pytz.timezone("Europe/Berlin")     # Needs to be adjusted based on the timezone
+    """Formats the trade time to a readable format based on Berlin timezone."""
+    berlin = pytz.timezone("Europe/Berlin")
     return datetime.fromtimestamp(trade_time / 1000, berlin).strftime('%H:%M:%S')
 
 def format_usd_size(usd_size):
@@ -76,13 +75,10 @@ def add_cumulative_sum_column(df):
     The cumulative sum is added or subtracted based on 'trade_type' or 'liquidation_type'.
     If 'trade_type' or 'liquidation_type' is '📈 ', the value is added; if '📉 ', it is subtracted.
     """
-    # Initialize the cumulative sum with zero
     cumulative_sum = 0
     cumulative_sums = []
 
-    # Iterate over each row in the DataFrame
     for index, row in df.iterrows():
-        # Determine if 'trade_type' or 'liquidation_type' exists and perform the operation accordingly
         if 'trade_type' in df.columns and row['trade_type'] == '📈 ':
             cumulative_sum += row['usd_size']
         elif 'trade_type' in df.columns and row['trade_type'] == '📉 ':
@@ -92,55 +88,42 @@ def add_cumulative_sum_column(df):
         elif 'liquidation_type' in df.columns and row['liquidation_type'] == '📉 ':
             cumulative_sum -= row['usd_size']
 
-        # Append the updated cumulative sum to the list
         cumulative_sums.append(cumulative_sum)
 
-    # Add the cumulative sums to the DataFrame as a new column
     df['cumulative_sum'] = cumulative_sums
     return df
-
 def export_to_excel(data, columns, output_filename, directory):
     """
     Exports the specified columns of the DataFrame to Excel with a cumulative sum column.
     The output file is saved in the specified directory. If the file does not exist, it is created first.
     """
-    # Ensure the directory exists
     os.makedirs(directory, exist_ok=True)
-
-    # Define the full path for the output file
     full_path = os.path.join(directory, output_filename)
 
-    # Check if the file exists; if not, create it with an empty DataFrame
     if not os.path.isfile(full_path):
         empty_df = pd.DataFrame(columns=columns)
         with pd.ExcelWriter(full_path, engine='xlsxwriter') as writer:
             empty_df.to_excel(writer, index=False, sheet_name='Sheet1')
         print(f"Neue Datei erstellt: {full_path}")
 
-    # Create DataFrame and add cumulative sum column
     df = pd.DataFrame(data, columns=columns)
 
-    # Ensure 'usd_size' column is float for calculations
     if 'usd_size' in df.columns:
         df['usd_size'] = df['usd_size'].astype(float)
 
-    # Add cumulative sum column if data is not empty
     if not df.empty:
         df = add_cumulative_sum_column(df)
 
-    # Export the DataFrame to Excel
     with pd.ExcelWriter(full_path, engine='xlsxwriter') as writer:
         df.to_excel(writer, index=False, sheet_name='Sheet1')
         worksheet = writer.sheets['Sheet1']
         worksheet.set_column('A:F', 18)  # Set column width for better readability
 
-        # Define formatting for positive (green) and negative (red) values
         green_format = writer.book.add_format({'font_color': 'green'})
         red_format = writer.book.add_format({'font_color': 'red'})
         positive_bg_format = writer.book.add_format({'bg_color': '#C6EFCE'})  # Light green background
         negative_bg_format = writer.book.add_format({'bg_color': '#FFC7CE'})  # Light red background
 
-        # Apply conditional formatting to 'usd_size' column based on 'trade_type' or 'liquidation_type'
         worksheet.conditional_format('D2:D{}'.format(len(df) + 1), {
             'type': 'formula',
             'criteria': '=$C2="📈 "',
@@ -152,7 +135,6 @@ def export_to_excel(data, columns, output_filename, directory):
             'format': red_format
         })
 
-        # Apply conditional formatting to 'cumulative_sum' column for background colors
         worksheet.conditional_format('E2:E{}'.format(len(df) + 1), {
             'type': 'cell',
             'criteria': '>',
@@ -251,8 +233,8 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
             avg_usd_size_per_minute_liq = total_usd_size_liq / total_intervals if total_intervals > 0 else 0
 
             # Determine the color of the average usd_size
-            usd_size_color = 'green' if avg_usd_size_per_minute > 0 else 'red'
-            usd_size_color_liq = 'green' if avg_usd_size_per_minute_liq > 0 else 'red'
+            usd_size_color = 'green' if avg_usd_size_per_minute < 0 else 'red'
+            usd_size_color_liq = 'green' if avg_usd_size_per_minute_liq < 0 else 'red'
 
             # Calculate counts for trades
             trades_count = len(trades_data)
@@ -277,15 +259,14 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
             usd_size_difference_liq = total_usd_size_long_liq - total_usd_size_short_liq
 
             # Determine the color based on the difference
-            difference_color = 'green' if usd_size_difference > 0 else 'red'
-            difference_color_liq = 'green' if usd_size_difference_liq > 0 else 'red'
+            difference_color = 'green' if usd_size_difference < 0 else 'red'
+            difference_color_liq = 'green' if usd_size_difference_liq < 0 else 'red'
 
             # Print the summary including the total usd_size and the difference
             print(f"\n--------------------------------------------------------------------")
             print(f"📅 Start Time: {start_time}")
             print(f"🕰️ Current Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             print(f"⏳{calculate_time_difference(start_time, datetime.now().strftime('%H:%M:%S'))} since start⏳")
-            print(f"--------------------------------------------------------------------")
             print(f"🎣 A total of {trades_count} Trades above {trade_threshold}$")
             print(colored(f"📈Total Count: {trades_long_count}  | 📈Total Size: {total_usd_size_long:,.2f}$", 'white', 'on_green'))
             print(colored(f"📉Total Count: {trades_short_count} | 📉Total Size: {total_usd_size_short:,.2f}$", 'white', 'on_red'))
@@ -297,10 +278,9 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
                         usd_size_color = 'green' if trade_type == '📈 ' else 'red'
                         print(f"  {stars}: {trade_type}{data[trade_type]['count']} Trades | Total USD Size: {colored(f'{data[trade_type]['total_usd_size']:,.2f}$', usd_size_color)}")
             print(colored(f"Difference: {usd_size_difference:,.2f}$", difference_color, attrs=['bold']))
-            print(colored(f"📊 Avg. Trades per minute: {avg_trades_per_minute:.2f}", 'black', 'on_white'))
-            print(colored(f"📊 Avg. USD Size per minute: {avg_usd_size_per_minute:.2f}$", usd_size_color, 'on_white', attrs=['bold']))
-            print(f"--------------------------------------------------------------------")
-            print(f"🌊 A total of {liquidations_count} Liquidations above {liquidation_threshold}$")
+            print(colored(f"📊 Avg. Trades per interval: {avg_trades_per_minute:.2f}", 'black', 'on_white'))
+            print(colored(f"📊 Avg. USD Size per interval: {avg_usd_size_per_minute:.2f}$", usd_size_color, 'on_white', attrs=['bold']))
+            print(f"\n🌊 A total of {liquidations_count} Liquidations above {liquidation_threshold}$")
             print(colored(f"📈Total Count: {liquidations_long_count}  | 📈Total Size: {total_usd_size_long_liq:,.2f}$", 'white', 'on_green'))
             print(colored(f"📉Total Count: {liquidations_short_count} | 📉Total Size: {total_usd_size_short_liq:,.2f}$", 'white', 'on_red'))
             print("🔍 Liquidation Sizes:")
@@ -532,7 +512,7 @@ async def process_liquidation(symbol, side, timestamp, usd_size):
         usd_size_str = format_usd_size(usd_size, liquidation_type)
         attrs = get_attrs_liquidations(usd_size)
         stars_padding = get_stars_padding(usd_size, max_price)
-        output = f"{formatted_symbol}{'    |'}{stars}{'|'}{used_trade_time}{'|'}{liquidation_type}{usd_size_str}{stars_padding}{'|'} 💧🟰 {cumulative_sum_str}"
+        output = f"{formatted_symbol}{'|'}{stars}{'|'}{used_trade_time}{'|'}{liquidation_type}{usd_size_str}{stars_padding}{'|'} 💧🟰 {cumulative_sum_str}"
 
         if usd_size > 10000000:
             output = add_color_border(output, 'green')
@@ -621,12 +601,47 @@ async def binance_liquidation(uri):
             await asyncio.sleep(5)
 
 
+def select_symbols():
+    """
+    Allows the user to select which symbols to include in the query.
+    """
+    selected_symbols = []
+    print("\nAvailable symbols:")
+    for key, value in name_map.items():
+        print(f"{key}: {value.strip()}")
+
+    print("\nType the symbol you want to add (e.g., BTC) or type 'ALL' to select all symbols.")
+    print("Type 'DONE' when you are finished selecting symbols.")
+
+    while True:
+        user_input = input("Select symbol: ").strip().upper()
+        if user_input == 'ALL':
+            return symbols  # Return all symbols in their original format
+        elif user_input == 'DONE':
+            break
+        elif user_input in name_map:
+            formatted_symbol = user_input.lower() + "usdt"
+            if formatted_symbol not in selected_symbols:
+                selected_symbols.append(formatted_symbol)
+                print(f"{user_input} added.")
+            else:
+                print(f"{user_input} is already selected.")
+        else:
+            print("Invalid symbol. Please enter a valid symbol from the list above.")
+
+    return selected_symbols if selected_symbols else symbols  # Return default if no symbols selected
 
 
 async def main():
+    """
+    Main function that initializes thresholds, selects symbols, and starts WebSocket streams.
+    """
     global trade_threshold, liquidation_threshold
     print("⚙️ Start main function ⚙️")
-    
+
+    # Symbol selection
+    selected_symbols = select_symbols()
+
     # Prompt user for threshold values
     trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades: "))
     liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations: "))
@@ -634,17 +649,15 @@ async def main():
 
     # Capture the start time in a readable format
     start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
+
     tasks = []
-    for symbol in symbols:
+    for symbol in selected_symbols:
         stream_url = f"{websocket_url_base_binance}{symbol}@aggTrade"
-        # Await the stream tasks correctly
         tasks.append(binance_trade_stream(stream_url, symbol))
-    
+
     tasks.append(coinbase_trade_stream(websocket_url_base_coinbase))
     tasks.append(binance_liquidation(websocket_url_liq))
 
-    # Add periodic export task with the start_time argument included
     tasks.append(periodic_export(interval, trade_threshold, liquidation_threshold, start_time))
 
     print("⚙️ asyncio.gather is running ⚙️")
