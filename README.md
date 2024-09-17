@@ -1,7 +1,6 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
 
 ## Important❗
-
 ### These Codes only provide the following symbols:                                      
 - 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX
 - Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX, and 🎨RNDR" a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
