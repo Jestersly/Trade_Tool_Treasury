@@ -12,7 +12,7 @@
 
 This Code provides an Overview for every trade and liquidation that was made with Binance or Coinbase over a given threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
 
-- At the beginning of the Code you have to set 3 requirements 
+- At the beginning of the Code you have to set 4 requirements 
 
                                                                    
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                                 
@@ -22,7 +22,7 @@ This Code provides an Overview for every trade and liquidation that was made wit
 ❗ You will only see liquidations that are bigger than the specified value❗
                                                                           
 ❓"Please enter the interval for exportation and calculation: "❓                                                                                                            
-❗ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.)❗
+❗ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program❗
 
 
  
