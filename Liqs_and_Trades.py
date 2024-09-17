@@ -166,58 +166,8 @@ def export_to_excel(data, columns, output_filename, directory):
             'format': negative_bg_format
         })
 
-        
+    
 
-async def calculate_average_per_minute(interval):
-    """
-    Calculates the average number of trades and liquidations per minute over the threshold 
-    and the average usd_size value per minute.
-    """
-    total_intervals = 0
-    total_trades_above_threshold = 0
-    total_liquidations_above_threshold = 0
-    total_usd_size = 0
-    total_usd_size_liq = 0  # Initialize this variable to fix the error
-
-    while True:
-        await asyncio.sleep(interval)
-        total_intervals += 1
-
-        # Count trades and liquidations above threshold in the last interval
-        trades_above_threshold = sum(1 for trade in trades_data if trade[3] >= trade_threshold)
-        liquidations_above_threshold = sum(1 for liquidation in liquidations_data if liquidation[3] >= liquidation_threshold)
-
-        # Calculate total usd_size considering trade types
-        usd_size_sum = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in trades_data)
-        usd_size_sum_liq = sum(liquidation[3] if liquidation[2] == '📈 ' else -liquidation[3] for liquidation in liquidations_data)
-
-        # Update cumulative values
-        total_trades_above_threshold += trades_above_threshold
-        total_liquidations_above_threshold += liquidations_above_threshold
-        total_usd_size += usd_size_sum
-        total_usd_size_liq += usd_size_sum_liq  # This line will now work correctly
-
-        # Calculate averages
-        avg_trades_per_minute = total_trades_above_threshold / total_intervals
-        avg_liquidations_per_minute = total_liquidations_above_threshold / total_intervals
-        avg_usd_size_per_minute = total_usd_size / total_intervals
-        avg_usd_size_per_minute_liq = total_usd_size_liq / total_intervals  # Corrected to use the proper cumulative value
-
-        # Determine the color of the average usd_size
-        usd_size_color = 'green' if avg_usd_size_per_minute > 0 else 'red'
-        usd_size_color_liq = 'green' if avg_usd_size_per_minute_liq > 0 else 'red'
-
-        # Display the averages
-        print(f"\n📊 Average Data per Minute (Based on {total_intervals} intervals):")
-        print(f"   Trades Above Threshold: {avg_trades_per_minute:.2f}")
-        print(f"   Liquidations Above Threshold: {avg_liquidations_per_minute:.2f}")
-        print(colored(f"   Average USD Size for Trades:         {avg_usd_size_per_minute:.2f}$", usd_size_color, attrs=['bold']))
-        print(colored(f"   Average USD Size for Liquidations:   {avg_usd_size_per_minute_liq:.2f}$", usd_size_color_liq, attrs=['bold']))
-        print("--------------------------------------------------------------------")
-
-# Assuming start_time is passed as a string in ISO format or similar and needs to be converted
-
-from datetime import datetime, timedelta
 
 def calculate_time_difference(start_time, used_trade_time):
     """
@@ -238,34 +188,71 @@ def calculate_time_difference(start_time, used_trade_time):
     # Return time difference in a readable format
     return time_difference
 
-from datetime import datetime, timedelta
-
-def calculate_time_difference(start_time, used_trade_time):
-    """
-    Calculates the time difference between start_time and used_trade_time.
-    Assumes used_trade_time is just a time (HH:MM:SS) format and appends it to the start date.
-    """
-    # Convert start_time to datetime
-    start_datetime = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-    
-    # Convert used_trade_time to datetime assuming the same date as start_time
-    # Adding the time component from used_trade_time to start_datetime's date
-    used_time = datetime.strptime(used_trade_time, '%H:%M:%S').time()
-    used_datetime = datetime.combine(start_datetime.date(), used_time)
-    
-    # Calculate the time difference
-    time_difference = used_datetime - start_datetime
-    
-    # Return time difference in a readable format
-    return time_difference
 
 async def periodic_export(interval, trade_threshold, liquidation_threshold, start_time):
     """
     Periodically exports the collected trade and liquidation data to Excel files.
     """
+
+
+                # Initialize cumulative values and counts
+    total_intervals = 0
+    total_trades_above_threshold = 0
+    total_liquidations_above_threshold = 0
+    total_usd_size = 0
+    total_usd_size_liq = 0
+
     while True:
         try:
             await asyncio.sleep(interval)
+            total_intervals += 1
+            # Stars counting dictionaries for trades and liquidations
+            stars_count_trades = {}
+            stars_count_liquidations = {}
+
+            # Count trades and liquidations above threshold
+            trades_above_threshold = sum(1 for trade in trades_data if trade[3] >= trade_threshold)
+            liquidations_above_threshold = sum(1 for liquidation in liquidations_data if liquidation[3] >= liquidation_threshold)
+
+            # Calculate total usd_size considering trade types
+            usd_size_sum = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in trades_data)
+            usd_size_sum_liq = sum(liquidation[3] if liquidation[2] == '📈 ' else -liquidation[3] for liquidation in liquidations_data)
+
+            # Update cumulative values
+            total_trades_above_threshold += trades_above_threshold
+            total_liquidations_above_threshold += liquidations_above_threshold
+            total_usd_size += usd_size_sum
+            total_usd_size_liq += usd_size_sum_liq
+
+            # Iterate over trades to count stars occurrences and accumulate usd_size
+            for trade in trades_data:
+                usd_size = trade[3]
+                stars = get_stars(usd_size)
+                trade_type = trade[2]
+                if stars not in stars_count_trades:
+                    stars_count_trades[stars] = {'📈 ': {'count': 0, 'total_usd_size': 0}, '📉 ': {'count': 0, 'total_usd_size': 0}}
+                stars_count_trades[stars][trade_type]['count'] += 1
+                stars_count_trades[stars][trade_type]['total_usd_size'] += usd_size
+
+            # Iterate over liquidations to count stars occurrences and accumulate usd_size
+            for liquidation in liquidations_data:
+                usd_size = liquidation[3]
+                stars = get_liq_stars(usd_size)
+                liquidation_type = liquidation[2]
+                if stars not in stars_count_liquidations:
+                    stars_count_liquidations[stars] = {'📈 ': {'count': 0, 'total_usd_size': 0}, '📉 ': {'count': 0, 'total_usd_size': 0}}
+                stars_count_liquidations[stars][liquidation_type]['count'] += 1
+                stars_count_liquidations[stars][liquidation_type]['total_usd_size'] += usd_size
+
+            # Calculate averages
+            avg_trades_per_minute = total_trades_above_threshold / total_intervals if total_intervals > 0 else 0
+            avg_liquidations_per_minute = total_liquidations_above_threshold / total_intervals if total_intervals > 0 else 0
+            avg_usd_size_per_minute = total_usd_size / total_intervals if total_intervals > 0 else 0
+            avg_usd_size_per_minute_liq = total_usd_size_liq / total_intervals if total_intervals > 0 else 0
+
+            # Determine the color of the average usd_size
+            usd_size_color = 'green' if avg_usd_size_per_minute > 0 else 'red'
+            usd_size_color_liq = 'green' if avg_usd_size_per_minute_liq > 0 else 'red'
 
             # Calculate counts for trades
             trades_count = len(trades_data)
@@ -293,23 +280,40 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
             difference_color = 'green' if usd_size_difference > 0 else 'red'
             difference_color_liq = 'green' if usd_size_difference_liq > 0 else 'red'
 
-            # Calculate the percentage of long and short trades relative to total usd size
-            total_usd_size = total_usd_size_long + total_usd_size_short
-            if total_usd_size > 0:
-                long_percentage = (total_usd_size_long / total_usd_size) * 100
-                short_percentage = (total_usd_size_short / total_usd_size) * 100
-            else:
-                long_percentage = short_percentage = 0
-
             # Print the summary including the total usd_size and the difference
-            print(f"--------------------------------------------------------------------\n🎣 A total of {trades_count} Trades above {trade_threshold}$")
-            print(colored(f"📈Total Count: {trades_long_count}  | 📈Total Size: {total_usd_size_long:,.2f}$ ({long_percentage:.2f}%)", 'white', 'on_green'))
-            print(colored(f"📉Total Count: {trades_short_count} | 📉Total Size: {total_usd_size_short:,.2f}$ ({short_percentage:.2f}%)", 'white', 'on_red'))
-            print(colored(f"Difference: {usd_size_difference:,.2f}$", difference_color, 'on_white', attrs=['bold']))
-            print(f"\n🌊 A total of {liquidations_count} Liquidations above {liquidation_threshold}$")
+            print(f"\n--------------------------------------------------------------------")
+            print(f"📅 Start Time: {start_time}")
+            print(f"🕰️ Current Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"⏳{calculate_time_difference(start_time, datetime.now().strftime('%H:%M:%S'))} since start⏳")
+            print(f"--------------------------------------------------------------------")
+            print(f"🎣 A total of {trades_count} Trades above {trade_threshold}$")
+            print(colored(f"📈Total Count: {trades_long_count}  | 📈Total Size: {total_usd_size_long:,.2f}$", 'white', 'on_green'))
+            print(colored(f"📉Total Count: {trades_short_count} | 📉Total Size: {total_usd_size_short:,.2f}$", 'white', 'on_red'))
+            print("🔍 Trade Sizes:")
+            # Sort and display trades with 📈 first and 📉 second
+            for trade_type in ['📈 ', '📉 ']:
+                for stars, data in stars_count_trades.items():
+                    if data[trade_type]['count'] > 0:
+                        usd_size_color = 'green' if trade_type == '📈 ' else 'red'
+                        print(f"  {stars}: {trade_type}{data[trade_type]['count']} Trades | Total USD Size: {colored(f'{data[trade_type]['total_usd_size']:,.2f}$', usd_size_color)}")
+            print(colored(f"Difference: {usd_size_difference:,.2f}$", difference_color, attrs=['bold']))
+            print(colored(f"📊 Avg. Trades per minute: {avg_trades_per_minute:.2f}", 'black', 'on_white'))
+            print(colored(f"📊 Avg. USD Size per minute: {avg_usd_size_per_minute:.2f}$", usd_size_color, 'on_white', attrs=['bold']))
+            print(f"--------------------------------------------------------------------")
+            print(f"🌊 A total of {liquidations_count} Liquidations above {liquidation_threshold}$")
             print(colored(f"📈Total Count: {liquidations_long_count}  | 📈Total Size: {total_usd_size_long_liq:,.2f}$", 'white', 'on_green'))
             print(colored(f"📉Total Count: {liquidations_short_count} | 📉Total Size: {total_usd_size_short_liq:,.2f}$", 'white', 'on_red'))
-            print(colored(f"Difference: {usd_size_difference_liq:,.2f}$", difference_color, 'on_white', attrs=['bold']))
+            print("🔍 Liquidation Sizes:")
+            # Sort and display liquidations with 📈 first and 📉 second
+            for liquidation_type in ['📈 ', '📉 ']:
+                for stars, data in stars_count_liquidations.items():
+                    if data[liquidation_type]['count'] > 0:
+                        usd_size_color_liq = 'green' if liquidation_type == '📈 ' else 'red'
+                        print(f"  {stars}: {liquidation_type}{data[liquidation_type]['count']} Liquidations | Total USD Size: {colored(f'{data[liquidation_type]['total_usd_size']:,.2f}$', usd_size_color_liq)}")
+            print(colored(f"Difference: {usd_size_difference_liq:,.2f}$", difference_color, attrs=['bold']))
+            print(colored(f"📊 Avg. Liquidations per interval: {avg_liquidations_per_minute:.2f}", 'black', 'on_white'))
+            print(colored(f"📊Avg. USD Size per interval: {avg_usd_size_per_minute_liq:.2f}$", usd_size_color_liq, 'on_white', attrs=['bold']))
+            print(f"\n--------------------------------------------------------------------")
 
             # Generate filenames that include the threshold values
             trades_filename = f"Trades_threshold_{trade_threshold}.xlsx"
@@ -319,16 +323,11 @@ async def periodic_export(interval, trade_threshold, liquidation_threshold, star
             export_to_excel(trades_data, trades_columns, trades_filename, output_directory)
             export_to_excel(liquidations_data, liquidations_columns, liquidations_filename, output_directory)
 
-            # Calculate time difference for the most recent trade and print
-            if trades_data:
-                # Get the most recent trade (assuming trades_data is in chronological order)
-                last_trade = trades_data[-1]
-                symbol, used_trade_time, trade_type, usd_size = last_trade
-                time_difference = calculate_time_difference(start_time, used_trade_time)
-                print(f"\n🕒{time_difference}🕒")
-
         except Exception as e:
             print(f"Error during export: {e}")
+
+
+
 
 
 
@@ -367,7 +366,7 @@ def get_stars(usd_size):
         return '   🐳🐳   '
     elif usd_size >= 50000000:
         return '    🐳    '
-    elif usd_size >= 24800000:
+    elif usd_size >= 25000000:
         return '  🦈🦈🦈  '
     elif usd_size >= 12400000:
         return '   🦈🦈   '
@@ -626,12 +625,12 @@ async def binance_liquidation(uri):
 
 async def main():
     global trade_threshold, liquidation_threshold
-    print("🔧Start main function")
+    print("⚙️ Start main function ⚙️")
     
     # Prompt user for threshold values
-    trade_threshold = float(input("Please enter the threshold value for 'usd_size' on trades: "))
-    liquidation_threshold = float(input("Please enter the threshold value for 'usd_size' on liquidations: "))
-    interval = int(input("Please enter the interval for exportation and calculation: "))
+    trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades: "))
+    liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations: "))
+    interval = int(input("🔧Please enter the interval for exportation and calculation: "))
 
     # Capture the start time in a readable format
     start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -648,13 +647,10 @@ async def main():
     # Add periodic export task with the start_time argument included
     tasks.append(periodic_export(interval, trade_threshold, liquidation_threshold, start_time))
 
-    # Add average calculation task
-    tasks.append(calculate_average_per_minute(interval))
-
-    print("🔧Start asyncio.gather")
+    print("⚙️ asyncio.gather is running ⚙️")
     await asyncio.gather(*tasks)
 
 # Start the main function properly
-print("🔧Start asyncio.run(main())")
+print("⚙️ asyncio.run(main()) is running ⚙️")
 asyncio.run(main())
-print("Program is done")
+print("✅⚙️ Program is done ⚙✅️")
