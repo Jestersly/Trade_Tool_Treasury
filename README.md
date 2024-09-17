@@ -1,34 +1,48 @@
 # Binance-Coinbase-Trade-and-Liquidation-Streams
 
-## These Codes only provides the following symbols:                                      
- ### 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX   
+## Important❗
 
-### Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX and 🎨RNDR" a bit different such that you maybe have to indent them correctly (just add or delete a space btwn the emoji and the name in "name_map")
+### These Codes only provides the following symbols:                                      
+- 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX
+- Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX, and 🎨RNDR" a bit differently such that you may have to indent them correctly (just add or delete space between the emoji and the name in "name_map")
+- I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody
 -----------------------------------------------------------------------
 
-# **🃏Liq's & Trades🃏**
+# **⭐🃏Liq's & Trades🃏⭐** 
 
 
-This Code visualizes every trade and liquidation that was made or triggered through Binance and Coinbase, over a  given treshhold. There are 3 different codes for 3 different magnitudes of trades and liquidations. 
+This Code provides an Overview for every trade and liquidation that was made with Binance or Coinbase over a given threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
+
+- At the beginning of the Code you have to set 3 requirements 
+
+                                                                   
+❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                                 
+❗ You will only see trades that are bigger than the specified value❗
+                                                                          
+❓"Please enter the threshold value for 'usd_size' on liquidations: "❓                                                                                                                        
+❗ You will only see liquidations that are bigger than the specified value❗
+                                                                          
+❓"Please enter the interval for exportation and calculation: "❓                                                                                                            
+❗ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.)❗
 
 
  
   **Trade Magnitudes**                                         
        
-  :         <  25,000$                                                
-🐟:         >= 25,000$                                           
-🐟🐟:       >= 50,000$                                           
-🐟🐟🐟:     >= 100,000$                                          
-🐟🐟🐟🐟:   >= 200,000$                                          
-🐟🐟🐟🐟🐟: >= 400,000$                                          
-🐠:         >= 500,000$                                          
-🐠🐠:       >= 1,000,000$                                        
-🐠🐠🐠:     >= 1,500,000$                                        
-🐠🐠🐠🐠:   >= 2,500,000$                                        
-🐠🐠🐠🐠🐠: >= 5,000,000$                                        
-🦈:         >= 10,000,000$                                       
-🦈🦈:       >= 20,000,000$                                        
-🦈🦈🦈:     >= 30,000,000$                                       
+  :         <  5,000$                                                
+🐟:         >= 5,000$                                           
+🐟🐟:       >= 10,000$                                           
+🐟🐟🐟:     >= 20,000$                                          
+🐟🐟🐟🐟:   >= 40,000$                                          
+🐟🐟🐟🐟🐟: >= 80,000$                                          
+🐠:         >= 160,000$                                          
+🐠🐠:       >= 320,000$                                        
+🐠🐠🐠:     >= 640,000$                                        
+🐠🐠🐠🐠:   >= 1,280,000$                                        
+🐠🐠🐠🐠🐠: >= 2,560,000$                                        
+🦈:         >= 5,120,000$                                       
+🦈🦈:       >= 12,400,000$                                        
+🦈🦈🦈:     >= 25,000,000$                                       
 🐳:         >= 50,000,000$                                                                                    
 🐳🐳:       >= 80,000,000$                                                                 
 🐳🐳🐳:     >= 120,000,000$                                                       
@@ -38,16 +52,16 @@ This Code visualizes every trade and liquidation that was made or triggered thro
 
 **Liquidation Magnitudes**
 
-💧:          <  5,000$                                                      
-💧💧:        >= 5,000$                                                         
-💧💧💧:      >= 10,000$                                                         
-💦:          >= 15,000$                                                        
-💦💦:        >= 25,000$                                                           
-💦💦💦:      >= 50,000$                                                             
-💦💦💦💦:    >= 100,000$                                                                
-💦💦💦💦💦:  >= 250,000$                                                            
-🌊:          >= 500,000$                                                        
-🌊🌊:        >= 1,000,000$                                                          
+💧:          <  2,000$                                                      
+💧💧:        >= 4,000$                                                         
+💧💧💧:      >= 8,000$                                                         
+💦:          >= 16,000$                                                        
+💦💦:        >= 32,000$                                                           
+💦💦💦:      >= 64,000$                                                             
+💦💦💦💦:    >= 128,000$                                                                
+💦💦💦💦💦:  >= 256,000$                                                            
+🌊:          >= 512,000$                                                        
+🌊🌊:        >= 1,240,000$                                                          
 🌊🌊🌊:      >= 2,500,000$                                                       
 🤿:          >= 5,000,000$                                                        
 🌊🤿🌊:      >= 10,000,000$                                                        
@@ -56,9 +70,11 @@ This Code visualizes every trade and liquidation that was made or triggered thro
 
 
 - A green number for transactions means a Long-Trade (or Buy) was made
-- A green number for liquidations means somebody got liquidated (Portfolio Stop-Loss(Margin) got triggered)
-- A red number for transactions means a Short-Trade (or Sell) was made
 - A red number for liquidations means somebody has closed his/her portfolio with profits (Portfolio Take-Profit got triggered or manual close with profits)
+  
+- A red number for transactions means a Short-Trade (or Sell) was made
+- A red number for liquidations means somebody got liquidated (Portfolio Stop-Loss(Margin) got triggered)
+  
 - On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program  
 
 
@@ -114,9 +130,10 @@ If your portfolio was liquidated, it means that one or more of your positions we
 
 
 -----------------------------------------------------------------------------------------------------------------------------------
+
 # **🃏The Daily Trade Summary🃏**
 
-This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program, and visualizes their time dependent behavoir. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple hours. 
+This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program and visualizes their time-dependent behavior. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple of hours. 
 
 9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
 8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
