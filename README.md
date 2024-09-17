@@ -2,10 +2,10 @@
 
 ## Important❗
 
-### These Codes only provides the following symbols:                                      
+### These Codes only provide the following symbols:                                      
 - 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX
-- Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX, and 🎨RNDR" a bit differently such that you may have to indent them correctly (just add or delete space between the emoji and the name in "name_map")
-- I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody
+- Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX, and 🎨RNDR" a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
+- I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody. 
 -----------------------------------------------------------------------
 
 # **⭐🃏Liq's & Trades🃏⭐** 
@@ -70,13 +70,73 @@ This Code provides an Overview for every trade and liquidation that was made wit
 
 
 - A green number for transactions means a Long-Trade (or Buy) was made
-- A red number for liquidations means somebody has closed his/her portfolio with profits (Portfolio Take-Profit got triggered or manual close with profits)
-  
 - A red number for transactions means a Short-Trade (or Sell) was made
-- A red number for liquidations means somebody got liquidated (Portfolio Stop-Loss(Margin) got triggered)
-  
-- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program  
 
+- A green number for liquidations means somebodies Take-Profit got triggered
+- A red number for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
+  
+- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
+
+
+
+### After a specified Interval you will get an Output like this:
+
+📅 Start Time: 2024-09-17 12:09:49                                                                                                                  
+🕰️ Current Time: 2024-09-17 12:10:19                                                                                            
+⏳0:00:30 since start⏳                                                                                                                                      
+
+🎣 A total of 203 Trades above 10000.0$                                                                                                                          
+📈Total Count: 102  | 📈Total Size: 5,104,487.80$                                                                                                                        
+📉Total Count: 101 | 📉Total Size: 3,303,344.57$                                                                                                                      
+🔍 Trade Sizes:                                                                                                                                                      
+      🐠    : 📈 3 Trades | Total USD Size: 669,459.49$                                                                                                                    
+     🐟🐟   : 📈 35 Trades | Total USD Size: 488,669.52$                                                                                                                    
+    🐟🐟🐟  : 📈 32 Trades | Total USD Size: 877,985.05$                                                                                                                                  
+   🐟🐟🐟🐟 : 📈 19 Trades | Total USD Size: 1,005,109.28$                                                                                                                        
+  🐟🐟🐟🐟🐟: 📈 11 Trades | Total USD Size: 1,198,481.59$                                                                                                                                  
+     🐠🐠   : 📈 2 Trades | Total USD Size: 864,782.87$                                                                                                                                                                                       
+      🐠    : 📉 3 Trades | Total USD Size: 764,492.32$                                                                                                                                        
+     🐟🐟   : 📉 47 Trades | Total USD Size: 627,271.66$                                                                                                                                                                  
+    🐟🐟🐟  : 📉 40 Trades | Total USD Size: 1,160,777.67$                                                                                                                                                                
+   🐟🐟🐟🐟 : 📉 9 Trades | Total USD Size: 521,872.89$                                                                                                                                                                      
+  🐟🐟🐟🐟🐟: 📉 2 Trades | Total USD Size: 228,930.03$                                                                                                                                                                            
+Difference: 1,801,143.23$                                                                                                                                                                              
+📊 Avg. Trades per minute: 203.00                                                                                                                                                                      
+📊 Avg. USD Size per minute: 1801143.23$                                                                                                                                                                                          
+
+🌊 A total of 0 Liquidations above 10000.0$                                                                                                                                                                                  
+📈Total Count: 0  | 📈Total Size: 0.00$                                                                                                                                                                                    
+📉Total Count: 0 | 📉Total Size: 0.00$                                                                                                                                                              
+🔍 Liquidation Sizes:                                                                                                                                                      
+Difference: 0.00$                                                                                                                                                                  
+📊 Avg. Liquidations per interval: 0.00                                                                                                                                                                                
+📊Avg. USD Size per interval: 0.00$ per minute                                                                                                                                  
+
+
+### In this Overview you can see different Informations:
+
+**🕰️Time Parameters🕰️**
+- At wich point in time you started the program
+- At which point in time the last Trade or Liquidation was recognized
+- how long the program is running
+
+**🎣Trade Parameters🎣**
+- Total Trades
+- Total amount of Long-Trades and the total USD size of them
+- Total amount of Short-Trades and the total USd size of them
+- In which magnitude the Trades where made
+- difference between Long-Trades and Short-Trades
+- average amount of Trades in a specified interval
+- average USD size of Trades in a specified interval
+
+**🌊Liquidation Parameters🌊**
+- Total Liquidations
+- Total amount of Take-Profit-Liquidations and the total USD size of them
+- Total amount of Stop-Loss-Liquidations and the total USd size of them
+- In which magnitude the Liquidations where made
+- difference between Take-Profit-Liquidations and Stop-Loss-Liquidations
+- average amount of Liquidations in a specified interval
+- average USD size of Liquidations in a specified interval
 
 
 ### Definitions
