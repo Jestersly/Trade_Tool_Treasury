@@ -277,7 +277,7 @@ This Code creates a cumulative sum over all trades made with the given symbol si
 ---------------------------------------------------------------------
 
 
-## Definitions🃏📖
+## Definitions and Education🃏📖
 
 **Liquidation:** In the world of cryptocurrencies, liquidation refers to the process where a position is automatically closed to limit losses to the trader's capital. This occurs when the market price of an asset moves so strongly against the trader's position that the available margin (the collateral the trader has posted) is no longer sufficient to cover the losses. Liquidations are particularly common in leveraged positions, where borrowed funds are used to increase the size of the trade.
 
