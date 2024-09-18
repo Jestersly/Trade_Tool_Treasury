@@ -347,4 +347,4 @@ In summary, funding rates are an important tool for maintaining the balance betw
 ## **🃏Own Opinion🃏**
 
 
-I think these data streams will give you alternative informations, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier and the cumulative trade summary gives you a good alternative way to interpret the changes that happen over time. The funding rates are especially important if you trade with contracts but give you also information about the behaviour in the spot market
+I think these data streams will give you detailed alternative information, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier. You will gain a bird's view over the ocean of cryptocurrencies. Swim with the Stream of the big fishes and not based on chart formations. The funding rates are significant if you trade with contracts but give you also information about the behaviour in the spot market. This information can also be used to build algorithmic trading bots around it (buy if some 40,000,000$ Whale bought or something like this)
