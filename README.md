@@ -1,32 +1,32 @@
-# Binance-Coinbase-Trade-and-Liquidation-Streams
+# Trade-Liquidation-and-Funding-Streams from Binance and Coinbase
 
 ## Important❗
-### These Codes only provide the following symbols:                                      
-- 🟡BTC, 💠ETH, 👾SOL, 🔶BNB, 🐶DOGE, 💵USDC, ⚫XRP, 🔵ADA 🟣MATIC, 🎮TON, 🔗LINK, ⚙️ TRX, 🔍NEAR, 🌟XLM, 🎨RNDR, ⚪DOT, 🦄UNI, ⚛️ ATOM, 👽XMR, 🧪LDO, 🌀GMX
-- Some terminals represent the symbols "⚛️ ATOM, ⚙️ TRX, and 🎨RNDR" a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
-- I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody. 
+- You can only choose between a given number of crypto currencies (more than enough)                       
+- Some terminals represent the emojis a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
+- I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody.
+- The market data for trades is provided via binance, coinbase, kraken and bitfinex websockets. The market data for liquidations is only provided via binance websocket 
 -----------------------------------------------------------------------
 
 # **⭐🃏Liq's & Trades🃏⭐** 
 
 
-This Code provides an Overview for every trade and liquidation that was made with Binance or Coinbase over a given threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
+This Code provides a Stream for every specified symbol in wich trades and liquidations are displayedif they reach a given threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
 
-- At the beginning of the Code you have to set 4 requirements 
+### At the beginning of the Code you have to set 4 requirements:
 
+❓"Choose Symbols: "❓                                                                                              
+↪️ You can choose crypto currencies from a given list. if you choosed every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
                                                                    
-❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                                 
-❗ You will only see trades that are bigger than the specified value❗
+❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
+↪️ You will only see trades that are bigger than the specified value
                                                                           
 ❓"Please enter the threshold value for 'usd_size' on liquidations: "❓                                                                                                                        
-❗ You will only see liquidations that are bigger than the specified value❗
+↪️ You will only see liquidations that are bigger than the specified value
                                                                           
-❓"Please enter the interval for exportation and calculation: "❓                                                                                                            
-❗ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program❗
-
-
+❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
+↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program
  
-  **Trade Magnitudes**                                         
+###  **Trade Magnitudes**                                         
        
   :         <  5,000$                                                
 🐟:         >= 5,000$                                           
@@ -49,7 +49,7 @@ This Code provides an Overview for every trade and liquidation that was made wit
 ❓💰🃏💰❓: >= 500,000,000$                                                     
 
 
-**Liquidation Magnitudes**
+### **Liquidation Magnitudes**
 
 💧:          <  2,000$                                                      
 💧💧:        >= 4,000$                                                         
@@ -68,17 +68,17 @@ This Code provides an Overview for every trade and liquidation that was made wit
 🌊💰🤿💰🌊:  >= 50,000,000$                                                          
 
 
-- A green number for transactions means a Long-Trade (or Buy) was made
-- A red number for transactions means a Short-Trade (or Sell) was made
+- A **green number** for transactions means a Long-Trade (or Buy) was made
+- A **red number** for transactions means a Short-Trade (or Sell) was made
 
-- A green number for liquidations means somebodies Take-Profit got triggered
-- A red number for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
+- A **green number** for liquidations means somebodies Take-Profit got triggered
+- A **red number** for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
   
 - On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
 
 
 
-### After a specified Interval you will get an Output like this:
+## After a specified Interval you will get an Output like this:
 
 📅 Start Time: 2024-09-17 12:09:49                                                                                                                  
 🕰️ Current Time: 2024-09-17 12:10:19                                                                                            
@@ -189,6 +189,76 @@ If your portfolio was liquidated, it means that one or more of your positions we
 
 
 -----------------------------------------------------------------------------------------------------------------------------------
+
+# **🃏⭐Trade Trawler⭐🃏**
+
+
+This masterpiece of market visualization allows to catch every trade, going through binance, coinbase, kraken and bitfinex and list them into a table. These trades an liquidations get listed and calculated in real time. You can specify a interval in which the program should calculate and list the trades and liquidations to get a broader view of long time market behaviour and short time market behaviour. The border will be colored green, if the difference between long-trades and short-trades is positive and red if the difference is negativ. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be adviced and delighted
+
+
+
+
+###  **Trade Magnitudes**                                         
+       
+  :         <  5,000$                                                
+🐟:         >= 5,000$                                           
+🐟🐟:       >= 10,000$                                           
+🐟🐟🐟:     >= 20,000$                                          
+🐟🐟🐟🐟:   >= 40,000$                                          
+🐟🐟🐟🐟🐟: >= 80,000$                                          
+🐠:         >= 160,000$                                          
+🐠🐠:       >= 320,000$                                        
+🐠🐠🐠:     >= 640,000$                                        
+🐠🐠🐠🐠:   >= 1,280,000$                                        
+🐠🐠🐠🐠🐠: >= 2,560,000$                                        
+🦈:         >= 5,120,000$                                       
+🦈🦈:       >= 12,400,000$                                        
+🦈🦈🦈:     >= 25,000,000$                                       
+🐳:         >= 50,000,000$                                                                                    
+🐳🐳:       >= 80,000,000$                                                                 
+🐳🐳🐳:     >= 120,000,000$                                                       
+💸🌈🦄🌈💸: >= 250,000,000$                                                      
+❓💰🃏💰❓: >= 500,000,000$                                                     
+
+
+### **Liquidation Magnitudes**
+
+💧:          <  2,000$                                                      
+💧💧:        >= 4,000$                                                         
+💧💧💧:      >= 8,000$                                                         
+💦:          >= 16,000$                                                        
+💦💦:        >= 32,000$                                                           
+💦💦💦:      >= 64,000$                                                             
+💦💦💦💦:    >= 128,000$                                                                
+💦💦💦💦💦:  >= 256,000$                                                            
+🌊:          >= 512,000$                                                        
+🌊🌊:        >= 1,240,000$                                                          
+🌊🌊🌊:      >= 2,500,000$                                                       
+🤿:          >= 5,000,000$                                                        
+🌊🤿🌊:      >= 10,000,000$                                                        
+💸🌊🤿🌊💸:  >= 25,000,000$                                                        
+🌊💰🤿💰🌊:  >= 50,000,000$                                                          
+
+
+
+
+
+### At the beginning of the Code you have to set 4 requirements:
+
+❓"Choose Symbols: "❓                                                                                              
+↪️ You can choose crypto currencies from a given list. if you choosed every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
+                                                                   
+❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
+↪️ You will only see trades that are bigger than the specified value
+                                                                          
+❓"Please enter the threshold value for 'usd_size' on liquidations: "❓                                                                                                                        
+↪️ You will only see liquidations that are bigger than the specified value
+                                                                          
+❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
+↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program
+
+
+
 
 # **🃏The Daily Trade Summary🃏**
 
