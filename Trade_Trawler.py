@@ -194,6 +194,10 @@ def format_trade_time(trade_time):
     berlin = pytz.timezone("Europe/Berlin")
     return datetime.fromtimestamp(trade_time / 1000, berlin).strftime('%H:%M:%S')
 
+
+# ...
+
+
 def calculate_time_difference(start_time, current_time):
     """
     Calculates the time difference between start_time and current_time.
@@ -508,12 +512,6 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
 
     return metrics
 
-def export_data():
-    """
-    Handles data export if necessary.
-    Currently a placeholder as export functionality is not required.
-    """
-    pass  # No action needed as per current requirements
 
 def create_output(layout, metrics, start_time, trade_threshold, liquidation_threshold):
     """
@@ -581,10 +579,10 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
         header_content = Text(justify="center", no_wrap=False)
         header_content.append(f"📊 Selected Symbols:\n", style="bold yellow")
         header_content.append(f"{symbols_display}\n", style="bold yellow")
-        header_content.append(f"📅 Start Time:   {start_time}\n")
-        header_content.append(f"🕰️ Current Time: {current_time}\n")
-        header_content.append(f"🌊 Liquidation Threshold at {liquidation_threshold}$\n")
-        header_content.append(f"🎣 Trade Threshold at {trade_threshold}$\n")
+        header_content.append(f"🌊 Liquidation Threshold at  {liquidation_threshold}$\n")
+        header_content.append(f"🎣 Trade Threshold at        {trade_threshold}$\n")
+        header_content.append(f"📅 {start_time} »» 🕰️{current_time}\n")
+        header_content.append(f"")
         # Create the header Panel with wrapping enabled
         header_panel = Panel(
             header_content,
@@ -1086,8 +1084,8 @@ async def main():
     select_symbols()
 
     # Prompt user for threshold values
-    trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades: "))
-    liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations: "))
+    trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
+    liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
     average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
     interval = 1  # Set interval to 1 second
 
