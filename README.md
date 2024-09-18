@@ -11,7 +11,7 @@
 # **🃏Trade Trawler🃏      ⭐⭐⭐⭐⭐**
 
 
-This masterpiece of market visualization allows to catch every trade, going through binance, coinbase, kraken and bitfinex and list them into a table. These trades an liquidations get listed and calculated in real time. You can specify a interval in which the program should calculate and list the trades and liquidations to get a broader view of long time market behaviour and short time market behaviour. The border will be colored green, if the difference between long-trades and short-trades is positive and red if the difference is negativ. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be adviced and delighted
+This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the difference between long-trades and short-trades is positive and red if the difference is negative. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
 
 
 
@@ -64,7 +64,7 @@ This masterpiece of market visualization allows to catch every trade, going thro
 ### At the beginning of the Code you have to set 4 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
-↪️ You can choose crypto currencies from a given list. if you choosed every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
+↪️ You can choose cryptocurrencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
                                                                    
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
 ↪️ You will only see trades that are bigger than the specified value
@@ -73,7 +73,7 @@ This masterpiece of market visualization allows to catch every trade, going thro
 ↪️ You will only see liquidations that are bigger than the specified value
                                                                           
 ❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
-↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program
+↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get an Overview of all trades and liquidation since starting the program
 
 
 
@@ -142,7 +142,7 @@ This Code provides a Stream for every specified symbol in wich trades and liquid
 ### At the beginning of the Code you have to set 4 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
-↪️ You can choose crypto currencies from a given list. if you choosed every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
+↪️ You can choose crypto currencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
                                                                    
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
 ↪️ You will only see trades that are bigger than the specified value
@@ -151,7 +151,7 @@ This Code provides a Stream for every specified symbol in wich trades and liquid
 ↪️ You will only see liquidations that are bigger than the specified value
                                                                           
 ❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
-↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get a Overview of all trades and liquidation since starting the program
+↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get an Overview of all trades and liquidation since starting the program
  
 
 
@@ -192,26 +192,26 @@ Difference: 0.00$
 ### In this Overview you can see different Informations:
 
 **🕰️Time Parameters🕰️**
-- At wich point in time you started the program
+- At which point in time you started the program
 - At which point in time the last Trade or Liquidation was recognized
 - how long the program is running
 
 **🎣Trade Parameters🎣**
 - Total Trades
 - Total amount of Long-Trades and the total USD size of them
-- Total amount of Short-Trades and the total USd size of them
-- In which magnitude the Trades where made
+- Total amount of Short-Trades and the total USD size of them
+- In which magnitude were the Trades where made
 - difference between Long-Trades and Short-Trades
-- average amount of Trades in a specified interval
+- the average amount of Trades in a specified interval
 - average USD size of Trades in a specified interval
 
 **🌊Liquidation Parameters🌊**
 - Total Liquidations
 - Total amount of Take-Profit-Liquidations and the total USD size of them
-- Total amount of Stop-Loss-Liquidations and the total USd size of them
-- In which magnitude the Liquidations where made
-- difference between Take-Profit-Liquidations and Stop-Loss-Liquidations
-- average amount of Liquidations in a specified interval
+- Total amount of Stop-Loss-Liquidations and the total USD size of them
+- In which magnitude were the Liquidations where made
+- the difference between Take-Profit-Liquidations and Stop-Loss-Liquidations
+- the average amount of Liquidations in a specified interval
 - average USD size of Liquidations in a specified interval
 
 
@@ -222,7 +222,7 @@ Difference: 0.00$
 
 This Code provides the Funding Rates for contracts. 
 - If the Funding Rate is **low or 0** you will get a relatively smaller fee.
-- If the Funding Rate is **positive** you need to pay a relatively higher fee.
+- If the Funding Rate is **positive** you have to pay a relatively higher fee.
 - If the Funding Rate is **negative** you will get a a negative fee (they will fund you a bit instead of demanding fees such that the amount will come to an equilibrium)
  
 🟨| Funding Rate is between -5% to 5%                                                            
@@ -239,7 +239,7 @@ This Code provides the Funding Rates for contracts.
 
 # **🃏The Daily Trade Summary🃏      ⭐⭐**
 
-This Code creates a cumulative sum over all trades that are made with the given symbol since starting the program and visualizes their time-dependent behavior. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple of hours. 
+This Code creates a cumulative sum over all trades made with the given symbol since starting the program and visualizes their time-dependent behavior. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple of hours. 
 
 9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
 8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
@@ -277,7 +277,7 @@ This Code creates a cumulative sum over all trades that are made with the given 
 ---------------------------------------------------------------------
 
 
-### Definitions
+## Definitions🃏📖
 
 **Liquidation:** In the world of cryptocurrencies, liquidation refers to the process where a position is automatically closed to limit losses to the trader's capital. This occurs when the market price of an asset moves so strongly against the trader's position that the available margin (the collateral the trader has posted) is no longer sufficient to cover the losses. Liquidations are particularly common in leveraged positions, where borrowed funds are used to increase the size of the trade.
 
@@ -369,4 +369,4 @@ In summary, funding rates are an important tool for maintaining the balance betw
 ## **🃏Own Opinion🃏**
 
 
-I think these data streams will give you detailed alternative information, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier. You will gain a bird's view over the ocean of cryptocurrencies. Swim with the Stream of the big fishes and not based on chart formations. The funding rates are significant if you trade with contracts but give you also information about the behaviour in the spot market. This information can also be used to build algorithmic trading bots around it (buy if some 40,000,000$ Whale bought or something like this)
+I think these data streams will give you detailed alternative information, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier. You will gain a bird's view over the ocean of cryptocurrencies. Swim with the Stream of the big fishes and not based on chart formations. The funding rates are significant if you trade with contracts but give you also information about the behavior in the spot market. This information can also be used to build algorithmic trading bots around it (buy if some 40,000,000$ Whale bought or something like this)
