@@ -9,7 +9,7 @@
 -----------------------------------------------------------------------
 
 
-# **Trade Trawler🚢      |⭐⭐⭐⭐⭐|**
+# **Trade Trawler🚢      |⭐⭐⭐⭐|**
 
 
 This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the difference between long-trades and short-trades is positive and red if the difference is negative. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
@@ -171,23 +171,23 @@ This masterpiece of market visualization allows you to catch every trade, going 
     - Connects to Kraken's WebSocket API to listen for trade data for selected symbols.
 
 15. **`bitfinex_trade_stream(uri)`**:
-    - Connects to Bitfinex's WebSocket API to listen for trade data and processes it.
+    - Connects to Bitfinex's WebSocket API to listen for trade data and process it.
 
 16. **`select_symbols()`**:
     - Allows the user to select which cryptocurrency symbols to monitor.
 
 17. **`main()`**:
-    - Main function that coordinates symbol selection, threshold setting, and the initialization of WebSocket streams for data collection. It also manages the real-time display of trade and liquidation data using the `Live` component.
+    - The main function that coordinates symbol selection, threshold setting, and the initialization of WebSocket streams for data collection. It also manages the real-time display of trade and liquidation data using the `Live` component.
 
 
 ---------------------------------------------------------------------------------
 
 
 
-# **Liq's & Trades🛤️    |⭐⭐⭐⭐|** 
+# **Trade Trail🛤️    |⭐⭐⭐|** 
 
 
-This Code provides a Stream for every specified symbol in wich trades and liquidations are displayed, if they reach the specified threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
+This Code provides a Stream for every specified symbol in which trades and liquidations are displayed if they reach the specified threshold. These trades and liquidations will be saved in an Excel file and calculated for more in-depth comparison and better market data interpretation
 
 
 ###  **Trade Magnitudes**                                         
@@ -234,7 +234,7 @@ This Code provides a Stream for every specified symbol in wich trades and liquid
 ### At the beginning of the Code you have to set 4 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
-↪️ You can choose crypto currencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
+↪️ You can choose cryptocurrencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
                                                                    
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
 ↪️ You will only see trades that are bigger than the specified value
@@ -289,7 +289,7 @@ Difference: 0.00$
 📊Avg. USD Size per interval: 0.00$ per minute                                                                                                                                  
 
 
-### In this Overview you can see different Informations:
+### In this Overview you can see different Information:
 
 **🕰️Time Parameters🕰️**
 - At which point in time you started the program
