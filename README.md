@@ -77,6 +77,107 @@ This masterpiece of market visualization allows you to catch every trade, going 
 
 
 
+## Code Breakdown (Step by Step):
+
+1. **Imports and Initialization**:
+    - Imports essential modules for handling asynchronous tasks (`asyncio`), JSON processing (`json`), and time management (`datetime`, `pytz`). 
+    - Websocket connections are managed using `websockets`, and terminal output is styled with `termcolor`, `colorama`, and `rich`.
+    - Initializes `colorama` for colored terminal output and creates a `Console` instance from `rich`.
+
+2. **Global Variables**:
+    - `symbols`: List of cryptocurrency pairs from Binance to track.
+    - `selected_symbols`: Empty list to hold user-selected symbols.
+    - `websocket_url_base_*`: WebSocket URLs for Binance, Coinbase, Kraken, and Bitfinex.
+    - `name_map`: Maps cryptocurrency names to their corresponding symbols and emojis.
+    - `trades_data`, `liquidations_data`: Lists to store trade and liquidation data.
+    - `trade_threshold`, `liquidation_threshold`: Variables for minimum trade/liquidation sizes.
+
+3. **Utility Functions**:
+    - `format_trade_time(trade_time)`: Converts timestamp into a human-readable time format using the Berlin timezone.
+    - `calculate_time_difference(start_time, current_time)`: Calculates the time difference between two timestamps.
+    - `collect_trade_data(symbol, used_trade_time, trade_type, usd_size, timestamp)`: Collects trade data and appends it to the `trades_data` list.
+    - `collect_liquidation_data(symbol, used_trade_time, liquidation_type, usd_size, timestamp)`: Collects liquidation data and appends it to the `liquidations_data` list.
+    - `get_stars(usd_size)`: Returns a visual representation (stars) for trades based on the USD size.
+    - `get_liq_stars(usd_size)`: Similar to `get_stars`, but for liquidation sizes.
+
+4. **`calculate_metrics` Function**:
+    - Gathers and calculates statistical data from trades and liquidations over a specified time interval (including averages, counts, and USD sizes).
+    - Categorizes trades and liquidations based on size, and stores results in dictionaries for further visualization.
+
+5. **`create_output` Function**:
+    - Uses the `rich` library to create a real-time dashboard layout displaying key metrics such as trades, liquidations, and average values.
+    - The output is organized into panels for visual clarity and is updated dynamically.
+
+6. **Trade and Liquidation Handlers**:
+    - `process_trade(symbol, price, quantity, trade_time, is_buyer_maker)`: Processes each trade received, converts the trade time, and appends data if the size exceeds the threshold.
+    - `process_liquidation(symbol, side, timestamp, usd_size)`: Similar to `process_trade`, but for liquidations.
+
+7. **WebSocket Stream Functions**:
+    - `binance_trade_stream`, `coinbase_trade_stream`, `kraken_trade_stream`, and `bitfinex_trade_stream`: These asynchronous functions establish WebSocket connections to the respective exchanges and handle trade data received in real-time.
+    - `binance_liquidation`: This function listens for liquidation events on Binance.
+
+8. **`select_symbols` Function**:
+    - Allows the user to manually select symbols to track or select all available symbols.
+    - Determines which symbols are available on Kraken and Bitfinex exchanges.
+
+9. **Main Program Flow (`main` Function)**:
+    - Initializes thresholds, selects symbols, and starts WebSocket streams to listen to trades and liquidations.
+    - Uses `asyncio` to run the WebSocket streams concurrently.
+    - Starts the real-time dashboard using the `Live` feature of `rich` to continuously display updated data.
+
+### Function Descriptions:
+
+1. **`format_trade_time(trade_time)`**:
+   - Converts a given Unix timestamp to a human-readable time format using the Berlin timezone.
+
+2. **`calculate_time_difference(start_time, current_time)`**:
+   - Computes and returns the difference between two timestamps.
+
+3. **`collect_trade_data(symbol, used_trade_time, trade_type, usd_size, timestamp)`**:
+   - Stores trade information (symbol, trade time, type, size, and timestamp) in a global list.
+
+4. **`collect_liquidation_data(symbol, used_trade_time, liquidation_type, usd_size, timestamp)`**:
+   - Stores liquidation information (symbol, liquidation time, type, size, and timestamp) in a global list.
+
+5. **`get_stars(usd_size)`**:
+   - Returns a visual representation (using emojis) based on the USD size of a trade.
+
+6. **`get_liq_stars(usd_size)`**:
+   - Similar to `get_stars`, but for liquidation size, returning corresponding emojis.
+
+7. **`calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidation_threshold, average_interval, start_timestamp)`**:
+   - Calculates statistical metrics for trades and liquidations, such as the number of trades, total USD size, and averages per minute within a given time interval.
+
+8. **`create_output(layout, metrics, start_time, trade_threshold, liquidation_threshold)`**:
+   - Generates and updates a visual dashboard to display trade and liquidation metrics using `rich` components.
+
+9. **`process_trade(symbol, price, quantity, trade_time, is_buyer_maker)`**:
+   - Processes trade data (price, quantity, and time), and appends it to the trade data list if the trade size exceeds the threshold.
+
+10. **`process_liquidation(symbol, side, timestamp, usd_size)`**:
+    - Processes liquidation data, storing it if the size exceeds the defined threshold.
+
+11. **`binance_trade_stream(uri, symbol)`**:
+    - Connects to Binance's WebSocket API to listen for trade data, processes it, and appends to the trade list.
+
+12. **`coinbase_trade_stream(uri)`**:
+    - Connects to Coinbase's WebSocket API to listen for trade data for selected symbols.
+
+13. **`binance_liquidation(uri)`**:
+    - Listens for liquidation events on Binance and processes them if they meet the threshold.
+
+14. **`kraken_trade_stream(uri)`**:
+    - Connects to Kraken's WebSocket API to listen for trade data for selected symbols.
+
+15. **`bitfinex_trade_stream(uri)`**:
+    - Connects to Bitfinex's WebSocket API to listen for trade data and processes it.
+
+16. **`select_symbols()`**:
+    - Allows the user to select which cryptocurrency symbols to monitor.
+
+17. **`main()`**:
+    - Main function that coordinates symbol selection, threshold setting, and the initialization of WebSocket streams for data collection. It also manages the real-time display of trade and liquidation data using the `Live` component.
+
 
 ---------------------------------------------------------------------------------
 
@@ -129,16 +230,6 @@ This Code provides a Stream for every specified symbol in wich trades and liquid
 💸🌊🤿🌊💸:  >= 25,000,000$                                                        
 🌊💰🤿💰🌊:  >= 50,000,000$                                                          
 
-
-- A **green number** for transactions means a Long-Trade (or Buy) was made
-- A **red number** for transactions means a Short-Trade (or Sell) was made
-
-- A **green number** for liquidations means somebodies Take-Profit got triggered
-- A **red number** for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
-  
-- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
-
-
 ### At the beginning of the Code you have to set 4 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
@@ -153,6 +244,14 @@ This Code provides a Stream for every specified symbol in wich trades and liquid
 ❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
 ↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get an Overview of all trades and liquidation since starting the program
  
+
+- A **green number** for transactions means a Long-Trade (or Buy) was made
+- A **red number** for transactions means a Short-Trade (or Sell) was made
+
+- A **green number** for liquidations means somebodies Take-Profit got triggered
+- A **red number** for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
+  
+- On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
 
 
 ## After a specified Interval you will get an Output like this:
@@ -213,6 +312,122 @@ Difference: 0.00$
 - the difference between Take-Profit-Liquidations and Stop-Loss-Liquidations
 - the average amount of Liquidations in a specified interval
 - average USD size of Liquidations in a specified interval
+
+
+
+## Code Breakdown (Step by Step):
+
+1. **Library Imports**:
+   - Imports necessary libraries such as `asyncio` for asynchronous tasks, `json` for handling JSON data, and `pytz` for time zone handling, among others.
+
+2. **Initialize Colorama**:
+   ```python
+   init()
+   print("🗄️ Libraries successfully loaded")
+   ```
+   This initializes the `colorama` module to handle colored terminal outputs and confirms that libraries are loaded.
+
+3. **Configuration**:
+   ```python
+   symbols = [ ... ]  # List of symbols for various cryptocurrency pairs.
+   selected_symbols = []  # Placeholder for symbols that will be chosen by the user.
+   ```
+   This defines default cryptocurrency symbols, which are later selected by the user for tracking.
+
+4. **Ensure Output Directory**:
+   ```python
+   os.makedirs(output_directory, exist_ok=True)
+   ```
+   This creates a directory for storing data, ensuring it exists.
+
+5. **Initialize Symbol Maps**:
+   ```python
+   name_map = { ... }  # Maps currency symbols to their respective icons.
+   ```
+   This provides a dictionary mapping for symbols to emojis, making it easier to display symbol names in a more intuitive way.
+
+6. **Exchange-Specific Mappings**:
+   ```python
+   kraken_symbol_map = { ... }  # Kraken exchange-specific symbol mapping.
+   bitfinex_symbol_map = { ... }  # Bitfinex exchange-specific symbol mapping.
+   ```
+   This sets up symbol mappings for specific exchanges like Kraken and Bitfinex.
+
+7. **Initialize Variables**:
+   ```python
+   cumulative_sum_map = {}
+   trades_data = []  # List to hold trade data.
+   liquidations_data = []  # List to hold liquidation data.
+   ```
+   This initializes dictionaries and lists to track cumulative sums and store trade or liquidation data.
+
+8. **Main Function Definitions**:
+   
+   - **initialize_maps**: Initializes the cumulative sum maps for the selected symbols.
+   - **format_trade_time**: Formats the trade time to the `Europe/Berlin` time zone.
+   - **add_cumulative_sum_column**: Adds a cumulative sum column to a DataFrame based on the trade or liquidation type.
+   - **export_to_excel**: Exports data to an Excel file and applies formatting such as colored cells based on conditions.
+   - **calculate_time_difference**: Calculates the time difference between the start time and the trade or liquidation time.
+   - **periodic_export**: Periodically exports trade and liquidation data to Excel at a given interval.
+   - **collect_trade_data**: Collects trade data and appends it to the `trades_data` list.
+   - **collect_liquidation_data**: Collects liquidation data and appends it to the `liquidations_data` list.
+   - **process_trade**: Processes incoming trade data by calculating `usd_size`, updating cumulative sums, and printing the formatted output.
+   - **process_liquidation**: Processes liquidation data similarly to `process_trade`.
+   
+9. **WebSocket Streams**:
+   - Functions like `binance_trade_stream`, `coinbase_trade_stream`, and `kraken_trade_stream` handle live data streams from different exchanges.
+   
+10. **Main Function**:
+   ```python
+   async def main(): 
+       select_symbols()  # User selects the cryptocurrency symbols to track.
+       asyncio.run(main())
+   ```
+   This function initiates the process, allowing users to select symbols, set thresholds, and start multiple WebSocket connections for real-time data collection and processing.
+
+### Function Descriptioin
+
+1. **initialize_maps**:
+   Initializes the cumulative sum maps for tracking the cumulative trade or liquidation size for each selected symbol.
+
+2. **format_trade_time**:
+   Converts a timestamp to a formatted string in the `Europe/Berlin` time zone, used for displaying trade times.
+
+3. **add_cumulative_sum_column**:
+   Adds a column to a DataFrame that shows the running total (cumulative sum) based on trade or liquidation types.
+
+4. **export_to_excel**:
+   Exports collected trade or liquidation data into an Excel file, creating a new file if it doesn't exist and adding color formatting based on conditions.
+
+5. **calculate_time_difference**:
+   Calculates the time difference between the program start time and a given trade or liquidation time.
+
+6. **periodic_export**:
+   Periodically exports collected data to Excel files at specified intervals and prints a summary of the data collected so far.
+
+7. **collect_trade_data**:
+   Appends trade data to the global list `trades_data`, storing details about each trade.
+
+8. **collect_liquidation_data**:
+   Appends liquidation data to the global list `liquidations_data`, storing details about each liquidation event.
+
+9. **process_trade**:
+   Processes a trade event, updates cumulative sums, formats and displays the trade information with colored output.
+
+10. **process_liquidation**:
+   Processes a liquidation event, updates cumulative sums, formats and displays the liquidation information with colored output.
+
+11. **binance_trade_stream**:
+   Connects to Binance's WebSocket API to receive real-time trade data for the selected symbols and process each trade.
+
+12. **coinbase_trade_stream**:
+   Connects to Coinbase's WebSocket API to receive real-time trade data and processes each trade for selected symbols.
+
+13. **kraken_trade_stream**:
+   Connects to Kraken's WebSocket API to receive and process real-time trade data for the selected symbols. 
+
+14. **main**:
+   The main function that initializes the WebSocket streams and periodically exports collected data to Excel files while printing summaries to the terminal.
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------
