@@ -9,7 +9,7 @@
 -----------------------------------------------------------------------
 
 
-# **🃏Trade Trawler🃏      ⭐⭐⭐⭐⭐**
+# **Trade Trawler🚢      |⭐⭐⭐⭐⭐|**
 
 
 This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the difference between long-trades and short-trades is positive and red if the difference is negative. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
@@ -184,7 +184,7 @@ This masterpiece of market visualization allows you to catch every trade, going 
 
 
 
-# **🃏Liq's & Trades🃏    ⭐⭐⭐⭐** 
+# **Liq's & Trades🛤️    |⭐⭐⭐⭐|** 
 
 
 This Code provides a Stream for every specified symbol in wich trades and liquidations are displayed, if they reach the specified threshold. These trades and liquidations will be saved in an excel file and calculated for more in depth comparison and a better market data interpretation
@@ -433,7 +433,7 @@ Difference: 0.00$
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
- # **🃏Funding Rates🃏      ⭐⭐⭐**
+ # **Funding Rates📊      |⭐⭐⭐|**
 
 
 This Code provides the Funding Rates for contracts. 
