@@ -450,10 +450,169 @@ This Code provides the Funding Rates for contracts.
 🟥🟥🟥| Funding Rate is less than -20%                                                   
 
 
+
+## Step-by-Step Explanation of the Code
+
+This Python script connects to a WebSocket on Binance and continuously fetches market data (funding rates) for various cryptocurrency pairs. It uses `asyncio` to handle asynchronous operations and libraries like `rich` for rendering output in a table format. Let's break down the code:
+
+---
+
+### 1. **Import Statements**
+```python
+import asyncio
+import json
+from datetime import datetime
+from websockets import connect, ConnectionClosed
+from rich.console import Console
+from rich.table import Table
+from rich.live import Live
+from termcolor import colored
+```
+- **`asyncio`**: Enables asynchronous programming, allowing multiple tasks (such as WebSocket connections) to run concurrently.
+- **`json`**: Used for parsing JSON data received from the WebSocket.
+- **`datetime`**: Handles date and time manipulation.
+- **`websockets`**: Manages WebSocket connections to fetch real-time data from Binance.
+- **`rich`**: Provides functionalities for creating tables (`Table`) and live console updates (`Live`).
+- **`termcolor`**: Adds colored output to terminal messages.
+
+---
+
+### 2. **Symbols and Initial Configuration**
+```python
+symbols = ['btcusdt', 'ethusdt', 'solusdt', ...]
+websocket_url_base_binance = 'wss://fstream.binance.com/ws/'
+shared_symbol_data = {symbol: {} for symbol in symbols}
+print_lock = asyncio.Lock()
+console = Console()
+```
+- **`symbols`**: A list of trading pairs (cryptocurrencies paired with USDT) from Binance, like `btcusdt`, `ethusdt`.
+- **`websocket_url_base_binance`**: The base WebSocket URL for connecting to Binance.
+- **`shared_symbol_data`**: A dictionary where each key is a symbol, and its value will store the latest market data.
+- **`print_lock`**: An asyncio lock to ensure safe concurrent access to the console.
+- **`console`**: A `rich` object to handle the rendering of tables and other text to the terminal.
+
+---
+
+### 3. **Symbol Mapping for Display**
+```python
+name_map = {
+    'BTC': '🟡BTC     ', 'ETH': '💠ETH     ', ...
+}
+```
+- **`name_map`**: A dictionary mapping cryptocurrency tickers (like `BTC`, `ETH`) to a visually enriched display name (including emojis for styling).
+
+---
+
+### 4. **User-Selected Symbols Placeholder**
+```python
+selected_symbols = []
+selected_symbols_formatted = []
+All_symbols = False
+```
+- **`selected_symbols`**: A list that will store the symbols selected by the user.
+- **`selected_symbols_formatted`**: The formatted version of the selected symbols for display.
+- **`All_symbols`**: A flag indicating if the user selects all available symbols.
+
+---
+
+### 5. **WebSocket Data Stream (binance_funding_stream)**
+```python
+async def binance_funding_stream(symbol):
+    websocket_url = f'{websocket_url_base_binance}{symbol}@markPrice'
+    ...
+```
+This function continuously connects to the WebSocket for a specific symbol, fetches the data, and processes it:
+- **`connect(websocket_url)`**: Establishes the WebSocket connection for the symbol's funding rate.
+- **`message = await websocket.recv()`**: Asynchronously waits to receive a new message.
+- **`data = json.loads(message)`**: Parses the JSON data received.
+- **`funding_rate`**: Extracts the funding rate and calculates related rates for different time periods (8-hour, daily, weekly, monthly, yearly).
+- **`shared_symbol_data[symbol]`**: Updates the `shared_symbol_data` dictionary with the latest data for this symbol.
+
+If the WebSocket connection is closed, the script will try to reconnect after a delay.
+
+---
+
+### 6. **Sorting Symbols by Funding Rate (get_sorted_symbols)**
+```python
+def get_sorted_symbols():
+    return sorted(shared_symbol_data.items(), key=lambda x: x[1].get('yearly_funding_rate', float('-inf')), reverse=True)
+```
+This function sorts all symbols based on their yearly funding rate (from highest to lowest).
+
+---
+
+### 7. **Creating the Table (create_table)**
+```python
+def create_table():
+    table = Table(show_header=True, header_style="bold white", title=f"🚀 Funding Rates {current_time} ️🚀", show_lines=True)
+    ...
+```
+This function creates a table using the `rich` library:
+- **`Table()`**: Defines a new table with a header.
+- **`add_column`**: Adds columns for symbol name, funding rates over different periods (8-hour, daily, weekly, etc.).
+- **`add_row`**: Adds rows of data, populated with the latest market data from `shared_symbol_data`.
+
+---
+
+### 8. **Live Table Update (update_display)**
+```python
+async def update_display():
+    with Live(create_table(), refresh_per_second=1, console=console) as live:
+        while True:
+            await asyncio.sleep(1)
+            live.update(create_table())
+```
+This function continuously updates the table on the console:
+- **`Live()`**: Manages the live update of the table on the terminal.
+- **`live.update()`**: Refreshes the table display with the latest data.
+
+---
+
+### 9. **User Symbol Selection (select_symbols)**
+```python
+def select_symbols():
+    print(colored("\n♠️♦️Choose your symbols♣️♥️", 'black', 'on_white'))
+    ...
+```
+This function allows the user to choose which symbols they want to query:
+- **`input()`**: The user can type a symbol or choose 'ALL' to select all symbols.
+- **`selected_symbols`**: Stores the symbols the user selects.
+
+---
+
+### 10. **Main Function (main)**
+```python
+async def main():
+    select_symbols()
+    tasks = [binance_funding_stream(symbol) for symbol in selected_symbols]
+    tasks.append(update_display())
+    await asyncio.gather(*tasks)
+```
+This is the entry point of the program:
+- **`select_symbols()`**: Calls the function to let the user select which symbols to track.
+- **`tasks`**: Creates a list of asyncio tasks—one task for each selected symbol to fetch data, plus one task to update the display.
+- **`asyncio.gather(*tasks)`**: Runs all tasks concurrently.
+
+---
+
+### 11. **Program Execution**
+```python
+asyncio.run(main())
+```
+This runs the `main()` function, starting the entire process asynchronously.
+
+---
+
+### Summary:
+- This code connects to Binance's WebSocket API and fetches real-time funding rates for selected cryptocurrency pairs.
+- The data is displayed in a dynamic, continuously updated table.
+- The user can choose which symbols they want to track.
+
+
  ---------------------------------------------------------------------------------------------------------------------------------------
 
 
-## Definitions and Education🃏📖
+# Definitions and Education🃏📖
 
 **Liquidation:** In the world of cryptocurrencies, liquidation refers to the process where a position is automatically closed to limit losses to the trader's capital. This occurs when the market price of an asset moves so strongly against the trader's position that the available margin (the collateral the trader has posted) is no longer sufficient to cover the losses. Liquidations are particularly common in leveraged positions, where borrowed funds are used to increase the size of the trade.
 
