@@ -33,6 +33,8 @@ selected_symbols = []
 websocket_url_base_binance = 'wss://fstream.binance.com/ws/'
 websocket_url_base_coinbase = 'wss://ws-feed.exchange.coinbase.com'
 websocket_url_liq = 'wss://fstream.binance.com/ws/!forceOrder@arr'
+websocket_url_kraken = 'wss://ws.kraken.com/'
+websocket_url_bitfinex = 'wss://api-pub.bitfinex.com/ws/2'
 output_directory = "/home/jestersly/Schreibtisch/Codes/_Algo_Trade_Edge/Data_Streams/Liqs_and_Trades_Archive/"
 print("📡 Configuration loaded")
 
@@ -55,6 +57,132 @@ name_map = {
     'CAKE': '🍰CAKE    ', 'STX': '📚STX     ', 'SNX': '💎SNX     ', 'COMP': '🏦COMP    ', 'ZIL': '💠ZIL     ',
     'KSM': '🪶KSM     ', 'REN': '🔄REN     '
 }
+
+
+kraken_symbol_map = {
+    'btcusdt': 'XBT/USDT',
+    'ethusdt': 'ETH/USDT',
+    'solusdt': 'SOL/USDT',
+    'bnbusdt': None,  # BNB not available on Kraken
+    'dogeusdt': 'DOGE/USDT',
+    'usdcusdt': 'USDC/USDT',
+    'xrpusdt': 'XRP/USDT',
+    'adausdt': 'ADA/USDT',
+    'maticusdt': 'MATIC/USDT',
+    'tonusdt': None,  # TON not available on Kraken
+    'linkusdt': 'LINK/USDT',
+    'trxusdt': 'TRX/USDT',
+    'nearusdt': 'NEAR/USDT',
+    'xlmusdt': 'XLM/USDT',
+    'rndrusdt': None,  # RNDR not available on Kraken
+    'dotusdt': 'DOT/USDT',
+    'uniusdt': 'UNI/USDT',
+    'atomusdt': 'ATOM/USDT',
+    'xmrusdt': 'XMR/USDT',
+    'ldousdt': None,  # LDO not available on Kraken
+    'gmxusdt': None,  # GMX not available on Kraken
+    'ltcusdt': 'LTC/USDT',
+    'avaxusdt': 'AVAX/USDT',
+    'bchusdt': 'BCH/USDT',
+    'vetusdt': 'VET/USDT',
+    'filusdt': 'FIL/USDT',
+    'etcusdt': 'ETC/USDT',
+    'algousdt': 'ALGO/USDT',
+    'xtzusdt': 'XTZ/USDT',
+    'eosusdt': 'EOS/USDT',
+    'aaveusdt': 'AAVE/USDT',
+    'mkrusdt': 'MKR/USDT',
+    'thetausdt': 'THETA/USDT',
+    'axsusdt': 'AXS/USDT',
+    'sandusdt': 'SAND/USDT',
+    'icpusdt': 'ICP/USDT',
+    'shibusdt': 'SHIB/USDT',
+    'aptusdt': 'APT/USDT',
+    'grtusdt': 'GRT/USDT',
+    'enjusdt': 'ENJ/USDT',
+    'chzusdt': 'CHZ/USDT',
+    'manausdt': 'MANA/USDT',
+    'sushiusdt': 'SUSHI/USDT',
+    'batusdt': 'BAT/USDT',
+    'zecusdt': 'ZEC/USDT',
+    'dashusdt': 'DASH/USDT',
+    'neousdt': 'NEO/USDT',
+    'iotausdt': 'IOTA/USDT',
+    'omgusdt': 'OMG/USDT',
+    'cakeusdt': None,  # CAKE not available on Kraken
+    'stxusdt': 'STX/USDT',
+    'snxusdt': 'SNX/USDT',
+    'compusdt': 'COMP/USDT',
+    'zilusdt': 'ZIL/USDT',
+    'ksmusdt': 'KSM/USDT',
+    'renusdt': 'REN/USDT'
+}
+
+
+bitfinex_symbol_map = {
+    'btcusdt': 'tBTCUSD',
+    'ethusdt': 'tETHUSD',
+    'solusdt': 'tSOLUSD',
+    'bnbusdt': None,  # BNB not available on Bitfinex
+    'dogeusdt': 'tDOGEUSD',
+    'usdcusdt': 'tUDCUSD',  # Bitfinex uses 'UDC' for USDC
+    'xrpusdt': 'tXRPUSD',
+    'adausdt': 'tADAUSD',
+    'maticusdt': 'tMATICUSD',
+    'tonusdt': 'tTONUSD',  # TON is available
+    'linkusdt': 'tLINKUSD',
+    'trxusdt': 'tTRXUSD',
+    'nearusdt': 'tNEARUSD',
+    'xlmusdt': 'tXLMUSD',
+    'rndrusdt': None,  # RNDR not available on Bitfinex
+    'dotusdt': 'tDOTUSD',
+    'uniusdt': 'tUNIUSD',
+    'atomusdt': 'tATOMUSD',
+    'xmrusdt': 'tXMRUSD',
+    'ldousdt': None,  # LDO not available on Bitfinex
+    'gmxusdt': None,  # GMX not available on Bitfinex
+    'ltcusdt': 'tLTCUSD',
+    'avaxusdt': 'tAVAXUSD',
+    'bchusdt': 'tBCHUSD',
+    'vetusdt': 'tVETUSD',
+    'filusdt': 'tFILUSD',
+    'etcusdt': 'tETCUSD',
+    'algousdt': 'tALGOUSD',
+    'xtzusdt': 'tXTZUSD',
+    'eosusdt': 'tEOSUSD',
+    'aaveusdt': 'tAAVEUSD',
+    'mkrusdt': 'tMKRUSD',
+    'thetausdt': 'tTHETAUSD',
+    'axsusdt': 'tAXSUSD',
+    'sandusdt': 'tSANDUSD',
+    'icpusdt': 'tICPUSD',
+    'shibusdt': 'tSHIBUSD',
+    'aptusdt': 'tAPTUSD',
+    'grtusdt': 'tGRTUSD',
+    'enjusdt': 'tENJUSD',
+    'chzusdt': 'tCHZUSD',
+    'manausdt': 'tMNAUSD',  # Bitfinex uses 'MNA' for MANA
+    'sushiusdt': 'tSUSHIUSD',
+    'batusdt': 'tBATUSD',
+    'zecusdt': 'tZECUSD',
+    'dashusdt': 'tDSHUSD',  # Bitfinex uses 'DSH' for DASH
+    'neousdt': 'tNEOUSD',
+    'iotausdt': 'tIOTUSD',  # Bitfinex uses 'IOT' for IOTA
+    'omgusdt': 'tOMGUSD',
+    'cakeusdt': None,  # CAKE not available on Bitfinex
+    'stxusdt': 'tSTXUSD',
+    'snxusdt': 'tSNXUSD',
+    'compusdt': 'tCOMPUSD',
+    'zilusdt': 'tZILUSD',
+    'ksmusdt': 'tKSMUSD',
+    'renusdt': 'tRENUSD'
+}
+
+
+# Initialize exchange-specific symbol lists
+kraken_symbols_selected = []
+bitfinex_symbols_selected = []
+
 
 cumulative_sum_map = {}
 cumulative_sum_map_liq = {}
@@ -640,6 +768,86 @@ async def binance_liquidation(uri):
 
 
 
+# Kraken Trade Stream
+async def kraken_trade_stream(uri):
+    if not kraken_symbols_selected:
+        return
+    while True:
+        try:
+            async with connect(uri, max_size=None) as websocket:
+                subscribe_message = {
+                    "event": "subscribe",
+                    "pair": kraken_symbols_selected,
+                    "subscription": {"name": "trade"}
+                }
+                await websocket.send(json.dumps(subscribe_message))
+                while True:
+                    message = await websocket.recv()
+                    data = json.loads(message)
+                    if isinstance(data, list) and data[-1] == 'trade':
+                        trades = data[1]
+                        pair = data[3]
+                        symbol = pair.split('/')[0]
+                        if symbol == 'XBT':
+                            symbol = 'BTC'
+                        for trade in trades:
+                            price = float(trade[0])
+                            quantity = float(trade[1])
+                            trade_time = int(float(trade[2]) * 1000)
+                            side = trade[3]  # 'b' or 's'
+                            is_buyer_maker = True if side == 's' else False
+                            await process_trade(symbol, price, quantity, trade_time, is_buyer_maker)
+        except ConnectionClosed:
+            print("No Connection📡❌🛰️ (Kraken)")
+            await asyncio.sleep(5)
+        except Exception as e:
+            print(f"[red]An error occurred in kraken_trade_stream: {e}[/red]")
+            await asyncio.sleep(5)
+
+# Bitfinex Trade Stream
+async def bitfinex_trade_stream(uri):
+    if not bitfinex_symbols_selected:
+        return
+    chan_id_symbol_map = {}
+    while True:
+        try:
+            async with connect(uri, max_size=None) as websocket:
+                # Subscribe to trades for each symbol
+                for symbol in bitfinex_symbols_selected:
+                    subscribe_message = {
+                        "event": "subscribe",
+                        "channel": "trades",
+                        "symbol": symbol
+                    }
+                    await websocket.send(json.dumps(subscribe_message))
+                # Handle incoming messages
+                while True:
+                    message = await websocket.recv()
+                    data = json.loads(message)
+                    if isinstance(data, dict):
+                        if data.get('event') == 'subscribed' and data.get('channel') == 'trades':
+                            chan_id_symbol_map[data['chanId']] = data['symbol']
+                    elif isinstance(data, list):
+                        chan_id = data[0]
+                        if data[1] == 'tu':
+                            # Trade executed update
+                            trade_info = data[2]
+                            symbol = chan_id_symbol_map.get(chan_id, 'UNKNOWN').lstrip('t')
+                            if symbol == 'BTC':
+                                symbol = 'BTC'
+                            price = float(trade_info[3])
+                            quantity = abs(float(trade_info[2]))
+                            is_buyer_maker = True if float(trade_info[2]) < 0 else False
+                            trade_time = int(trade_info[1])
+                            await process_trade(symbol, price, quantity, trade_time, is_buyer_maker)
+        except ConnectionClosed:
+            print("No Connection📡❌🛰️ (Bitfinex)")
+            await asyncio.sleep(5)
+        except Exception as e:
+            print(f"[red]An error occurred in bitfinex_trade_stream: {e}[/red]")
+            await asyncio.sleep(5)
+
+
 
 def select_symbols():
     """
@@ -676,6 +884,19 @@ def select_symbols():
     if not selected_symbols:
         selected_symbols = symbols
 
+        # Create the formatted symbol list
+    selected_symbols_formatted = [name_map.get(symbol.upper().replace('USDT', ''), symbol.upper().replace('USDT', '')) for symbol in selected_symbols]
+
+    global kraken_symbols_selected, bitfinex_symbols_selected
+    kraken_symbols_selected = [kraken_symbol_map[symbol] for symbol in selected_symbols if symbol in kraken_symbol_map and kraken_symbol_map[symbol] is not None]
+    bitfinex_symbols_selected = [bitfinex_symbol_map[symbol] for symbol in selected_symbols if symbol in bitfinex_symbol_map and bitfinex_symbol_map[symbol] is not None]
+
+    if not kraken_symbols_selected:
+        print("No selected symbols are available on Kraken.")
+    if not bitfinex_symbols_selected:
+        print("No selected symbols are available on Bitfinex.")
+
+
 
 async def main():
     """
@@ -704,6 +925,10 @@ async def main():
     # Ensure streams and processing are only set up for selected symbols
     tasks.append(coinbase_trade_stream(websocket_url_base_coinbase))
     tasks.append(binance_liquidation(websocket_url_liq))
+    if kraken_symbols_selected:
+        asyncio.create_task(kraken_trade_stream(websocket_url_kraken))
+    if bitfinex_symbols_selected:
+        asyncio.create_task(bitfinex_trade_stream(websocket_url_bitfinex))
     tasks.append(periodic_export(interval, trade_threshold, liquidation_threshold, start_time))
 
     print("⚙️ asyncio.gather is running ⚙️")
