@@ -35,10 +35,13 @@ symbols = [
 # Placeholder for user-selected symbols
 selected_symbols = []
 selected_symbols_formatted = []
+All_symbols = False
 
 websocket_url_base_binance = 'wss://fstream.binance.com/ws/'
 websocket_url_base_coinbase = 'wss://ws-feed.exchange.coinbase.com'
 websocket_url_liq = 'wss://fstream.binance.com/ws/!forceOrder@arr'
+websocket_url_kraken = 'wss://ws.kraken.com/'
+websocket_url_bitfinex = 'wss://api-pub.bitfinex.com/ws/2'
 
 # Initialize Variables
 name_map = {
@@ -194,8 +197,6 @@ def format_trade_time(trade_time):
     berlin = pytz.timezone("Europe/Berlin")
     return datetime.fromtimestamp(trade_time / 1000, berlin).strftime('%H:%M:%S')
 
-
-# ...
 
 
 def calculate_time_difference(start_time, current_time):
@@ -570,8 +571,10 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
 
         # Using formatted symbols
         # 
-
-        symbols_display = ', '.join(selected_symbols_formatted)
+        if All_symbols:
+            symbols_display = '🃏ALL🃏'
+        else:
+            symbols_display = ', '.join(selected_symbols_formatted)
 
 
         # Create the header content as a Text object with wrapping
@@ -609,7 +612,7 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"📊Avg. Trades per minute:      {avg_trades_per_minute:.2f}\n\n"
             f"📈Total USD Size:              {total_usd_size_long:,.2f}$\n"
             f"📉Total USD Size:              {total_usd_size_short:,.2f}$\n"
-            f"🔰USD Difference:              {usd_size_difference:,.2f}$\n"
+            f"🔰USD Spread:                  {usd_size_difference:,.2f}$\n"
             f"📊Avg. USD Size per minute:    {avg_usd_size_per_minute:,.2f}$",
             border_style=trades_panel_border_color,
             title="Trades (Interval)"
@@ -665,7 +668,7 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"📊Avg. Trades per minute:       {avg_trades_per_minute_all:.2f}\n\n"
             f"📈Total USD Size:               {total_usd_size_long_all:,.2f}$\n"
             f"📉Total USD Size:               {total_usd_size_short_all:,.2f}$\n"
-            f"🔰Difference:                   {usd_size_difference_all:,.2f}$\n"
+            f"🔰Spread:                       {usd_size_difference_all:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_all:,.2f}$",
             border_style=trades_panel_all_border_color,
             title="Trades (Since Start)"
@@ -730,7 +733,7 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute:.2f}\n\n"
             f"📈Total Size:                   {total_usd_size_long_liq:,.2f}$\n"
             f"📉Total Size:                   {total_usd_size_short_liq:,.2f}$\n"
-            f"🔰Difference:                   {usd_size_difference_liq:,.2f}$\n"
+            f"🔰Spread:                       {usd_size_difference_liq:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_liq:,.2f}$",
             border_style=liq_panel_border_color,
             title="Liquidations (Interval)"
@@ -786,7 +789,7 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute_all:.2f}\n\n"
             f"📈Total Size:                   {total_usd_size_long_liq_all:,.2f}$\n"
             f"📉Total Size:                   {total_usd_size_short_liq_all:,.2f}$\n"
-            f"🔰Difference:                   {usd_size_difference_liq_all:,.2f}$\n"
+            f"🔰Spread:                       {usd_size_difference_liq_all:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_liq_all:,.2f}$",
             border_style=liq_panel_all_border_color,
             title="Liquidations (Since Start)"
@@ -1038,13 +1041,14 @@ def select_symbols():
     print("ALL: all of them.")
     print("Type 'DONE' when you are finished.")
 
-    global selected_symbols, selected_symbols_formatted
+    global selected_symbols, selected_symbols_formatted, All_symbols
     selected_symbols = []
 
     while True:
         user_input = input("Select symbol: ").strip().upper()
         if user_input == 'ALL':
             selected_symbols = symbols
+            All_symbols = True
             break
         elif user_input == 'DONE':
             break
@@ -1087,7 +1091,7 @@ async def main():
     trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
     liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
     average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
-    interval = 1  # Set interval to 1 second
+    interval = 0.2  # Set interval to 1 second
 
     # Capture the start time in a readable format
     start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -1100,11 +1104,6 @@ async def main():
 
     asyncio.create_task(coinbase_trade_stream(websocket_url_base_coinbase))
     asyncio.create_task(binance_liquidation(websocket_url_liq))
-
-    # Start Kraken and Bitfinex trade streams
-    websocket_url_kraken = 'wss://ws.kraken.com/'
-    websocket_url_bitfinex = 'wss://api-pub.bitfinex.com/ws/2'
-
     if kraken_symbols_selected:
         asyncio.create_task(kraken_trade_stream(websocket_url_kraken))
 
