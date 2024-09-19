@@ -4,7 +4,8 @@
 - You can only choose between a given number of crypto currencies (more than enough)                       
 - Some terminals represent the emojis a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
 - I personally use the timestamp "Europe/Berlin". I don't think that this is the case for everybody.
-- The market data for trades is provided via binance, coinbase, kraken and bitfinex websockets. The market data for liquidations and funding rates are only provided via binance websocket 
+- The market data for trades is provided via binance, coinbase, kraken and bitfinex websockets. The market data for liquidations and funding rates are only provided via Binance WebSocket
+- It could be possible that there are programs and software that have problems with referring files that have emojis in their name. I have no issues with that but if you are getting some this could be a reason  
 -----------------------------------------------------------------------
 
 
@@ -450,46 +451,6 @@ This Code provides the Funding Rates for contracts.
 
 
  ---------------------------------------------------------------------------------------------------------------------------------------
-
-
-# **🃏The Daily Trade Summary🃏      ⭐⭐**
-
-This Code creates a cumulative sum over all trades made with the given symbol since starting the program and visualizes their time-dependent behavior. The longer the code is running the bigger the impact from the current trades must be to make significant changes on the indicators. You create a broader overview if you start this code every couple of hours. 
-
-9️⃣ 📈📈📈📈📈📈📈📈📈   |The Cumulative Sum is >= to 1/10 of the market cap                                                                    
-8️⃣ 📈📈📈📈📈📈📈📈     |The Cumulative Sum is >= to 1/100 of the market cap                                                                      
-7️⃣ 📈📈📈📈📈📈📈       |The Cumulative Sum is >= to 1/1,000 of the market cap                                                                      
-6️⃣ 📈📈📈📈📈📈         |The Cumulative Sum is >= to 1/10,000 of the market cap                                                                       
-5️⃣ 📈📈📈📈📈           |The Cumulative Sum is >= to 1/100,000 of the market cap                                                                      
-4️⃣ 📈📈📈📈             |The Cumulative Sum is >= to 1/1,000,000 of the market cap                                                                
-3️⃣ 📈📈📈               |The Cumulative Sum is >= to 1/10,000,000 of the market cap                                                                  
-2️⃣ 📈📈                 |The Cumulative Sum is >= to 1/100,000,000 of the market cap                                                                             
-1️⃣ 📈                   |The Cumulative Sum is >= to 1/1,000,000,000 of the market cap                                                                  
-
-9️⃣ 📉📉📉📉📉📉📉📉📉  |The Cumulative Sum is <= to -1/10 of the market cap                                                                
-8️⃣ 📉📉📉📉📉📉📉📉    |The Cumulative Sum is <= to -1/100 of the market cap                                                                   
-7️⃣ 📉📉📉📉📉📉📉      |The Cumulative Sum is <= to -1/1,000 of the market cap                                                                  
-6️⃣ 📉📉📉📉📉📉        |The Cumulative Sum is <= to -1/10,000 of the market cap                                                                         
-5️⃣ 📉📉📉📉📉          |The Cumulative Sum is <= to -1/100,000 of the market cap                                                                               
-4️⃣ 📉📉📉📉            |The Cumulative Sum is <= to -1/1,000,000 of the market cap                                                                     
-3️⃣ 📉📉📉              |The Cumulative Sum is <= to -1/10,000,000 of the market cap                                                                        
-2️⃣ 📉📉                |The Cumulative Sum is <= to -1/100,000,000 of the market cap                                                                              
-1️⃣ 📉                  |The Cumulative Sum is <= to -1/1,000,000,000 of the market cap    
-
-🟨                     |The Cumulative Sum changed between -5% and 5%                                                                
-🟩                     |The Cumulative Sum changed between 5% and 10%                                                                         
-🟩🟩                   |The Cumulative Sum changed between 10% and 20%                                                                                 
-🟩🟩🟩                 |The Cumulative Sum changed between 20% and 40%                                                                                    
-🟩🟩🟩🟩               |The Cumulative Sum changed between 40% and 80%                                                                                 
-🟩🟩🟩🟩🟩             |The Cumulative Sum changed more than 80%                                                                               
-🟥                     |The Cumulative Sum changed between -5% and -10%                                                                                
-🟥🟥                   |The Cumulative Sum changed between -10% and -20%                                                                                      
-🟥🟥🟥                 |The Cumulative Sum changed between -20% and -40%                                                                                                                                                       
-🟥🟥🟥🟥               |The Cumulative Sum changed between -40% and -80%                                                                                 
-🟥🟥🟥🟥🟥             |The Cumulative Sum changed more than -80%                                                                        
-
-
----------------------------------------------------------------------
 
 
 ## Definitions and Education🃏📖
