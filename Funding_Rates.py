@@ -118,11 +118,11 @@ def create_table():
     table = Table(show_header=True, header_style="bold white", title=f"🚀 Funding Rates {current_time} ️🚀", title_style="bold white", show_lines=True)
     table.add_column("Symbol", style="white", justify="center")
     table.add_column("⭐Magnitude", style="green")
-    table.add_column("⏱️8-Hour", justify="right")
-    table.add_column("⏱️Daily", justify="right")
-    table.add_column("⏱️Weekly", justify="right")
-    table.add_column("⏱️Monthly", justify="right")
-    table.add_column("⏱️Yearly", justify="right")
+    table.add_column("⏱ 8-Hour", justify="center")
+    table.add_column("⏱ Daily", justify="center")
+    table.add_column("⏱ Weekly", justify="center")
+    table.add_column("⏱ Monthly", justify="center")
+    table.add_column("⏱ Yearly", justify="center")
     
     sorted_symbols = get_sorted_symbols()
 
@@ -188,10 +188,8 @@ def select_symbols():
 
 async def main():
     select_symbols()
-    tasks = [binance_funding_stream(symbol) for symbol in symbols]
+    tasks = [binance_funding_stream(symbol) for symbol in selected_symbols]
     tasks.append(update_display())
     await asyncio.gather(*tasks)
 
 asyncio.run(main())
-
-
