@@ -12,7 +12,7 @@
 # **Trade Trawler🚢      |⭐⭐⭐⭐|**
 
 
-This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the difference between long-trades and short-trades is positive and red if the difference is negative. The same is true for liquidations. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
+This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the spread between long-trades (ask) and short-trades (put) is positive and red if the spread is negative. The same is true for liquidations. The listed trades and liquidations are sorted after the Total-USD-Size. The Parameter "Avg. USD Size per minute" gives information about how much people bought or sold on average each minute and not how much was bought or sold the last minute. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
 
 
 
