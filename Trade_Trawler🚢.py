@@ -226,22 +226,24 @@ def collect_liquidation_data(symbol, used_trade_time, liquidation_type, usd_size
     liquidations_data.append([symbol, used_trade_time, liquidation_type, usd_size, timestamp])
 
 def get_stars(usd_size):
-    if usd_size >= 500000000:
-        return '❓💰🃏💰❓'
-    elif usd_size >= 250000000:
-        return '💸🌈🦄🌈💸'
-    elif usd_size >= 120000000:
+    if usd_size >= 1310720000:
+        return '⁉️💰🃏💰⁉️'
+    elif usd_size >= 655360000:
+        return '💸🌠🦄🌠💸'
+    elif usd_size >= 327680000:
+        return '  🌠🦄🌠  '
+    elif usd_size >= 163840000:
         return '  🐳🐳🐳  '
-    elif usd_size >= 80000000:
+    elif usd_size >= 81920000:
         return '   🐳🐳   '
-    elif usd_size >= 50000000:
+    elif usd_size >= 40960000:
         return '    🐳    '
-    elif usd_size >= 25000000:
-        return '  🦈🦈🦈  '
-    elif usd_size >= 12400000:
-        return '   🦈🦈   '
+    elif usd_size >= 20480000:
+        return '  🦑🦑🦑  '
+    elif usd_size >= 10240000:
+        return '   🦑🦑   '
     elif usd_size >= 5120000:
-        return '    🦈    '
+        return '    🦑    '
     elif usd_size >= 2560000:
         return '🐠🐠🐠🐠🐠'
     elif usd_size >= 1280000:
@@ -266,35 +268,43 @@ def get_stars(usd_size):
         return '          '
 
 def get_liq_stars(usd_size):
-    if usd_size > 40000000:
-        return '🌊💰🤿💰🌊'
-    elif usd_size > 20000000:
-        return '💸🌊🤿🌊💸'
-    elif usd_size > 10000000:
-        return '  🌊🤿🌊  '
-    elif usd_size > 5000000:
-        return '    🤿    '
-    elif usd_size > 2480000:
+    if usd_size > 262144000:
+        return '🌊💰♒💰🌊'
+    if usd_size > 131072000:
+        return '💸🌊♒🌊💸'
+    if usd_size > 65536000:
+        return '  🌊♒🌊  '
+    elif usd_size > 32768000:
         return '  🌊🌊🌊  '
-    elif usd_size > 1240000:
+    elif usd_size > 16384000:
         return '   🌊🌊   '
-    elif usd_size > 512000:
+    elif usd_size > 8192000:
         return '    🌊    '
-    elif usd_size > 256000:
+    elif usd_size > 4096000:
+        return '  🪣🪣🪣  '
+    elif usd_size > 2048000:
+        return '   🪣🪣   '
+    elif usd_size > 1024000:
+        return '    🪣    '
+    elif usd_size > 512000:
         return '💦💦💦💦💦'
-    elif usd_size > 128000:
+    elif usd_size > 256000:
         return ' 💦💦💦💦 '
-    elif usd_size > 64000:
+    elif usd_size > 128000:
         return '  💦💦💦  '
-    elif usd_size > 32000:
+    elif usd_size > 64000:
         return '   💦💦   '
-    elif usd_size > 16000:
+    elif usd_size > 32000:
         return '    💦    '
+    elif usd_size > 16000:
+        return '💧💧💧💧💧'
     elif usd_size > 8000:
-        return '  💧💧💧  '
+        return ' 💧💧💧💧 '
     elif usd_size > 4000:
-        return '   💧💧   '
+        return '  💧💧💧  '
     elif usd_size > 2000:
+        return '   💧💧   '
+    elif usd_size > 1000:
         return '    💧    '
     else:
         return '          '
@@ -318,10 +328,17 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
     trades_long_count = sum(1 for trade in filtered_trades_data if trade[2] == '📈 ')
     trades_short_count = sum(1 for trade in filtered_trades_data if trade[2] == '📉 ')
 
+    trades_long_count_percentage = (trades_long_count / total_trades_in_interval) * 100 if total_trades_in_interval > 0 else 0
+    trades_short_count_percentage = (trades_short_count / total_trades_in_interval) * 100 if total_trades_in_interval > 0 else 0
+
     total_usd_size_long = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📈 ')
     total_usd_size_short = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📉 ')
 
     usd_size_difference = total_usd_size_long - total_usd_size_short
+    total_usd_size_trades = total_usd_size_long + total_usd_size_short
+
+    total_usd_size_long_percentage = (total_usd_size_long / total_usd_size_trades) * 100 if total_usd_size_trades > 0 else 0
+    total_usd_size_short_percentage = (total_usd_size_short / total_usd_size_trades) * 100 if total_usd_size_trades > 0 else 0
 
     # Averages per minute
     avg_trades_per_minute = (total_trades_in_interval * 60) / average_interval if average_interval > 0 else 0
@@ -334,13 +351,21 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
     liquidations_long_count = sum(1 for liq in filtered_liquidations_data if liq[2] == '📈 ')
     liquidations_short_count = sum(1 for liq in filtered_liquidations_data if liq[2] == '📉 ')
 
+    liquidations_long_count_percentage = (liquidations_long_count / total_liquidations_in_interval) * 100 if total_liquidations_in_interval > 0 else 0
+    liquidations_short_count_percentage = (liquidations_short_count / total_liquidations_in_interval) * 100 if total_liquidations_in_interval > 0 else 0
+
     total_usd_size_long_liq = sum(liq[3] for liq in filtered_liquidations_data if liq[2] == '📈 ')
     total_usd_size_short_liq = sum(liq[3] for liq in filtered_liquidations_data if liq[2] == '📉 ')
 
-    usd_size_difference_liq = total_usd_size_long_liq - total_usd_size_short_liq
 
-    avg_liquidations_per_minute = (total_liquidations_in_interval * 60) / average_interval if average_interval > 0 else 0
-    avg_usd_size_per_minute_liq = (total_usd_size_liq_in_interval * 60) / average_interval if average_interval > 0 else 0
+    usd_size_difference_liq = total_usd_size_long_liq - total_usd_size_short_liq
+    total_usd_size_liquidations = total_usd_size_long_liq + total_usd_size_short_liq
+
+    total_usd_size_long_liq_percentage = (total_usd_size_long_liq / total_usd_size_liquidations) * 100 if total_usd_size_liquidations > 0 else 0
+    total_usd_size_short_liq_percentage = (total_usd_size_short_liq / total_usd_size_liquidations) * 100 if total_usd_size_liquidations > 0 else 0
+
+    avg_liquidations_per_minute = (total_liquidations_in_interval * 60) / total_elapsed_time if average_interval > total_elapsed_time else average_interval
+    avg_usd_size_per_minute_liq = (total_usd_size_liq_in_interval * 60) / total_elapsed_time if average_interval > total_elapsed_time else average_interval
 
     # Count stars for trades within the interval
     stars_count_trades = {}
@@ -415,11 +440,18 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
 
     trades_long_count_all = sum(1 for trade in trades_data if trade[2] == '📈 ')
     trades_short_count_all = sum(1 for trade in trades_data if trade[2] == '📉 ')
+    trades_long_count_percentage_all = (trades_long_count_all / total_trades_all) * 100 if total_trades_all > 0 else 0
+    trades_short_count_percentage_all = (trades_short_count_all / total_trades_all) * 100 if total_trades_all > 0 else 0
 
     total_usd_size_long_all = sum(trade[3] for trade in trades_data if trade[2] == '📈 ')
     total_usd_size_short_all = sum(trade[3] for trade in trades_data if trade[2] == '📉 ')
+    total_usd_size_all
 
     usd_size_difference_all = total_usd_size_long_all - total_usd_size_short_all
+    total_usd_size_trades_all = total_usd_size_long_all + total_usd_size_short_all 
+
+    total_usd_size_long_percentage_all = (total_usd_size_long_all / total_usd_size_trades_all) * 100 if total_usd_size_trades_all > 0 else 0
+    total_usd_size_short_percentage_all = (total_usd_size_short_all / total_usd_size_trades_all) * 100 if total_usd_size_trades_all > 0 else 0
 
     # Average trades and USD size per minute since program start
     avg_trades_per_minute_all = (total_trades_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
@@ -432,10 +464,17 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
     liquidations_long_count_all = sum(1 for liq in liquidations_data if liq[2] == '📈 ')
     liquidations_short_count_all = sum(1 for liq in liquidations_data if liq[2] == '📉 ')
 
+    liquidations_long_count_percentage_all = (liquidations_long_count_all / total_liquidations_all) * 100 if total_liquidations_all > 0 else 0
+    liquidations_short_count_percentage_all = (liquidations_short_count_all / total_liquidations_all) * 100 if total_liquidations_all > 0 else 0
+
     total_usd_size_long_liq_all = sum(liq[3] for liq in liquidations_data if liq[2] == '📈 ')
     total_usd_size_short_liq_all = sum(liq[3] for liq in liquidations_data if liq[2] == '📉 ')
 
     usd_size_difference_liq_all = total_usd_size_long_liq_all - total_usd_size_short_liq_all
+    total_usd_size_liquidations_all = total_usd_size_long_liq_all + total_usd_size_short_liq_all
+
+    total_usd_size_long_liq_percentage_all = (total_usd_size_long_liq_all / total_usd_size_liquidations_all) * 100 if total_usd_size_liquidations_all > 0 else 0
+    total_usd_size_short_liq_percentage_all = (total_usd_size_short_liq_all / total_usd_size_liquidations_all) * 100 if total_usd_size_liquidations_all > 0 else 0
 
     avg_liquidations_per_minute_all = (total_liquidations_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
     avg_usd_size_per_minute_liq_all = (total_usd_size_liq_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
@@ -462,27 +501,37 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
         'total_usd_size_in_interval': total_usd_size_in_interval,
         'trades_long_count': trades_long_count,
         'trades_short_count': trades_short_count,
+        'trades_long_count_percentage': trades_long_count_percentage,
+        'trades_short_count_percentage': trades_short_count_percentage,
         'total_usd_size_long': total_usd_size_long,
         'total_usd_size_short': total_usd_size_short,
+        'total_usd_size_long_percentage': total_usd_size_long_percentage,
+        'total_usd_size_short_percentage': total_usd_size_short_percentage,
         'usd_size_difference': usd_size_difference,
         'avg_trades_per_minute': avg_trades_per_minute,
         'avg_usd_size_per_minute': avg_usd_size_per_minute,
         'usd_size_color': usd_size_color,
         'difference_color': difference_color,
         'stars_count_trades': stars_count_trades,
+        'total_usd_size_trades': total_usd_size_trades,
         # Liquidations within interval
         'total_liquidations_in_interval': total_liquidations_in_interval,
         'total_usd_size_liq_in_interval': total_usd_size_liq_in_interval,
         'liquidations_long_count': liquidations_long_count,
         'liquidations_short_count': liquidations_short_count,
+        'liquidations_long_count_percentage': liquidations_long_count_percentage,
+        'liquidations_short_count_percentage': liquidations_short_count_percentage,
         'total_usd_size_long_liq': total_usd_size_long_liq,
         'total_usd_size_short_liq': total_usd_size_short_liq,
+        'total_usd_size_long_liq_percentage': total_usd_size_long_liq_percentage,
+        'total_usd_size_short_liq_percentage': total_usd_size_short_liq_percentage,
         'usd_size_difference_liq': usd_size_difference_liq,
         'avg_liquidations_per_minute': avg_liquidations_per_minute,
         'avg_usd_size_per_minute_liq': avg_usd_size_per_minute_liq,
         'usd_size_color_liq': usd_size_color_liq,
         'difference_color_liq': difference_color_liq,
         'stars_count_liquidations': stars_count_liquidations,
+        'total_usd_size_liquidations': total_usd_size_liquidations,
         # Cumulative Trades
         'total_trades_all': total_trades_all,
         'total_usd_size_all': total_usd_size_all,
@@ -490,25 +539,35 @@ def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidati
         'trades_short_count_all': trades_short_count_all,
         'total_usd_size_long_all': total_usd_size_long_all,
         'total_usd_size_short_all': total_usd_size_short_all,
+        'trades_long_count_percentage_all': trades_long_count_percentage_all,
+        'trades_short_count_percentage_all': trades_short_count_percentage_all,
+        'total_usd_size_long_percentage_all': total_usd_size_long_percentage_all,
+        'total_usd_size_short_percentage_all': total_usd_size_short_percentage_all,
         'usd_size_difference_all': usd_size_difference_all,
         'avg_trades_per_minute_all': avg_trades_per_minute_all,
         'avg_usd_size_per_minute_all': avg_usd_size_per_minute_all,
         'usd_size_color_all': usd_size_color_all,
         'difference_color_all': difference_color_all,
         'stars_count_trades_all': stars_count_trades_all,
+        'total_usd_size_trades_all': total_usd_size_trades_all,
         # Cumulative Liquidations
         'total_liquidations_all': total_liquidations_all,
         'total_usd_size_liq_all': total_usd_size_liq_all,
         'liquidations_long_count_all': liquidations_long_count_all,
         'liquidations_short_count_all': liquidations_short_count_all,
+        'liquidations_long_count_percentage_all': liquidations_long_count_percentage_all,
+        'liquidations_short_count_percentage_all': liquidations_short_count_percentage_all,
         'total_usd_size_long_liq_all': total_usd_size_long_liq_all,
         'total_usd_size_short_liq_all': total_usd_size_short_liq_all,
+        'total_usd_size_long_liq_percentage_all': total_usd_size_long_liq_percentage_all,
+        'total_usd_size_short_liq_percentage_all': total_usd_size_short_liq_percentage_all,
         'usd_size_difference_liq_all': usd_size_difference_liq_all,
         'avg_liquidations_per_minute_all': avg_liquidations_per_minute_all,
         'avg_usd_size_per_minute_liq_all': avg_usd_size_per_minute_liq_all,
         'usd_size_color_liq_all': usd_size_color_liq_all,
         'difference_color_liq_all': difference_color_liq_all,
-        'stars_count_liquidations_all': stars_count_liquidations_all
+        'stars_count_liquidations_all': stars_count_liquidations_all,
+        'total_usd_size_liquidations_all': total_usd_size_liquidations_all
     }
 
     return metrics
@@ -529,45 +588,69 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
         total_trades_in_interval = metrics['total_trades_in_interval']
         trades_long_count = metrics['trades_long_count']
         trades_short_count = metrics['trades_short_count']
+        trades_long_count_percentage = metrics['trades_long_count_percentage']
+        trades_short_count_percentage = metrics['trades_short_count_percentage']
+        total_usd_size_in_interval = metrics['total_usd_size_in_interval']
         total_usd_size_long = metrics['total_usd_size_long']
         total_usd_size_short = metrics['total_usd_size_short']
+        total_usd_size_long_percentage = metrics['total_usd_size_long_percentage']
+        total_usd_size_short_percentage = metrics['total_usd_size_short_percentage']
         usd_size_difference = metrics['usd_size_difference']
         avg_trades_per_minute = metrics['avg_trades_per_minute']
         avg_usd_size_per_minute = metrics['avg_usd_size_per_minute']
         stars_count_trades = metrics['stars_count_trades']
+        total_usd_size_trades = metrics['total_usd_size_trades']
 
         # Liquidations within interval
         total_liquidations_in_interval = metrics['total_liquidations_in_interval']
         liquidations_long_count = metrics['liquidations_long_count']
         liquidations_short_count = metrics['liquidations_short_count']
+        liquidations_long_count_percentage = metrics['liquidations_long_count_percentage']
+        liquidations_short_count_percentage = metrics['liquidations_short_count_percentage']
+        total_usd_size_liq_in_interval = metrics['total_usd_size_liq_in_interval']
         total_usd_size_long_liq = metrics['total_usd_size_long_liq']
         total_usd_size_short_liq = metrics['total_usd_size_short_liq']
+        total_usd_size_long_liq_percentage = metrics['total_usd_size_long_liq_percentage']
+        total_usd_size_short_liq_percentage = metrics['total_usd_size_short_liq_percentage']
         usd_size_difference_liq = metrics['usd_size_difference_liq']
         avg_liquidations_per_minute = metrics['avg_liquidations_per_minute']
         avg_usd_size_per_minute_liq = metrics['avg_usd_size_per_minute_liq']
         stars_count_liquidations = metrics['stars_count_liquidations']
+        total_usd_size_liquidations = metrics['total_usd_size_liquidations']
 
         # Cumulative Trades
         total_trades_all = metrics['total_trades_all']
         trades_long_count_all = metrics['trades_long_count_all']
         trades_short_count_all = metrics['trades_short_count_all']
+        trades_long_count_percentage_all = metrics['trades_long_count_percentage_all']
+        trades_short_count_percentage_all = metrics['trades_short_count_percentage_all']
+        total_usd_size_all = metrics['total_usd_size_all']
         total_usd_size_long_all = metrics['total_usd_size_long_all']
         total_usd_size_short_all = metrics['total_usd_size_short_all']
+        total_usd_size_long_percentage_all = metrics['total_usd_size_long_percentage_all']
+        total_usd_size_short_percentage_all = metrics['total_usd_size_short_percentage_all']
         usd_size_difference_all = metrics['usd_size_difference_all']
         avg_trades_per_minute_all = metrics['avg_trades_per_minute_all']
         avg_usd_size_per_minute_all = metrics['avg_usd_size_per_minute_all']
         stars_count_trades_all = metrics['stars_count_trades_all']
+        total_usd_size_trades_all = metrics['total_usd_size_trades_all']
 
         # Cumulative Liquidations
         total_liquidations_all = metrics['total_liquidations_all']
         liquidations_long_count_all = metrics['liquidations_long_count_all']
         liquidations_short_count_all = metrics['liquidations_short_count_all']
+        liquidations_long_count_percentage_all = metrics['liquidations_long_count_percentage_all']
+        liquidations_short_count_percentage_all = metrics['liquidations_short_count_percentage_all']
+        total_usd_size_liq_all = metrics['total_usd_size_liq_all']
         total_usd_size_long_liq_all = metrics['total_usd_size_long_liq_all']
         total_usd_size_short_liq_all = metrics['total_usd_size_short_liq_all']
+        total_usd_size_long_liq_percentage_all = metrics['total_usd_size_long_liq_percentage_all']
+        total_usd_size_short_liq_percentage_all = metrics['total_usd_size_short_liq_percentage_all']
         usd_size_difference_liq_all = metrics['usd_size_difference_liq_all']
         avg_liquidations_per_minute_all = metrics['avg_liquidations_per_minute_all']
         avg_usd_size_per_minute_liq_all = metrics['avg_usd_size_per_minute_liq_all']
         stars_count_liquidations_all = metrics['stars_count_liquidations_all']
+        total_usd_size_liquidations_all = metrics['total_usd_size_liquidations_all']
 
         # Using formatted symbols
         # 
@@ -576,16 +659,14 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
         else:
             symbols_display = ', '.join(selected_symbols_formatted)
 
-
         # Create the header content as a Text object with wrapping
-
         header_content = Text(justify="center", no_wrap=False)
         header_content.append(f"📊 Selected Symbols:\n", style="bold yellow")
         header_content.append(f"{symbols_display}\n", style="bold yellow")
         header_content.append(f"🌊 Liquidation Threshold at  {liquidation_threshold}$\n")
         header_content.append(f"🎣 Trade Threshold at        {trade_threshold}$\n")
         header_content.append(f"📅 {start_time} »» 🕰️{current_time}\n")
-        header_content.append(f"")
+        header_content.append(f"\n\n")
         # Create the header Panel with wrapping enabled
         header_panel = Panel(
             header_content,
@@ -605,17 +686,18 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
 
         # Left side: Trades
         trades_panel = Panel(
-            f"🔹 🔷Trades Metrics for the last {average_interval} seconds:🔷 🔹\n"
+            f"⏱ Trades Metrics for the last {average_interval} seconds ⏱\n"
             f"🎣Total Trades:                {total_trades_in_interval}\n"
-            f"📈Total Count:                 {trades_long_count}\n"
-            f"📉Total Count:                 {trades_short_count}\n"
+            f"📈Total Count:                 {trades_long_count}              📈{trades_long_count_percentage:.2f}%\n"
+            f"📉Total Count:                 {trades_short_count}              📉{trades_short_count_percentage:.2f}% \n"
             f"📊Avg. Trades per minute:      {avg_trades_per_minute:.2f}\n\n"
-            f"📈Total USD Size:              {total_usd_size_long:,.2f}$\n"
-            f"📉Total USD Size:              {total_usd_size_short:,.2f}$\n"
+            f"💵Total USD Size:              {total_usd_size_trades:,.2f}$\n"
+            f"📈Total USD Size Long:         {total_usd_size_long:,.2f}$    📈{total_usd_size_long_percentage:.2f}%\n"
+            f"📉Total USD Size Short:        {total_usd_size_short:,.2f}$    📉{total_usd_size_short_percentage:.2f}%\n"
             f"🔰USD Spread:                  {usd_size_difference:,.2f}$\n"
             f"📊Avg. USD Size per minute:    {avg_usd_size_per_minute:,.2f}$",
             border_style=trades_panel_border_color,
-            title="Trades (Interval)"
+            title="🔹 🔷Trades (Interval):🔷 🔹"
         )
 
         # Trades Sizes Table (Interval)
@@ -661,17 +743,18 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
 
         # Trades Sizes Table (Since Start)
         trades_panel_all = Panel(
-            f"🔸 🔶Total Trades since start:🔶 🔸\n"
+            f"⏱ Total Trades since start: {time_difference} ⏱ \n"
             f"🎣Total Trades:                 {total_trades_all}\n"
-            f"📈Total Count:                  {trades_long_count_all}\n"
-            f"📉Total Count:                  {trades_short_count_all}\n"
+            f"📈Total Count:                  {trades_long_count_all}              📈{trades_long_count_percentage_all:.2f}%\n"
+            f"📉Total Count:                  {trades_short_count_all}              📉{trades_short_count_percentage_all:.2f}%\n"
             f"📊Avg. Trades per minute:       {avg_trades_per_minute_all:.2f}\n\n"
-            f"📈Total USD Size:               {total_usd_size_long_all:,.2f}$\n"
-            f"📉Total USD Size:               {total_usd_size_short_all:,.2f}$\n"
+            f"💵Total USD Size:               {total_usd_size_trades_all:,.2f}$\n"
+            f"📈Total USD Size Long:          {total_usd_size_long_all:,.2f}$    📈{total_usd_size_long_percentage_all:.2f}%\n"
+            f"📉Total USD Size Short:         {total_usd_size_short_all:,.2f}$    📉{total_usd_size_short_percentage_all:.2f}%\n"
             f"🔰Spread:                       {usd_size_difference_all:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_all:,.2f}$",
             border_style=trades_panel_all_border_color,
-            title="Trades (Since Start)"
+            title="🔸 🔶Trades (Since Start)🔶 🔸"
         )
 
         trade_table_all = Table(title="🔍 Trade Sizes (Since Start)")
@@ -718,25 +801,26 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
         layout["left"].update(
             Group(
                 trades_panel,
-                trade_table_interval,
                 trades_panel_all,
+                trade_table_interval,
                 trade_table_all
             )
         )
 
         # Right side: Liquidations
         liq_panel = Panel(
-            f"🔹 🔷Liquidations Metrics for the last {average_interval} seconds:🔷 🔹\n"
+            f"⏱ Liquidations Metrics for the last {average_interval} seconds ⏱\n"
             f"🌊Total Liquidations:           {total_liquidations_in_interval}\n"
-            f"📈Total Count:                  {liquidations_long_count}\n"
-            f"📉Total Count:                  {liquidations_short_count}\n"
+            f"📈Total Count:                  {liquidations_long_count}              📈{liquidations_long_count_percentage:.2f}%\n"
+            f"📉Total Count:                  {liquidations_short_count}              📉{liquidations_short_count_percentage:.2f}%\n"
             f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute:.2f}\n\n"
-            f"📈Total Size:                   {total_usd_size_long_liq:,.2f}$\n"
-            f"📉Total Size:                   {total_usd_size_short_liq:,.2f}$\n"
+            f"💵Total Size:                   {total_usd_size_liquidations:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq:,.2f}$    📈{total_usd_size_long_liq_percentage:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq:,.2f}$    📉{total_usd_size_short_liq_percentage:.2f}%\n"
             f"🔰Spread:                       {usd_size_difference_liq:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_liq:,.2f}$",
             border_style=liq_panel_border_color,
-            title="Liquidations (Interval)"
+            title="🔹 🔷Liquidations (Interval)🔷 🔹"
         )
 
         # Liquidations Sizes Table (Interval)
@@ -782,17 +866,18 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
 
         # Liquidations Sizes Table (Since Start)
         liq_panel_all = Panel(
-            f"🔸 🔶Total Liquidations since start:🔶 🔸\n"
+            f"⏱ Total Liquidations since start: {time_difference} ⏱\n"
             f"🌊Total Liquidations:           {total_liquidations_all}\n"
-            f"📈Total Count:                  {liquidations_long_count_all}\n"
-            f"📉Total Count:                  {liquidations_short_count_all}\n"
+            f"📈Total Count:                  {liquidations_long_count_all}              📈{liquidations_long_count_percentage_all:.2f}%\n"
+            f"📉Total Count:                  {liquidations_short_count_all}              📉{liquidations_short_count_percentage_all:.2f}%\n"
             f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute_all:.2f}\n\n"
-            f"📈Total Size:                   {total_usd_size_long_liq_all:,.2f}$\n"
-            f"📉Total Size:                   {total_usd_size_short_liq_all:,.2f}$\n"
+            f"💵Total Size:                   {total_usd_size_liquidations_all:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq_all:,.2f}$    📈{total_usd_size_long_liq_percentage_all:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq_all:,.2f}$    📉{total_usd_size_short_liq_percentage_all:.2f}%\n"
             f"🔰Spread:                       {usd_size_difference_liq_all:,.2f}$\n"
             f"📊Avg. USD Size per minute:     {avg_usd_size_per_minute_liq_all:,.2f}$",
             border_style=liq_panel_all_border_color,
-            title="Liquidations (Since Start)"
+            title="🔸 🔶Liquidations (Since Start)🔶 🔸"
         )
 
         liq_table_all = Table(title="🔍 Liquidation Sizes (Since Start)")
@@ -839,8 +924,8 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
         layout["right"].update(
             Group(
                 liq_panel,
-                liq_table_interval,
                 liq_panel_all,
+                liq_table_interval,
                 liq_table_all
             )
         )
