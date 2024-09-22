@@ -2,11 +2,26 @@
 
 ## Important❗
 - You can only choose between a given number of cryptocurrencies (more than enough)                       
-- Some terminals represent the emojis a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")
+- Some terminals represent the emojis a bit differently such that you may have to indent them correctly (add or delete space between the emoji and the name in "name_map")|Trade Trail🛤️ & Trade Trawler🚢: Line 47|
 - I use the timezone "Europe/Berlin". I don't think that this is the case for everybody. |Trade Trail🛤️: Line 215|Trade Trawler🚢:Line 197|
-- The market data for trades is provided via **Binance, Coinbase, Kraken and Bitfinex** WebSockets. The market data for liquidations and funding rates are only provided via Binance WebSocket
-- It could be possible that some programs and software have problems with referring files with emojis in their name. I have no issues with that but if you are getting some this could be a reason. Let me know such that i can change the names
+- The market data for **trades** is provided via **Binance, Coinbase, Kraken and Bitfinex** WebSockets. The market data for **liquidations and funding rates** are only provided via **Binance** WebSocket
+- It could be possible that some programs and software have problems with referring files with emojis in their name. I have no issues with that but if you are getting some this could be a reason. Let me know such that I can change the names
 - Inside the **Trade Trail** Code at Line 38 is an absolute Path defined for exporting received data into a .xlsx file, which probably doesn't exist on your computer. Change this to any Path you want to save the data in 
+- To be capable to start these programs you need to install some python libraries. I would recommend you to create an virtual environment via conda or env before installing.
+### Step-by-Step Installation Guide:
+Global Installation:
+```python
+pip install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter
+```
+Installation in virtual Environment:
+```python
+pip install conda
+```
+```python
+conda create --name Trade_Tools
+conda activate Trade_Tools
+conda install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter
+```
 -----------------------------------------------------------------------
 
 
