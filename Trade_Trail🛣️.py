@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import math
 from datetime import datetime
 import pytz
 from websockets import connect, ConnectionClosed
@@ -8,6 +9,8 @@ from termcolor import colored, cprint
 from colorama import init
 import pandas as pd
 import xlsxwriter
+from tabulate import tabulate
+import pyfiglet
 
 # Initialize Colorama
 init()
@@ -35,7 +38,7 @@ websocket_url_base_coinbase = 'wss://ws-feed.exchange.coinbase.com'
 websocket_url_liq = 'wss://fstream.binance.com/ws/!forceOrder@arr'
 websocket_url_kraken = 'wss://ws.kraken.com/'
 websocket_url_bitfinex = 'wss://api-pub.bitfinex.com/ws/2'
-output_directory = "/home/jestersly/Schreibtisch/Codes/_Algo_Trade_Edge/Data_Streams/Liqs_and_Trades_Archive/"
+output_directory = "/home/jestersly/Schreibtisch/Codes/_Algo_Trade_Edge/Data_Streams/Liqs_and_Trades_Archive/" #Change this
 print("📡 Configuration loaded")
 
 # Ensure the output directory exists
@@ -490,22 +493,24 @@ def add_color_border(text, color):
     return bordered_text
 
 def get_stars(usd_size):
-    if usd_size >= 500000000:
-        return '❓💰🃏💰❓'
-    elif usd_size >= 250000000:
-        return '💸🌈🦄🌈💸'
-    elif usd_size >= 120000000:
+    if usd_size >= 1310720000:
+        return '⁉️💰🃏💰⁉️'
+    elif usd_size >= 655360000:
+        return '💸🌠🦄🌠💸'
+    elif usd_size >= 327680000:
+        return '  🌠🦄🌠  '
+    elif usd_size >= 163840000:
         return '  🐳🐳🐳  '
-    elif usd_size >= 80000000:
+    elif usd_size >= 81920000:
         return '   🐳🐳   '
-    elif usd_size >= 50000000:
+    elif usd_size >= 40960000:
         return '    🐳    '
-    elif usd_size >= 25000000:
-        return '  🦈🦈🦈  '
-    elif usd_size >= 12400000:
-        return '   🦈🦈   '
+    elif usd_size >= 20480000:
+        return '  🦑🦑🦑  '
+    elif usd_size >= 10240000:
+        return '   🦑🦑   '
     elif usd_size >= 5120000:
-        return '    🦈    '
+        return '    🦑    '
     elif usd_size >= 2560000:
         return '🐠🐠🐠🐠🐠'
     elif usd_size >= 1280000:
@@ -538,35 +543,43 @@ def get_attrs_trades(usd_size):
         return []
 
 def get_liq_stars(usd_size):
-    if usd_size > 40000000:
-        return '🌊💰🤿💰🌊'
-    elif usd_size > 20000000:
-        return '💸🌊🤿🌊💸'
-    elif usd_size > 10000000:
-        return '  🌊🤿🌊  '
-    elif usd_size > 5000000:
-        return '    🤿    '
-    elif usd_size > 2480000:
+    if usd_size > 262144000:
+        return '🌊💰♒💰🌊'
+    if usd_size > 131072000:
+        return '💸🌊♒🌊💸'
+    if usd_size > 65536000:
+        return '  🌊♒🌊  '
+    elif usd_size > 32768000:
         return '  🌊🌊🌊  '
-    elif usd_size > 1240000:
+    elif usd_size > 16384000:
         return '   🌊🌊   '
-    elif usd_size > 512000:
+    elif usd_size > 8192000:
         return '    🌊    '
-    elif usd_size > 256000:
+    elif usd_size > 4096000:
+        return '  🪣🪣🪣  '
+    elif usd_size > 2048000:
+        return '   🪣🪣   '
+    elif usd_size > 1024000:
+        return '    🪣    '
+    elif usd_size > 512000:
         return '💦💦💦💦💦'
-    elif usd_size > 128000:
+    elif usd_size > 256000:
         return ' 💦💦💦💦 '
-    elif usd_size > 64000:
+    elif usd_size > 128000:
         return '  💦💦💦  '
-    elif usd_size > 32000:
+    elif usd_size > 64000:
         return '   💦💦   '
-    elif usd_size > 16000:
+    elif usd_size > 32000:
         return '    💦    '
+    elif usd_size > 16000:
+        return '💧💧💧💧💧'
     elif usd_size > 8000:
-        return '  💧💧💧  '
+        return ' 💧💧💧💧 '
     elif usd_size > 4000:
-        return '   💧💧   '
+        return '  💧💧💧  '
     elif usd_size > 2000:
+        return '   💧💧   '
+    elif usd_size > 1000:
         return '    💧    '
     else:
         return '          '
@@ -853,20 +866,67 @@ def select_symbols():
     """
     Allows the user to select which symbols to include in the query.
     """
+    title = ' Trade Trail '
+
+    # Färbe den ASCII-Text blau-weiß (blau als Textfarbe, weiß als Hintergrund)
+    ascii_title = '🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏\n' + pyfiglet.figlet_format(title) + '🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏'
+    print(colored(ascii_title, 'red', 'on_white', attrs=['bold']))
+
+    # Verwende pyfiglet, um den Titel in ASCII-Kunstform darzustellen
+    print("""+------------------------------------------------+
+|🌊🌊🪙🌊🌊🌊🌊🌊🪙🌊🌊🌊🌊🌊🌊🪙🌊🌊🌊🌊🌊🪙🌊🌊|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|💦🪙💦🪙💦💦💦🪙💦🪙💦💦💦💦🪙💦🪙💦💦💦🪙💦🪙💦|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|🪙💧💧💧🪙💧🪙💧💧💧🪙💧💧🪙💧💧💧🪙💧🪙💧💧💧🪙|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|🐟💵🐟💶🐟💴🐟💷🐟💵🐟💶🐟💴🐟💷🐟💵🐟💶🐟💴🐟💷|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|🪙🐠🐠🐠🪙🐠🪙🐠🐠🐠🪙🐠🐠🪙🐠🐠🐠🪙🐠🪙🐠🐠🐠🪙|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|🦑🪙🦑🪙🦑🦑🦑🪙🦑🪙🦑🦑🦑🦑🪙🦑🪙🦑🦑🦑🪙🦑🪙🦑|
+|📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉|
+|🐳🐳🪙🐳🐳🐳🐳🐳🪙🐳🐳🐳🐳🐳🐳🪙🐳🐳🐳🐳🐳🪙🐳🐳|
++------------------------------------------------+
+         """)
+    print("🛤️Trade Trail is ready to get explored 🐟🐠🦑🐳")
+    
     print(colored("\n♠️♦️Choose your symbols♣️♥️", 'black', 'on_white'))
-    for key, value in name_map.items():
-        print(f"{key}: {value.strip()}")
+
+    # Erstelle eine Liste der Namenf
+    name_list = [value.strip() for value in name_map.values()]
+
+    # Teile die Liste in mehrere Spalten auf (z.B. 10 Elemente pro Spalte)
+    num_rows = 10  # Anzahl der Zeilen pro Spalte
+    num_columns = math.ceil(len(name_list) / num_rows)  # Berechne die Anzahl der Spalten
+
+    # Erstelle ein 2D-Array für die Tabellendarstellung
+    table_data = []
+    for row_idx in range(num_rows):
+        row = []
+        for col_idx in range(num_columns):
+            idx = row_idx + col_idx * num_rows
+            if idx < len(name_list):
+                row.append(name_list[idx])
+            else:
+                row.append("")  # Füge leere Felder hinzu, wenn die Liste nicht gleichmäßig ist
+        table_data.append(row)
+
+    # Verwende tabulate, um die Namen in Tabellenform darzustellen (ohne Symbole)
+    headers = [""] * num_columns  # Keine Header für diese Darstellung
+    print(tabulate(table_data, headers, tablefmt="grid"))
 
     print("ALL: all of them.")
     print("Type 'DONE' when you are finished.")
 
-    global selected_symbols  # Ensure we're using the global variable
-    selected_symbols = []  # Reinitialize it to avoid any previous data
+    global selected_symbols, selected_symbols_formatted, All_symbols
+    selected_symbols = []
 
     while True:
         user_input = input("Select symbol: ").strip().upper()
         if user_input == 'ALL':
-            selected_symbols = symbols  # Return all symbols in their original format
+            selected_symbols = list(name_map.keys())  # Verwende alle Symbole
+            All_symbols = True
             break
         elif user_input == 'DONE':
             break
@@ -880,22 +940,25 @@ def select_symbols():
         else:
             print("Invalid symbol. Please enter a valid symbol from the list above.")
 
-    # Return selected symbols; fallback to all symbols if none selected
     if not selected_symbols:
-        selected_symbols = symbols
+        selected_symbols = list(name_map.keys())  # Verwende alle Symbole, wenn keine ausgewählt wurden
 
-        # Create the formatted symbol list
+    # Create the formatted symbol list
     selected_symbols_formatted = [name_map.get(symbol.upper().replace('USDT', ''), symbol.upper().replace('USDT', '')) for symbol in selected_symbols]
 
+
+
+
+
+    # Determine symbols available on Kraken and Bitfinex
     global kraken_symbols_selected, bitfinex_symbols_selected
     kraken_symbols_selected = [kraken_symbol_map[symbol] for symbol in selected_symbols if symbol in kraken_symbol_map and kraken_symbol_map[symbol] is not None]
     bitfinex_symbols_selected = [bitfinex_symbol_map[symbol] for symbol in selected_symbols if symbol in bitfinex_symbol_map and bitfinex_symbol_map[symbol] is not None]
 
     if not kraken_symbols_selected:
-        print("No selected symbols are available on Kraken.")
+        console.print("No selected symbols are available on Kraken.")
     if not bitfinex_symbols_selected:
-        print("No selected symbols are available on Bitfinex.")
-
+        console.print("No selected symbols are available on Bitfinex.")
 
 
 async def main():
