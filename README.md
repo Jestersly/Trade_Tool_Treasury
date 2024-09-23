@@ -283,8 +283,8 @@ This Code provides a Stream for every specified symbol in which trades and liqui
 - A **green number** for transactions means a Long-Trade (or Buy) was made
 - A **red number** for transactions means a Short-Trade (or Sell) was made
 
-- A **green number** for liquidations means somebodies Take-Profit got triggered
-- A **red number** for liquidations means somebody got liquidated (Stop-Loss or max. Margin got triggered)
+- A **green number** for liquidations means somebody got liquidated due to rising prices 
+- A **red number** for liquidations means somebody got liquidated due to falling prices
   
 - On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
 
