@@ -1205,10 +1205,10 @@ async def main():
     global trade_threshold, liquidation_threshold
 
     # Symbol selection
+    print("🚢Trade Trawler sets sail and gets ready to fish🐟🐠🦑🐳")
     select_symbols()
 
     # Prompt user for threshold values
-    print("🚢Trade Trawler has set sail and is ready to fish🐟🐠🦑🐳")
     trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
     liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
     average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
