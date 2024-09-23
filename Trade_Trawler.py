@@ -1,3 +1,6 @@
+#Trade Trawler🚢
+
+
 import asyncio
 import json
 from datetime import datetime
@@ -717,11 +720,11 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"🎣Total Trades:                {total_trades_in_interval}\n"
             f"📈Total Count:                 {trades_long_count}              📈{trades_long_count_percentage:.2f}%\n"
             f"📉Total Count:                 {trades_short_count}              📉{trades_short_count_percentage:.2f}% \n"
-            f"📊Avg. Trades per minute:      {avg_trades_per_minute:.2f}\n"
+            f"📊Avg. Trades per minute:      {avg_trades_per_minute:,.2f}\n"
             f"🔰Count Spread:                {format_value(trades_difference_count)}\n\n"
-            f"💵Total USD Size:              {total_usd_size_trades:.2f}$\n"
-            f"📈Total USD Size Long:         {total_usd_size_long:.2f}$    📈{total_usd_size_long_percentage:.2f}%\n"
-            f"📉Total USD Size Short:        {total_usd_size_short:.2f}$    📉{total_usd_size_short_percentage:.2f}%\n"
+            f"💵Total USD Size:              {total_usd_size_trades:,.2f}$\n"
+            f"📈Total USD Size Long:         {total_usd_size_long:,.2f}$    📈{total_usd_size_long_percentage:.2f}%\n"
+            f"📉Total USD Size Short:        {total_usd_size_short:,.2f}$    📉{total_usd_size_short_percentage:.2f}%\n"
             f"📊Avg. USD Size per minute:    {format_value(avg_usd_size_per_minute)}$\n"
             f"🔰USD Spread:                  {format_value(usd_size_difference)}$",
 
@@ -776,11 +779,11 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"🎣Total Trades:                 {total_trades_all}\n"
             f"📈Total Count:                  {trades_long_count_all}              📈{trades_long_count_percentage_all:.2f}%\n"
             f"📉Total Count:                  {trades_short_count_all}              📉{trades_short_count_percentage_all:.2f}%\n"
-            f"📊Avg. Trades per minute:       {avg_trades_per_minute_all:.2f}\n"
+            f"📊Avg. Trades per minute:       {avg_trades_per_minute_all:,.2f}\n"
             f"🔰Count Spread:                 {format_value(trades_difference_count_all)}\n\n"
-            f"💵Total USD Size:               {total_usd_size_trades_all:.2f}$\n"
-            f"📈Total USD Size Long:          {total_usd_size_long_all:.2f}$    📈{total_usd_size_long_percentage_all:.2f}%\n"
-            f"📉Total USD Size Short:         {total_usd_size_short_all:.2f}$    📉{total_usd_size_short_percentage_all:.2f}%\n"
+            f"💵Total USD Size:               {total_usd_size_trades_all:,.2f}$\n"
+            f"📈Total USD Size Long:          {total_usd_size_long_all:,.2f}$    📈{total_usd_size_long_percentage_all:.2f}%\n"
+            f"📉Total USD Size Short:         {total_usd_size_short_all:,.2f}$    📉{total_usd_size_short_percentage_all:.2f}%\n"
             f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_all)}$\n"
             f"🔰Spread:                       {format_value(usd_size_difference_all)}$",
             border_style=trades_panel_all_border_color,
@@ -843,11 +846,11 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"🌊Total Liquidations:           {total_liquidations_in_interval}\n"
             f"📈Total Count:                  {liquidations_long_count}              📈{liquidations_long_count_percentage:.2f}%\n"
             f"📉Total Count:                  {liquidations_short_count}              📉{liquidations_short_count_percentage:.2f}%\n"
-            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute:.2f}\n"
+            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute:,.2f}\n"
             f"🔰Count Spread:                 {format_value(liquidations_difference_count)}\n\n"
-            f"💵Total Size:                   {total_usd_size_liquidations:.2f}$\n"
-            f"📈Total Size Long:              {total_usd_size_long_liq:.2f}$    📈{total_usd_size_long_liq_percentage:.2f}%\n"
-            f"📉Total Size Short:             {total_usd_size_short_liq:.2f}$    📉{total_usd_size_short_liq_percentage:.2f}%\n"
+            f"💵Total Size:                   {total_usd_size_liquidations:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq:,.2f}$    📈{total_usd_size_long_liq_percentage:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq:,.2f}$    📉{total_usd_size_short_liq_percentage:.2f}%\n"
             f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_liq)}$\n"
             f"🔰Spread:                       {format_value(usd_size_difference_liq)}$",
             border_style=liq_panel_border_color,
@@ -901,11 +904,11 @@ def create_output(layout, metrics, start_time, trade_threshold, liquidation_thre
             f"🌊Total Liquidations:           {total_liquidations_all}\n"
             f"📈Total Count:                  {liquidations_long_count_all}              📈{liquidations_long_count_percentage_all:.2f}%\n"
             f"📉Total Count:                  {liquidations_short_count_all}              📉{liquidations_short_count_percentage_all:.2f}%\n"
-            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute_all:.2f}\n"
+            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute_all:,.2f}\n"
             f"🔰Count Spread:                 {format_value(liquidations_difference_count_all)}\n\n"
-            f"💵Total Size:                   {total_usd_size_liquidations_all:.2f}$\n"
-            f"📈Total Size Long:              {total_usd_size_long_liq_all:.2f}$    📈{total_usd_size_long_liq_percentage_all:.2f}%\n"
-            f"📉Total Size Short:             {total_usd_size_short_liq_all:.2f}$    📉{total_usd_size_short_liq_percentage_all:.2f}%\n"
+            f"💵Total Size:                   {total_usd_size_liquidations_all:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq_all:,.2f}$    📈{total_usd_size_long_liq_percentage_all:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq_all:,.2f}$    📉{total_usd_size_short_liq_percentage_all:.2f}%\n"
             f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_liq_all)}$\n"
             f"🔰Spread:                       {format_value(usd_size_difference_liq_all)}$",
             border_style=liq_panel_all_border_color,
@@ -1205,6 +1208,7 @@ async def main():
     select_symbols()
 
     # Prompt user for threshold values
+    print("🚢Trade Trawler has set sail and is ready to fish🐟🐠🦑🐳")
     trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
     liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
     average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
