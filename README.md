@@ -17,7 +17,7 @@ These provided Codes are made to give a broader understanding of the streams of 
 ### 📚Library Installation Guide:
 Global Installation:
 ```python
-pip install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter
+pip install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter tabulate
 ```
 Installation in virtual Environment:
 ```python
