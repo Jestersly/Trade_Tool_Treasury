@@ -3,8 +3,7 @@
 
 ## Introductions🔰
 
-These provided Codes are made to give a broader understanding of the streams of cryptocurrencies. These Codes are different from typical trading indicators and allow you to track each trade in more detail for each direction and scale. It will not replace the standard indicators we all know and use, but serves as an extension to provide a deeper insight into the cryptocurrency ocean. The provided Code will give you an advanced trading edge for free. If you want more tools like this please support my work such that I can continue to create codes that equalize the amount of market information for everybody  
-
+My provided code offers a comprehensive understanding of cryptocurrency market flows, setting itself apart from standard trading indicators. Unlike typical tools, this code enables you to monitor each trade with greater detail, tracking direction, volume, and scale more effectively. You will get a closer look at "The Smart Money" and the "Big Whales" while keeping track of the overall market direction. While it does not replace conventional indicators, it complements them by offering greater insights into the deep Ocean of cryptocurrency trading. Best of all, this advanced tool is available to you at no cost, giving you a significant edge in your trading strategy. If you find these tools valuable, please consider supporting my work so I can continue developing solutions that democratize access to vital market data for everyone.
 
 ## Important❗
 - You can only choose between a given number of cryptocurrencies (more than enough)                       
