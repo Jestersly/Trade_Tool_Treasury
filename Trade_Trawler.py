@@ -1,6 +1,3 @@
-#Trade Trawler🚢
-
-
 import asyncio
 import json
 from datetime import datetime
@@ -14,6 +11,9 @@ from rich.console import Console, Group
 from rich.text import Text
 from rich.panel import Panel
 from rich.layout import Layout
+from tabulate import tabulate
+import pyfiglet
+import math
 
 # Initialize Colorama
 init()
@@ -1150,13 +1150,63 @@ async def bitfinex_trade_stream(uri):
             console.print(f"[red]An error occurred in bitfinex_trade_stream: {e}[/red]")
             await asyncio.sleep(5)
 
+
+
+
 def select_symbols():
     """
     Allows the user to select which symbols to include in the query.
     """
+    title = 'Trade Trawler '
+
+    # Färbe den ASCII-Text blau-weiß (blau als Textfarbe, weiß als Hintergrund)
+    ascii_title = pyfiglet.figlet_format(title)
+    print(colored(ascii_title, 'blue', 'on_white', attrs=['bold']))
+
+    # Verwende pyfiglet, um den Titel in ASCII-Kunstform darzustellen
+    print("""☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☀️
+  
+
+                          💭💭        💭       💭
+                           💭💭💭     💭💭     💭💭
+                            || 💭💭   || 💭    || 💭
+                           _||___||___||__||___||__||_
+                     ______|   o    o    o   o    🎛️🪟|________
+                    | ⚓\\_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-/
+            🌊💦    |    \\o»»»o»»»»o»»»»o»»»»o»»»»o»»»»o»»»o/   🌊💦
+         ~~~~~~~~~~🕸️~~~~~\\________________________________/~~~~~~~~~~~~~~~~~~~~
+         ~~🐟~~~🐠~🕸️~~~~🐟~~~~🐟~~~~~~🐟~~🐟🐟~~🐠~~~~🐟~~~~~🐠🐠~~~~~~~~🐠~
+         ~~~~~🐟~~~🕸️🐟~~~~🐟~~~~🐟🐟~~~~🐟~~~~🐟~💧~🐟~~🦑🦑~~~~🐟~~~~🐟~~~~~
+         ~~~~~🦑~~~🕸️🐟~~~~🐳~~~~🐟~~~~🦑🦑🦑~~~~🐟~~~~🐟~~~🐳🐳~~~~🐟~~~~🐟~~~
+
+         
+         """)
+    print("🚢Trade Trawler sets sail and gets ready to fish🐟🐠🦑🐳")
+    
     print(colored("\n♠️♦️Choose your symbols♣️♥️", 'black', 'on_white'))
-    for key, value in name_map.items():
-        print(f"{key}: {value.strip()}")
+
+    # Erstelle eine Liste der Namenf
+    name_list = [value.strip() for value in name_map.values()]
+
+    # Teile die Liste in mehrere Spalten auf (z.B. 10 Elemente pro Spalte)
+    num_rows = 10  # Anzahl der Zeilen pro Spalte
+    num_columns = math.ceil(len(name_list) / num_rows)  # Berechne die Anzahl der Spalten
+
+    # Erstelle ein 2D-Array für die Tabellendarstellung
+    table_data = []
+    for row_idx in range(num_rows):
+        row = []
+        for col_idx in range(num_columns):
+            idx = row_idx + col_idx * num_rows
+            if idx < len(name_list):
+                row.append(name_list[idx])
+            else:
+                row.append("")  # Füge leere Felder hinzu, wenn die Liste nicht gleichmäßig ist
+        table_data.append(row)
+
+    # Verwende tabulate, um die Namen in Tabellenform darzustellen (ohne Symbole)
+    headers = [""] * num_columns  # Keine Header für diese Darstellung
+    print(tabulate(table_data, headers, tablefmt="grid"))
 
     print("ALL: all of them.")
     print("Type 'DONE' when you are finished.")
@@ -1167,7 +1217,7 @@ def select_symbols():
     while True:
         user_input = input("Select symbol: ").strip().upper()
         if user_input == 'ALL':
-            selected_symbols = symbols
+            selected_symbols = list(name_map.keys())  # Verwende alle Symbole
             All_symbols = True
             break
         elif user_input == 'DONE':
@@ -1183,10 +1233,14 @@ def select_symbols():
             print("Invalid symbol. Please enter a valid symbol from the list above.")
 
     if not selected_symbols:
-        selected_symbols = symbols
+        selected_symbols = list(name_map.keys())  # Verwende alle Symbole, wenn keine ausgewählt wurden
 
     # Create the formatted symbol list
     selected_symbols_formatted = [name_map.get(symbol.upper().replace('USDT', ''), symbol.upper().replace('USDT', '')) for symbol in selected_symbols]
+
+
+
+
 
     # Determine symbols available on Kraken and Bitfinex
     global kraken_symbols_selected, bitfinex_symbols_selected
@@ -1205,10 +1259,11 @@ async def main():
     global trade_threshold, liquidation_threshold
 
     # Symbol selection
-    print("🚢Trade Trawler sets sail and gets ready to fish🐟🐠🦑🐳")
+
     select_symbols()
 
     # Prompt user for threshold values
+
     trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
     liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
     average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
