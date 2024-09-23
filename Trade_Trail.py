@@ -919,14 +919,13 @@ def select_symbols():
     print("ALL: all of them.")
     print("Type 'DONE' when you are finished.")
 
-    global selected_symbols, selected_symbols_formatted, All_symbols
+    global selected_symbols, selected_symbols_formatted
     selected_symbols = []
 
     while True:
         user_input = input("Select symbol: ").strip().upper()
         if user_input == 'ALL':
-            selected_symbols = list(name_map.keys())  # Verwende alle Symbole
-            All_symbols = True
+            selected_symbols = Symbols  # Verwende alle Symbole
             break
         elif user_input == 'DONE':
             break
