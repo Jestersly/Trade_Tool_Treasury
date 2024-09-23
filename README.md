@@ -17,7 +17,7 @@ These provided Codes are made to give a broader understanding of the streams of 
 ### 📚Library Installation Guide:
 Global Installation:
 ```python
-pip install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter tabulate
+pip install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter tabulate pyfiglet
 ```
 Installation in virtual Environment:
 ```python
@@ -26,7 +26,7 @@ pip install conda
 ```python
 conda create --name Trade_Tools
 conda activate Trade_Tool_Treasury
-conda install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter
+conda install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter tabulate pyfiglet
 ```
 If you want to start the Code after a global installation:
 - open temrinal
