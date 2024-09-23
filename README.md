@@ -1,4 +1,10 @@
-# Trade-Liquidation-and-Funding-Streams from Binance and Coinbase
+# Trade Treasuries💰⚓
+
+
+## Introductions🔰
+
+These provided Codes are made to give a broader understanding of the streams of cryptocurrencies. These Codes are different from typical trading indicators and allow you to track each trade in more detail for each direction and scale. It will not replace the standard indicators we all know and use, but serves as an extension to provide a deeper insight into the cryptocurrency ocean. The provided Code will give you an advanced trading edge for free. If you want more tools like this please support my work such that I can continue to create codes that equalize the amount of market information for everybody  
+
 
 ## Important❗
 - You can only choose between a given number of cryptocurrencies (more than enough)                       
@@ -7,7 +13,7 @@
 - The market data for **trades** is provided via **Binance, Coinbase, Kraken and Bitfinex** WebSockets. The market data for **liquidations and funding rates** are only provided via **Binance** WebSocket
 - It could be possible that some programs and software have problems with referring files with emojis in their name. I have no issues with that but if you are getting some this could be a reason. Let me know such that I can change the names
 - Inside the **Trade Trail** Code at Line 38 is an absolute Path defined for exporting received data into a .xlsx file, which probably doesn't exist on your computer. Change this to any Path you want to save the data in 
-- To be capable to start these programs you need to install some python libraries. I would recommend you to create an virtual environment via conda or env before installing.
+- To be capable of starting these programs you need to install some Python libraries. I recommend creating a virtual environment via conda or env before installing, but this isn't necessary.
 ### 📚Library Installation Guide:
 Global Installation:
 ```python
@@ -19,8 +25,19 @@ pip install conda
 ```
 ```python
 conda create --name Trade_Tools
-conda activate Trade_Tools
+conda activate Trade_Tool_Treasury
 conda install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter
+```
+If you want to start the Code after a global installation:
+- open temrinal
+```python
+python <Path_of_the_code>
+```
+If you want to start the Code after installion in a virtaul environment:
+-open terminal
+```python
+conda activate Trade_Tool_Treasury
+python <Path_of_the_code>
 ```
 -----------------------------------------------------------------------
 
