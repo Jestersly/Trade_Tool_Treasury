@@ -11,11 +11,6 @@ from rich.console import Console, Group
 from rich.text import Text
 from rich.panel import Panel
 from rich.layout import Layout
-from textual.app import App, ComposeResult
-from textual.reactive import Reactive
-from textual.widgets import Header, Footer, Static
-from textual.layouts.grid import GridLayout
-from textual.containers import Grid
 from tabulate import tabulate
 import pyfiglet
 import math
@@ -46,6 +41,7 @@ selected_symbols_formatted = []
 
 websocket_url_base_binance = 'wss://fstream.binance.com/ws/'
 websocket_url_base_coinbase = 'wss://ws-feed.exchange.coinbase.com'
+websocket_url_liq = 'wss://fstream.binance.com/ws/!forceOrder@arr'
 websocket_url_kraken = 'wss://ws.kraken.com/'
 websocket_url_bitfinex = 'wss://api-pub.bitfinex.com/ws/2'
 
@@ -68,9 +64,11 @@ name_map = {
 
 # Data Collection Lists
 trades_data = []
+liquidations_data = []
 
 # Thresholds for printing output
 trade_threshold = 0
+liquidation_threshold = 0
 
 kraken_symbol_map = {
     'btcusdt': 'XBT/USDT',
@@ -223,40 +221,54 @@ def collect_trade_data(symbol, used_trade_time, trade_type, usd_size, timestamp)
     """
     trades_data.append([symbol, used_trade_time, trade_type, usd_size, timestamp])
 
+def collect_liquidation_data(symbol, used_trade_time, liquidation_type, usd_size, timestamp):
+    """
+    Collects liquidation data and appends it to the liquidations_data list.
+    """
+    liquidations_data.append([symbol, used_trade_time, liquidation_type, usd_size, timestamp])
+
 def get_stars(usd_size):
-    if usd_size >= 1310720000:
+    if usd_size >= 210935000:
         return '⁉️💰🃏💰⁉️'
-    elif usd_size >= 655360000:
-        return '💸🌠🦄🌠💸'
-    elif usd_size >= 327680000:
-        return '  🌠🦄🌠  '
-    elif usd_size >= 163840000:
+    elif usd_size >= 130365000:
         return '  🐳🐳🐳  '
-    elif usd_size >= 81920000:
+    elif usd_size >= 80570000:
         return '   🐳🐳   '
-    elif usd_size >= 40960000:
+    elif usd_size >= 49795000:
         return '    🐳    '
-    elif usd_size >= 20480000:
+    elif usd_size >= 30775000:
+        return '  🦈🦈🦈  '
+    elif usd_size >= 19020000:
+        return '   🦈🦈   '
+    elif usd_size >= 11755000:
+        return '    🦈    '
+    elif usd_size >= 7265000:
         return '  🦑🦑🦑  '
-    elif usd_size >= 10240000:
+    elif usd_size >= 4490000:
         return '   🦑🦑   '
-    elif usd_size >= 5120000:
+    elif usd_size >= 2775000:
         return '    🦑    '
-    elif usd_size >= 2560000:
+    elif usd_size >= 1715000:
+        return '  🐡🐡🐡  '
+    elif usd_size >= 1060000:
+        return '   🐡🐡   '
+    elif usd_size >= 655000:
+        return '    🐡    '
+    elif usd_size >= 405000:
         return '🐠🐠🐠🐠🐠'
-    elif usd_size >= 1280000:
+    elif usd_size >= 250000:
         return ' 🐠🐠🐠🐠 '
-    elif usd_size >= 640000:
+    elif usd_size >= 155000:
         return '  🐠🐠🐠  '
-    elif usd_size >= 320000:
+    elif usd_size >= 95000:
         return '   🐠🐠   '
-    elif usd_size >= 160000:
+    elif usd_size >= 60000:
         return '    🐠    '
-    elif usd_size >= 80000:
+    elif usd_size >= 35000:
         return '🐟🐟🐟🐟🐟'
-    elif usd_size >= 40000:
+    elif usd_size >= 25000:
         return ' 🐟🐟🐟🐟 '
-    elif usd_size >= 20000:
+    elif usd_size >= 15000:
         return '  🐟🐟🐟  '
     elif usd_size >= 10000:
         return '   🐟🐟   '
@@ -265,144 +277,151 @@ def get_stars(usd_size):
     else:
         return '          '
 
+def get_liq_stars(usd_size):
+    if usd_size > 46368000:
+        return '🌊💰♒💰🌊'
+    elif usd_size > 28657000:
+        return '  ♒♒♒  '
+    elif usd_size > 17711000:
+        return '   ♒♒   '
+    elif usd_size > 10946000:
+        return '    ♒    '
+    elif usd_size > 6765000:
+        return '  🌊🌊🌊  '
+    elif usd_size > 4181000:
+        return '   🌊🌊   '
+    elif usd_size > 2584000:
+        return '    🌊    '
+    elif usd_size > 1597000:
+        return '  ⛲⛲⛲  '
+    elif usd_size > 987000:
+        return '   ⛲⛲   '
+    elif usd_size > 610000:
+        return '    ⛲  '
+    elif usd_size > 377000:
+        return '  🪣🪣🪣  '
+    elif usd_size > 233000:
+        return '   🪣🪣   '
+    elif usd_size > 144000:
+        return '    🪣    '
+    elif usd_size > 89000:
+        return '💦💦💦💦💦'
+    elif usd_size > 55000:
+        return ' 💦💦💦💦 '
+    elif usd_size > 34000:
+        return '  💦💦💦  '
+    elif usd_size > 21000:
+        return '   💦💦   '
+    elif usd_size > 13000:
+        return '    💦    '
+    elif usd_size > 8000:
+        return '💧💧💧💧💧'
+    elif usd_size > 5000:
+        return ' 💧💧💧💧 '
+    elif usd_size > 3000:
+        return '  💧💧💧  '
+    elif usd_size > 2000:
+        return '   💧💧   '
+    elif usd_size > 1000:
+        return '    💧    '
+    else:
+        return '          '
 
-def calculate_metrics(trades_data, trade_threshold, average_interval_1, average_interval_2, average_interval_3, start_timestamp):
+def calculate_metrics(trades_data, liquidations_data, trade_threshold, liquidation_threshold, average_interval, start_timestamp):
     current_time = datetime.now().timestamp() * 1000  # Current time in milliseconds
 
     # Total elapsed time since program start in seconds
     total_elapsed_time = (current_time - start_timestamp) / 1000
 
-    # Filter data to last average_interval_1 seconds
-    filtered_trades_data = [trade for trade in trades_data if current_time - trade[4] <= average_interval_1 * 1000]
-    # --- Calculations within the average_interval_1 ---
+    # Filter data to last average_interval seconds
+    filtered_trades_data = [trade for trade in trades_data if current_time - trade[4] <= average_interval * 1000]
+    filtered_liquidations_data = [liq for liq in liquidations_data if current_time - liq[4] <= average_interval * 1000]
 
-    # Trades within the interval 1
-    total_trades_in_interval_1 = len(filtered_trades_data)
-    total_usd_size_in_interval_1 = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in filtered_trades_data)
+    # --- Calculations within the average_interval ---
 
-    trades_long_count_1 = sum(1 for trade in filtered_trades_data if trade[2] == '📈 ')
-    trades_short_count_1 = sum(1 for trade in filtered_trades_data if trade[2] == '📉 ')
-    trades_difference_count_1 = trades_long_count_1 - trades_short_count_1
+    # Trades within the interval
+    total_trades_in_interval = len(filtered_trades_data)
+    total_usd_size_in_interval = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in filtered_trades_data)
 
-    trades_long_count_percentage_1 = (trades_long_count_1 / total_trades_in_interval_1) * 100 if total_trades_in_interval_1 > 0 else 0
-    trades_short_count_percentage_1 = (trades_short_count_1 / total_trades_in_interval_1) * 100 if total_trades_in_interval_1 > 0 else 0
+    trades_long_count = sum(1 for trade in filtered_trades_data if trade[2] == '📈 ')
+    trades_short_count = sum(1 for trade in filtered_trades_data if trade[2] == '📉 ')
+    trades_difference_count = trades_long_count - trades_short_count
 
-    total_usd_size_long_1 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📈 ')
-    total_usd_size_short_1 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📉 ')
+    trades_long_count_percentage = (trades_long_count / total_trades_in_interval) * 100 if total_trades_in_interval > 0 else 0
+    trades_short_count_percentage = (trades_short_count / total_trades_in_interval) * 100 if total_trades_in_interval > 0 else 0
 
-    usd_size_difference_1 = total_usd_size_long_1 - total_usd_size_short_1
-    total_usd_size_trades_1 = total_usd_size_long_1 + total_usd_size_short_1
+    total_usd_size_long = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📈 ')
+    total_usd_size_short = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📉 ')
 
-    total_usd_size_long_percentage_1 = (total_usd_size_long_1 / total_usd_size_trades_1) * 100 if total_usd_size_trades_1 > 0 else 0
-    total_usd_size_short_percentage_1 = (total_usd_size_short_1 / total_usd_size_trades_1) * 100 if total_usd_size_trades_1 > 0 else 0
+    usd_size_difference = total_usd_size_long - total_usd_size_short
+    total_usd_size_trades = total_usd_size_long + total_usd_size_short
+
+    total_usd_size_long_percentage = (total_usd_size_long / total_usd_size_trades) * 100 if total_usd_size_trades > 0 else 0
+    total_usd_size_short_percentage = (total_usd_size_short / total_usd_size_trades) * 100 if total_usd_size_trades > 0 else 0
 
     # Averages per minute
-    avg_trades_per_minute_1 = (total_trades_in_interval_1 * 60) / average_interval_1 if average_interval_1 > 0 else 0
-    avg_usd_size_per_minute_1 = (total_usd_size_in_interval_1 * 60) / average_interval_1 if average_interval_1 > 0 else 0
+    avg_trades_per_minute = (total_trades_in_interval * 60) / average_interval if average_interval > 0 else 0
+    avg_usd_size_per_minute = (total_usd_size_in_interval * 60) / average_interval if average_interval > 0 else 0
 
+    # Liquidations within the interval
+    total_liquidations_in_interval = len(filtered_liquidations_data)
+    total_usd_size_liq_in_interval = sum(liq[3] if liq[2] == '📈 ' else -liq[3] for liq in filtered_liquidations_data)
+
+    liquidations_long_count = sum(1 for liq in filtered_liquidations_data if liq[2] == '📈 ')
+    liquidations_short_count = sum(1 for liq in filtered_liquidations_data if liq[2] == '📉 ')
+    liquidations_difference_count = liquidations_long_count - liquidations_short_count
+
+    liquidations_long_count_percentage = (liquidations_long_count / total_liquidations_in_interval) * 100 if total_liquidations_in_interval > 0 else 0
+    liquidations_short_count_percentage = (liquidations_short_count / total_liquidations_in_interval) * 100 if total_liquidations_in_interval > 0 else 0
+
+    total_usd_size_long_liq = sum(liq[3] for liq in filtered_liquidations_data if liq[2] == '📈 ')
+    total_usd_size_short_liq = sum(liq[3] for liq in filtered_liquidations_data if liq[2] == '📉 ')
+
+
+    usd_size_difference_liq = total_usd_size_long_liq - total_usd_size_short_liq
+    total_usd_size_liquidations = total_usd_size_long_liq + total_usd_size_short_liq
+
+    total_usd_size_long_liq_percentage = (total_usd_size_long_liq / total_usd_size_liquidations) * 100 if total_usd_size_liquidations > 0 else 0
+    total_usd_size_short_liq_percentage = (total_usd_size_short_liq / total_usd_size_liquidations) * 100 if total_usd_size_liquidations > 0 else 0
+
+    avg_liquidations_per_minute = (total_liquidations_in_interval * 60) / total_elapsed_time if average_interval > total_elapsed_time else average_interval
+    avg_usd_size_per_minute_liq = (total_usd_size_liq_in_interval * 60) / total_elapsed_time if average_interval > total_elapsed_time else average_interval
 
     # Count stars for trades within the interval
-    stars_count_trades_1 = {}
+    stars_count_trades = {}
     for trade in filtered_trades_data:
         usd_size = trade[3]
         stars = get_stars(usd_size)
         trade_type = trade[2]
         symbol = trade[0]
-        if stars not in stars_count_trades_1:
-            stars_count_trades_1[stars] = {}
-        if trade_type not in stars_count_trades_1[stars]:
-            stars_count_trades_1[stars][trade_type] = {}
-        if symbol not in stars_count_trades_1[stars][trade_type]:
-            stars_count_trades_1[stars][trade_type][symbol] = {'count': 0, 'total_usd_size': 0}
-        stars_count_trades_1[stars][trade_type][symbol]['count'] += 1
-        stars_count_trades_1[stars][trade_type][symbol]['total_usd_size'] += usd_size
+        if stars not in stars_count_trades:
+            stars_count_trades[stars] = {}
+        if trade_type not in stars_count_trades[stars]:
+            stars_count_trades[stars][trade_type] = {}
+        if symbol not in stars_count_trades[stars][trade_type]:
+            stars_count_trades[stars][trade_type][symbol] = {'count': 0, 'total_usd_size': 0}
+        stars_count_trades[stars][trade_type][symbol]['count'] += 1
+        stars_count_trades[stars][trade_type][symbol]['total_usd_size'] += usd_size
 
+    # Count stars for liquidations within the interval
+    stars_count_liquidations = {}
+    for liquidation in filtered_liquidations_data:
+        usd_size = liquidation[3]
+        stars = get_liq_stars(usd_size)
+        liquidation_type = liquidation[2]
+        symbol = liquidation[0]
+        if stars not in stars_count_liquidations:
+            stars_count_liquidations[stars] = {}
+        if liquidation_type not in stars_count_liquidations[stars]:
+            stars_count_liquidations[stars][liquidation_type] = {}
+        if symbol not in stars_count_liquidations[stars][liquidation_type]:
+            stars_count_liquidations[stars][liquidation_type][symbol] = {'count': 0, 'total_usd_size': 0}
+        stars_count_liquidations[stars][liquidation_type][symbol]['count'] += 1
+        stars_count_liquidations[stars][liquidation_type][symbol]['total_usd_size'] += usd_size
 
-    #trades within the interval 2
-    total_trades_in_interval_2 = len(filtered_trades_data)
-    total_usd_size_in_interval_2 = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in filtered_trades_data)
+    # --- Cumulative calculations since program start ---
 
-    trades_long_count_2 = sum(1 for trade in filtered_trades_data if trade[2] == '📈 ')
-    trades_short_count_2 = sum(1 for trade in filtered_trades_data if trade[2] == '📉 ')
-    trades_difference_count_2 = trades_long_count_2 - trades_short_count_2
-
-    trades_long_count_percentage_2 = (trades_long_count_2 / total_trades_in_interval_2) * 100 if total_trades_in_interval_2 > 0 else 0
-    trades_short_count_percentage_2 = (trades_short_count_2 / total_trades_in_interval_2) * 100 if total_trades_in_interval_2 > 0 else 0
-
-    total_usd_size_long_2 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📈 ')
-    total_usd_size_short_2 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📉 ')
-
-    usd_size_difference_2 = total_usd_size_long_2 - total_usd_size_short_2
-    total_usd_size_trades_2 = total_usd_size_long_2 + total_usd_size_short_2
-
-    total_usd_size_long_percentage_2 = (total_usd_size_long_2 / total_usd_size_trades_2) * 100 if total_usd_size_trades_2 > 0 else 0
-    total_usd_size_short_percentage_2 = (total_usd_size_short_2 / total_usd_size_trades_2) * 100 if total_usd_size_trades_2 > 0 else 0
-
-    # Averages per minute
-    avg_trades_per_minute_2 = (total_trades_in_interval_2 * 60) / average_interval_2 if average_interval_2 > 0 else 0
-    avg_usd_size_per_minute_2 = (total_usd_size_in_interval_2 * 60) / average_interval_2 if average_interval_2 > 0 else 0
-
-
-    # Count stars for trades within the interval
-    stars_count_trades_2 = {}
-    for trade in filtered_trades_data:
-        usd_size = trade[3]
-        stars = get_stars(usd_size)
-        trade_type = trade[2]
-        symbol = trade[0]
-        if stars not in stars_count_trades_2:
-            stars_count_trades_2[stars] = {}
-        if trade_type not in stars_count_trades_2[stars]:
-            stars_count_trades_2[stars][trade_type] = {}
-        if symbol not in stars_count_trades_2[stars][trade_type]:
-            stars_count_trades_2[stars][trade_type][symbol] = {'count': 0, 'total_usd_size': 0}
-        stars_count_trades_2[stars][trade_type][symbol]['count'] += 1
-        stars_count_trades_2[stars][trade_type][symbol]['total_usd_size'] += usd_size
-
-
-    #trades within the interval 3
-    total_trades_in_interval_3 = len(filtered_trades_data)
-    total_usd_size_in_interval_3 = sum(trade[3] if trade[2] == '📈 ' else -trade[3] for trade in filtered_trades_data)
-
-    trades_long_count_3 = sum(1 for trade in filtered_trades_data if trade[2] == '📈 ')
-    trades_short_count_3 = sum(1 for trade in filtered_trades_data if trade[2] == '📉 ')
-    trades_difference_count_3 = trades_long_count_3 - trades_short_count_3
-
-    trades_long_count_percentage_3 = (trades_long_count_3 / total_trades_in_interval_3) * 100 if total_trades_in_interval_3 > 0 else 0
-    trades_short_count_percentage_3 = (trades_short_count_3 / total_trades_in_interval_3) * 100 if total_trades_in_interval_3 > 0 else 0
-
-    total_usd_size_long_3 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📈 ')
-    total_usd_size_short_3 = sum(trade[3] for trade in filtered_trades_data if trade[2] == '📉 ')
-
-    usd_size_difference_3 = total_usd_size_long_3 - total_usd_size_short_3
-    total_usd_size_trades_3 = total_usd_size_long_3 + total_usd_size_short_3
-
-    total_usd_size_long_percentage_3 = (total_usd_size_long_3 / total_usd_size_trades_3) * 100 if total_usd_size_trades_3 > 0 else 0
-    total_usd_size_short_percentage_3 = (total_usd_size_short_3 / total_usd_size_trades_3) * 100 if total_usd_size_trades_3 > 0 else 0
-
-    # Averages per minute
-    avg_trades_per_minute_3 = (total_trades_in_interval_3 * 60) / average_interval_3 if average_interval_3 > 0 else 0
-    avg_usd_size_per_minute_3 = (total_usd_size_in_interval_3 * 60) / average_interval_3 if average_interval_3 > 0 else 0
-
-
-    # Count stars for trades within the interval
-    stars_count_trades_3 = {}
-    for trade in filtered_trades_data:
-        usd_size = trade[3]
-        stars = get_stars(usd_size)
-        trade_type = trade[2]
-        symbol = trade[0]
-        if stars not in stars_count_trades_3:
-            stars_count_trades_3[stars] = {}
-        if trade_type not in stars_count_trades_3[stars]:
-            stars_count_trades_3[stars][trade_type] = {}
-        if symbol not in stars_count_trades_3[stars][trade_type]:
-            stars_count_trades_3[stars][trade_type][symbol] = {'count': 0, 'total_usd_size': 0}
-        stars_count_trades_3[stars][trade_type][symbol]['count'] += 1
-        stars_count_trades_3[stars][trade_type][symbol]['total_usd_size'] += usd_size
-
-
-# --- Cumulative calculations since program start ---
+        # Count stars for trades since the program started
     stars_count_trades_all = {}
     for trade in trades_data:
         usd_size = trade[3]
@@ -417,6 +436,24 @@ def calculate_metrics(trades_data, trade_threshold, average_interval_1, average_
             stars_count_trades_all[stars][trade_type][symbol] = {'count': 0, 'total_usd_size': 0}
         stars_count_trades_all[stars][trade_type][symbol]['count'] += 1
         stars_count_trades_all[stars][trade_type][symbol]['total_usd_size'] += usd_size
+
+
+    # Count stars for liquidations since the program started
+    stars_count_liquidations_all = {}
+    for liquidation in liquidations_data:
+        usd_size = liquidation[3]
+        stars = get_liq_stars(usd_size)
+        liquidation_type = liquidation[2]
+        symbol = liquidation[0]
+        if stars not in stars_count_liquidations_all:
+            stars_count_liquidations_all[stars] = {}
+        if liquidation_type not in stars_count_liquidations_all[stars]:
+            stars_count_liquidations_all[stars][liquidation_type] = {}
+        if symbol not in stars_count_liquidations_all[stars][liquidation_type]:
+            stars_count_liquidations_all[stars][liquidation_type][symbol] = {'count': 0, 'total_usd_size': 0}
+        stars_count_liquidations_all[stars][liquidation_type][symbol]['count'] += 1
+        stars_count_liquidations_all[stars][liquidation_type][symbol]['total_usd_size'] += usd_size
+
 
     # Trades since program start
     # Total trades and USD size since program start
@@ -448,78 +485,90 @@ def calculate_metrics(trades_data, trade_threshold, average_interval_1, average_
     avg_trades_per_minute_all = (total_trades_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
     avg_usd_size_per_minute_all = (total_usd_size_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
 
+    # Liquidations since program start
+    total_liquidations_all = len(liquidations_data)
+    total_usd_size_liq_all = sum(liq[3] if liq[2] == '📈 ' else -liq[3] for liq in liquidations_data)
+
+    # Number of Long and short liquidations since program start and the difference between them
+    liquidations_long_count_all = sum(1 for liq in liquidations_data if liq[2] == '📈 ')
+    liquidations_short_count_all = sum(1 for liq in liquidations_data if liq[2] == '📉 ')
+    liquidations_difference_count_all = liquidations_long_count_all - liquidations_short_count_all
+
+    # Percentage of Long and short liquidations since program start
+    liquidations_long_count_percentage_all = (liquidations_long_count_all / total_liquidations_all) * 100 if total_liquidations_all > 0 else 0
+    liquidations_short_count_percentage_all = (liquidations_short_count_all / total_liquidations_all) * 100 if total_liquidations_all > 0 else 0
+
+    # Total USD size of Long and short liquidations since program start
+    total_usd_size_long_liq_all = sum(liq[3] for liq in liquidations_data if liq[2] == '📈 ')
+    total_usd_size_short_liq_all = sum(liq[3] for liq in liquidations_data if liq[2] == '📉 ')
+
+    # Difference between Long and short liquidations since program start
+    usd_size_difference_liq_all = total_usd_size_long_liq_all - total_usd_size_short_liq_all
+    total_usd_size_liquidations_all = total_usd_size_long_liq_all + total_usd_size_short_liq_all
+
+    # Percentage of Long and short liquidations since program start
+    total_usd_size_long_liq_percentage_all = (total_usd_size_long_liq_all / total_usd_size_liquidations_all) * 100 if total_usd_size_liquidations_all > 0 else 0
+    total_usd_size_short_liq_percentage_all = (total_usd_size_short_liq_all / total_usd_size_liquidations_all) * 100 if total_usd_size_liquidations_all > 0 else 0
+
+    # Average liquidations and USD size per minute since program start
+    avg_liquidations_per_minute_all = (total_liquidations_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
+    avg_usd_size_per_minute_liq_all = (total_usd_size_liq_all * 60) / total_elapsed_time if total_elapsed_time > 0 else 0
 
     # Determine the color of the average usd_size
-    usd_size_color = 'green' if avg_usd_size_per_minute_1 > 0 else 'red'
+    usd_size_color = 'green' if avg_usd_size_per_minute > 0 else 'red'
+    usd_size_color_liq = 'green' if avg_usd_size_per_minute_liq > 0 else 'red'
     usd_size_color_all = 'green' if avg_usd_size_per_minute_all > 0 else 'red'
+    usd_size_color_liq_all = 'green' if avg_usd_size_per_minute_liq_all > 0 else 'red'
 
     # Determine the color based on the difference
-    difference_color = 'green' if usd_size_difference_1 > 0 else 'red'
+    difference_color = 'green' if usd_size_difference > 0 else 'red'
+    difference_color_liq = 'green' if usd_size_difference_liq > 0 else 'red'
     difference_color_all = 'green' if usd_size_difference_all > 0 else 'red'
+    difference_color_liq_all = 'green' if usd_size_difference_liq_all > 0 else 'red'
 
     # Prepare metrics dictionary
     metrics = {
         # Times
-        'average_interval_1': average_interval_1,
-        'average_interval_2': average_interval_2,
-        'average_interval_3': average_interval_3,
+        'average_interval': average_interval,
         'total_elapsed_time': total_elapsed_time,
+        # Trades within interval
+        'total_trades_in_interval': total_trades_in_interval,
+        'total_usd_size_in_interval': total_usd_size_in_interval,
+        'trades_long_count': trades_long_count,
+        'trades_short_count': trades_short_count,
+        'trades_difference_count': trades_difference_count,
+        'trades_long_count_percentage': trades_long_count_percentage,
+        'trades_short_count_percentage': trades_short_count_percentage,
+        'total_usd_size_long': total_usd_size_long,
+        'total_usd_size_short': total_usd_size_short,
+        'total_usd_size_long_percentage': total_usd_size_long_percentage,
+        'total_usd_size_short_percentage': total_usd_size_short_percentage,
+        'usd_size_difference': usd_size_difference,
+        'avg_trades_per_minute': avg_trades_per_minute,
+        'avg_usd_size_per_minute': avg_usd_size_per_minute,
         'usd_size_color': usd_size_color,
         'difference_color': difference_color,
-        # Trades within interval 1
-        'total_trades_in_interval_1': total_trades_in_interval_1,
-        'total_usd_size_in_interval_1': total_usd_size_in_interval_1,
-        'trades_long_count_1': trades_long_count_1,
-        'trades_short_count_1': trades_short_count_1,
-        'trades_difference_count_1': trades_difference_count_1,
-        'trades_long_count_percentage_1': trades_long_count_percentage_1,
-        'trades_short_count_percentage_1': trades_short_count_percentage_1,
-        'total_usd_size_long_1': total_usd_size_long_1,
-        'total_usd_size_short_1': total_usd_size_short_1,
-        'total_usd_size_long_percentage_1': total_usd_size_long_percentage_1,
-        'total_usd_size_short_percentage_1': total_usd_size_short_percentage_1,
-        'usd_size_difference_1': usd_size_difference_1,
-        'avg_trades_per_minute_1': avg_trades_per_minute_1,
-        'avg_usd_size_per_minute_1': avg_usd_size_per_minute_1,
-        'stars_count_trades_1': stars_count_trades_1,
-        'total_usd_size_trades_1': total_usd_size_trades_1,
-        # Trades within interval 2
-        'total_trades_in_interval_2': total_trades_in_interval_2,
-        'total_usd_size_in_interval_2': total_usd_size_in_interval_2,
-        'trades_long_count_2': trades_long_count_2,
-        'trades_short_count_2': trades_short_count_2,
-        'trades_difference_count_2': trades_difference_count_2,
-        'trades_long_count_percentage_2': trades_long_count_percentage_2,
-        'trades_short_count_percentage_2': trades_short_count_percentage_2,
-        'total_usd_size_long_2': total_usd_size_long_2,
-        'total_usd_size_short_2': total_usd_size_short_2,
-        'total_usd_size_long_percentage_2': total_usd_size_long_percentage_2,
-        'total_usd_size_short_percentage_2': total_usd_size_short_percentage_2,
-        'usd_size_difference_2': usd_size_difference_2,
-        'avg_trades_per_minute_2': avg_trades_per_minute_2,
-        'avg_usd_size_per_minute_2': avg_usd_size_per_minute_2,
-        'stars_count_trades_2': stars_count_trades_2,
-        'total_usd_size_trades_2': total_usd_size_trades_2,
-        # Trades within interval 3
-        'total_trades_in_interval_3': total_trades_in_interval_3,
-        'total_usd_size_in_interval_3': total_usd_size_in_interval_3,
-        'trades_long_count_3': trades_long_count_3,
-        'trades_short_count_3': trades_short_count_3,
-        'trades_difference_count_3': trades_difference_count_3,
-        'trades_long_count_percentage_3': trades_long_count_percentage_3,
-        'trades_short_count_percentage_3': trades_short_count_percentage_3,
-        'total_usd_size_long_3': total_usd_size_long_3,
-        'total_usd_size_short_3': total_usd_size_short_3,
-        'total_usd_size_long_percentage_3': total_usd_size_long_percentage_3,
-        'total_usd_size_short_percentage_3': total_usd_size_short_percentage_3,
-        'usd_size_difference_3': usd_size_difference_3,
-        'avg_trades_per_minute_3': avg_trades_per_minute_3,
-        'avg_usd_size_per_minute_3': avg_usd_size_per_minute_3,
-        'stars_count_trades_3': stars_count_trades_3,
-        'total_usd_size_trades_3': total_usd_size_trades_3,
-
-
-
+        'stars_count_trades': stars_count_trades,
+        'total_usd_size_trades': total_usd_size_trades,
+        # Liquidations within interval
+        'total_liquidations_in_interval': total_liquidations_in_interval,
+        'total_usd_size_liq_in_interval': total_usd_size_liq_in_interval,
+        'liquidations_long_count': liquidations_long_count,
+        'liquidations_short_count': liquidations_short_count,
+        'liquidations_difference_count': liquidations_difference_count,
+        'liquidations_long_count_percentage': liquidations_long_count_percentage,
+        'liquidations_short_count_percentage': liquidations_short_count_percentage,
+        'total_usd_size_long_liq': total_usd_size_long_liq,
+        'total_usd_size_short_liq': total_usd_size_short_liq,
+        'total_usd_size_long_liq_percentage': total_usd_size_long_liq_percentage,
+        'total_usd_size_short_liq_percentage': total_usd_size_short_liq_percentage,
+        'usd_size_difference_liq': usd_size_difference_liq,
+        'avg_liquidations_per_minute': avg_liquidations_per_minute,
+        'avg_usd_size_per_minute_liq': avg_usd_size_per_minute_liq,
+        'usd_size_color_liq': usd_size_color_liq,
+        'difference_color_liq': difference_color_liq,
+        'stars_count_liquidations': stars_count_liquidations,
+        'total_usd_size_liquidations': total_usd_size_liquidations,
         # Cumulative Trades
         'total_trades_all': total_trades_all,
         'total_usd_size_all': total_usd_size_all,
@@ -539,168 +588,405 @@ def calculate_metrics(trades_data, trade_threshold, average_interval_1, average_
         'difference_color_all': difference_color_all,
         'stars_count_trades_all': stars_count_trades_all,
         'total_usd_size_trades_all': total_usd_size_trades_all,
-
+        # Cumulative Liquidations
+        'total_liquidations_all': total_liquidations_all,
+        'total_usd_size_liq_all': total_usd_size_liq_all,
+        'liquidations_long_count_all': liquidations_long_count_all,
+        'liquidations_short_count_all': liquidations_short_count_all,
+        'liquidations_difference_count_all': liquidations_difference_count_all,
+        'liquidations_long_count_percentage_all': liquidations_long_count_percentage_all,
+        'liquidations_short_count_percentage_all': liquidations_short_count_percentage_all,
+        'total_usd_size_long_liq_all': total_usd_size_long_liq_all,
+        'total_usd_size_short_liq_all': total_usd_size_short_liq_all,
+        'total_usd_size_long_liq_percentage_all': total_usd_size_long_liq_percentage_all,
+        'total_usd_size_short_liq_percentage_all': total_usd_size_short_liq_percentage_all,
+        'usd_size_difference_liq_all': usd_size_difference_liq_all,
+        'avg_liquidations_per_minute_all': avg_liquidations_per_minute_all,
+        'avg_usd_size_per_minute_liq_all': avg_usd_size_per_minute_liq_all,
+        'usd_size_color_liq_all': usd_size_color_liq_all,
+        'difference_color_liq_all': difference_color_liq_all,
+        'stars_count_liquidations_all': stars_count_liquidations_all,
+        'total_usd_size_liquidations_all': total_usd_size_liquidations_all
     }
 
     return metrics
 
+def create_output(layout, metrics, start_time, trade_threshold, liquidation_threshold):
+    """
+    Creates the output layout using Rich components, with color formatting for positive and negative values.
+    """
+    try:
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        time_difference = calculate_time_difference(start_time, current_time)
 
+        # Unpack metrics for easier access
+        average_interval = metrics['average_interval']
 
-class TradeTrawlerApp(App):
-    """Textual Application for displaying trade data with detailed metrics and scrollable layout."""
+        # Trades within interval
+        total_trades_in_interval = metrics['total_trades_in_interval']
+        trades_long_count = metrics['trades_long_count']
+        trades_short_count = metrics['trades_short_count']
+        trades_difference_count = metrics['trades_difference_count']
+        trades_long_count_percentage = metrics['trades_long_count_percentage']
+        trades_short_count_percentage = metrics['trades_short_count_percentage']
+        total_usd_size_in_interval = metrics['total_usd_size_in_interval']
+        total_usd_size_long = metrics['total_usd_size_long']
+        total_usd_size_short = metrics['total_usd_size_short']
+        total_usd_size_long_percentage = metrics['total_usd_size_long_percentage']
+        total_usd_size_short_percentage = metrics['total_usd_size_short_percentage']
+        usd_size_difference = metrics['usd_size_difference']
+        avg_trades_per_minute = metrics['avg_trades_per_minute']
+        avg_usd_size_per_minute = metrics['avg_usd_size_per_minute']
+        stars_count_trades = metrics['stars_count_trades']
+        total_usd_size_trades = metrics['total_usd_size_trades']
 
-    def __init__(self, metrics, start_time, trade_threshold):
-        super().__init__()
-        self.metrics = metrics
-        self.start_time = start_time
-        self.trade_threshold = trade_threshold
-        self.start_timestamp = datetime.now().timestamp() * 1000  # Start time in milliseconds
+        # Liquidations within interval
+        total_liquidations_in_interval = metrics['total_liquidations_in_interval']
+        liquidations_long_count = metrics['liquidations_long_count']
+        liquidations_short_count = metrics['liquidations_short_count']
+        liquidations_difference_count = metrics['liquidations_difference_count']
+        liquidations_long_count_percentage = metrics['liquidations_long_count_percentage']
+        liquidations_short_count_percentage = metrics['liquidations_short_count_percentage']
+        total_usd_size_liq_in_interval = metrics['total_usd_size_liq_in_interval']
+        total_usd_size_long_liq = metrics['total_usd_size_long_liq']
+        total_usd_size_short_liq = metrics['total_usd_size_short_liq']
+        total_usd_size_long_liq_percentage = metrics['total_usd_size_long_liq_percentage']
+        total_usd_size_short_liq_percentage = metrics['total_usd_size_short_liq_percentage']
+        usd_size_difference_liq = metrics['usd_size_difference_liq']
+        avg_liquidations_per_minute = metrics['avg_liquidations_per_minute']
+        avg_usd_size_per_minute_liq = metrics['avg_usd_size_per_minute_liq']
+        stars_count_liquidations = metrics['stars_count_liquidations']
+        total_usd_size_liquidations = metrics['total_usd_size_liquidations']
 
-    def compose(self) -> ComposeResult:
-        """Compose the UI layout by adding header and footer."""
-        yield Header()
-        yield Footer()
+        # Cumulative Trades
+        total_trades_all = metrics['total_trades_all']
+        trades_long_count_all = metrics['trades_long_count_all']
+        trades_short_count_all = metrics['trades_short_count_all']
+        trades_difference_count_all = metrics['trades_difference_count_all']
+        trades_long_count_percentage_all = metrics['trades_long_count_percentage_all']
+        trades_short_count_percentage_all = metrics['trades_short_count_percentage_all']
+        total_usd_size_all = metrics['total_usd_size_all']
+        total_usd_size_long_all = metrics['total_usd_size_long_all']
+        total_usd_size_short_all = metrics['total_usd_size_short_all']
+        total_usd_size_long_percentage_all = metrics['total_usd_size_long_percentage_all']
+        total_usd_size_short_percentage_all = metrics['total_usd_size_short_percentage_all']
+        usd_size_difference_all = metrics['usd_size_difference_all']
+        avg_trades_per_minute_all = metrics['avg_trades_per_minute_all']
+        avg_usd_size_per_minute_all = metrics['avg_usd_size_per_minute_all']
+        stars_count_trades_all = metrics['stars_count_trades_all']
+        total_usd_size_trades_all = metrics['total_usd_size_trades_all']
 
-    async def on_mount(self) -> None:
-        """Add the grid layout and other widgets after the app is mounted."""
-        # Create a grid layout
-        self.grid = Grid()
+        # Cumulative Liquidations
+        total_liquidations_all = metrics['total_liquidations_all']
+        liquidations_long_count_all = metrics['liquidations_long_count_all']
+        liquidations_short_count_all = metrics['liquidations_short_count_all']
+        liquidations_difference_count_all = metrics['liquidations_difference_count_all']
+        liquidations_long_count_percentage_all = metrics['liquidations_long_count_percentage_all']
+        liquidations_short_count_percentage_all = metrics['liquidations_short_count_percentage_all']
+        total_usd_size_liq_all = metrics['total_usd_size_liq_all']
+        total_usd_size_long_liq_all = metrics['total_usd_size_long_liq_all']
+        total_usd_size_short_liq_all = metrics['total_usd_size_short_liq_all']
+        total_usd_size_long_liq_percentage_all = metrics['total_usd_size_long_liq_percentage_all']
+        total_usd_size_short_liq_percentage_all = metrics['total_usd_size_short_liq_percentage_all']
+        usd_size_difference_liq_all = metrics['usd_size_difference_liq_all']
+        avg_liquidations_per_minute_all = metrics['avg_liquidations_per_minute_all']
+        avg_usd_size_per_minute_liq_all = metrics['avg_usd_size_per_minute_liq_all']
+        stars_count_liquidations_all = metrics['stars_count_liquidations_all']
+        total_usd_size_liquidations_all = metrics['total_usd_size_liquidations_all']
 
-        # Set the grid dimensions
-        self.grid.styles.grid_template_columns = "1fr 1fr"  # Two equal columns
-        self.grid.styles.grid_template_rows = "1fr 1fr"  # Two equal rows
-        self.grid.styles.gap = "2"  # Set the gap between the elements in the grid
+        # Create helper function to apply color based on value
+        def format_value(value):
+            return f"[green]{value:,.2f}[/green]" if value > 0 else f"[red]{value:,.2f}[/red]"
 
-        # Mount the grid to the application
-        await self.mount(self.grid)
+        # Using formatted symbols
+        if selected_symbols == symbols:
+            symbols_display = "🃏All🃏"
+        else:
+            symbols_display = ', '.join(selected_symbols_formatted)
 
-        # Scrollable content for the left and right areas
-        self.scroll_left = Static(expand=True)
-        self.scroll_right = Static(expand=True)
-
-        # Mount scrollable panels to the grid layout
-        await self.grid.mount(self.scroll_left)
-        await self.grid.mount(self.scroll_right)
-
-        # Start a background task to periodically update the metrics and UI
-        self.set_interval(1, self.update_metrics_and_ui)
-
-    async def update_metrics_and_ui(self) -> None:
-        """Periodically update metrics and refresh the UI."""
-        # Recalculate metrics (assuming trades_data is being updated by other WebSocket streams)
-        self.metrics = calculate_metrics(
-            trades_data,
-            self.trade_threshold,
-            self.metrics['average_interval_1'],
-            self.metrics['average_interval_2'],
-            self.metrics['average_interval_3'],
-            self.start_timestamp
+        # Create the header content as a Text object with wrapping
+        header_content = Text(justify="center", no_wrap=False)
+        header_content.append(f"📊 Selected Symbols:\n", style="bold yellow")
+        header_content.append(f"{symbols_display}\n", style="bold yellow")
+        header_content.append(f"🌊 Liquidation Threshold at  {liquidation_threshold}$\n")
+        header_content.append(f"🎣 Trade Threshold at        {trade_threshold}$\n")
+        header_content.append(f"📅 {start_time} »» 🕰️{current_time}\n")
+        header_content.append(f"\n\n")
+        # Create the header Panel with wrapping enabled
+        header_panel = Panel(
+            header_content,
+            border_style="bold blue",
+            title="Market Monitor",
+            width=console.width
         )
 
-        # Update the content of both panels
-        self.update_left(self.scroll_left)
-        self.update_right(self.scroll_right)
+        # Update the header layout
+        layout["header"].update(header_panel)
 
-    def update_left(self, scroll_view: Static):
-        """Updates the left panel with interval 1 and 2 metrics."""
-        interval_1_panel = self.create_interval_panels(1)
-        interval_2_panel = self.create_interval_panels(2)
+        # Determine panel border colors
+        trades_panel_border_color = "green" if usd_size_difference > 0 else "red"
+        trades_panel_all_border_color = "green" if usd_size_difference_all > 0 else "red"
+        liq_panel_border_color = "green" if usd_size_difference_liq > 0 else "red"
+        liq_panel_all_border_color = "green" if usd_size_difference_liq_all > 0 else "red"
 
-        # Pass updated content to the scrollable view
-        scroll_view.update(interval_1_panel)
-        scroll_view.update(interval_2_panel)
+        # Left side: Trades
+        trades_panel = Panel(
+            f"⏱ Trades Metrics for the last {average_interval} seconds ⏱\n"
+            f"🎣Total Trades:                {total_trades_in_interval}\n"
+            f"📈Total Count:                 {trades_long_count}              📈{trades_long_count_percentage:.2f}%\n"
+            f"📉Total Count:                 {trades_short_count}              📉{trades_short_count_percentage:.2f}% \n"
+            f"📊Avg. Trades per minute:      {avg_trades_per_minute:,.2f}\n"
+            f"🔰Count Spread:                {format_value(trades_difference_count)}\n\n"
+            f"💵Total USD Size:              {total_usd_size_trades:,.2f}$\n"
+            f"📈Total USD Size Long:         {total_usd_size_long:,.2f}$    📈{total_usd_size_long_percentage:.2f}%\n"
+            f"📉Total USD Size Short:        {total_usd_size_short:,.2f}$    📉{total_usd_size_short_percentage:.2f}%\n"
+            f"📊Avg. USD Size per minute:    {format_value(avg_usd_size_per_minute)}$\n"
+            f"🔰USD Spread:                  {format_value(usd_size_difference)}$",
 
-    def update_right(self, scroll_view: Static):
-        """Updates the right panel with interval 3 metrics and cumulative metrics."""
-        interval_3_panel = self.create_interval_panels(3)
-        total_panel = self.create_total_panel("Cumulative Trades", self.metrics)
-
-        # Pass updated content to the scrollable view
-        scroll_view.update(interval_3_panel)
-        scroll_view.update(total_panel)
-
-    def create_interval_panels(self, interval_num: int) -> Group:
-        """Creates panels for all metrics within a given interval."""
-        panels = []
-        interval_key_prefix = f"interval_{interval_num}"
-
-        panels.append(self.create_single_panel(
-            f"Total Trades in Interval {interval_num}", 
-            f"{self.metrics[f'total_trades_in_{interval_key_prefix}']} Trades"
-        ))
-        panels.append(self.create_single_panel(
-            f"Long Trades in Interval {interval_num}", 
-            f"{self.metrics[f'trades_long_count_{interval_num}']} ({self.metrics[f'trades_long_count_percentage_{interval_num}']:.2f}%)"
-        ))
-        panels.append(self.create_single_panel(
-            f"Short Trades in Interval {interval_num}", 
-            f"{self.metrics[f'trades_short_count_{interval_num}']} ({self.metrics[f'trades_short_count_percentage_{interval_num}']:.2f}%)"
-        ))
-        panels.append(self.create_single_panel(
-            f"USD Size in Interval {interval_num}", 
-            f"{self.metrics[f'total_usd_size_in_{interval_key_prefix}']:,.2f}$"
-        ))
-        panels.append(self.create_single_panel(
-            f"Long USD Size in Interval {interval_num}", 
-            f"{self.metrics[f'total_usd_size_long_{interval_num}']:,.2f}$ ({self.metrics[f'total_usd_size_long_percentage_{interval_num}']:.2f}%)"
-        ))
-        panels.append(self.create_single_panel(
-            f"Short USD Size in Interval {interval_num}", 
-            f"{self.metrics[f'total_usd_size_short_{interval_num}']:,.2f}$ ({self.metrics[f'total_usd_size_short_percentage_{interval_num}']:.2f}%)"
-        ))
-        panels.append(self.create_single_panel(
-            f"USD Difference in Interval {interval_num}", 
-            f"{self.format_value(self.metrics[f'usd_size_difference_{interval_num}'])}"
-        ))
-        panels.append(self.create_single_panel(
-            f"Average Trades per Minute in Interval {interval_num}", 
-            f"{self.metrics[f'avg_trades_per_minute_{interval_num}']:,.2f}"
-        ))
-        panels.append(self.create_single_panel(
-            f"Average USD per Minute in Interval {interval_num}", 
-            f"{self.format_value(self.metrics[f'avg_usd_size_per_minute_{interval_num}'])}$"
-        ))
-
-        return Group(*panels)
-
-    def create_single_panel(self, title: str, content: str) -> Panel:
-        """Creates a single panel with title and content."""
-        return Panel(Text(content), title=title, border_style="green")
-
-    def create_total_panel(self, title: str, metrics: dict) -> Panel:
-        """Creates a panel for displaying cumulative trade metrics since the start."""
-        total_trades = metrics['total_trades_all']
-        long_trades = metrics['trades_long_count_all']
-        short_trades = metrics['trades_short_count_all']
-        usd_size_total = metrics['total_usd_size_all']
-        usd_size_long = metrics['total_usd_size_long_all']
-        usd_size_short = metrics['total_usd_size_short_all']
-        usd_size_difference = metrics['usd_size_difference_all']
-        avg_trades_per_minute = metrics['avg_trades_per_minute_all']
-        avg_usd_size_per_minute = metrics['avg_usd_size_per_minute_all']
-
-        panel_content = (
-            f"🎣 Total Trades since start: {total_trades}\n"
-            f"📈 Long Trades: {long_trades} "
-            f"({metrics['trades_long_count_percentage_all']:.2f}%)\n"
-            f"📉 Short Trades: {short_trades} "
-            f"({metrics['trades_short_count_percentage_all']:.2f}%)\n"
-            f"💵 Total USD Size: {usd_size_total:,.2f}$\n"
-            f"📈 Long USD Size: {usd_size_long:,.2f}$ "
-            f"({metrics['total_usd_size_long_percentage_all']:.2f}%)\n"
-            f"📉 Short USD Size: {usd_size_short:,.2f}$ "
-            f"({metrics['total_usd_size_short_percentage_all']:.2f}%)\n"
-            f"🔰 USD Difference: {self.format_value(usd_size_difference)}\n"
-            f"📊 Avg. Trades per Minute: {avg_trades_per_minute:,.2f}\n"
-            f"📊 Avg. USD per Minute: {self.format_value(avg_usd_size_per_minute)}$\n"
+            border_style=trades_panel_border_color,
+            title="🔹 🔷Trades (Interval):🔷 🔹"
         )
 
-        return Panel(Text(panel_content), title=title, border_style="blue" if usd_size_difference > 0 else "red")
+        # Trades Sizes Table (Interval)
+        trade_table_interval = Table(title="🔍 Trade Sizes (Interval)")
+        trade_table_interval.add_column("Stars")
+        trade_table_interval.add_column("Symbol")
+        trade_table_interval.add_column("Type")
+        trade_table_interval.add_column("Count")
+        trade_table_interval.add_column("Total USD Size")
+
+        # Collect and sort rows
+        trade_rows_interval = []
+        for stars in stars_count_trades:
+            for trade_type in stars_count_trades[stars]:
+                data = stars_count_trades[stars][trade_type]
+                for symbol in data:
+                    count = data[symbol]['count']
+                    total_usd_size = data[symbol]['total_usd_size']
+                    usd_size_color_type = 'green' if trade_type == '📈 ' else 'red'
+                    formatted_symbol = name_map.get(symbol, symbol)
+                    trade_rows_interval.append({
+                        'stars': stars,
+                        'symbol': formatted_symbol.strip(),
+                        'trade_type': trade_type.strip(),
+                        'count': str(count),
+                        'total_usd_size': total_usd_size,
+                        'style': usd_size_color_type
+                    })
+
+        # Sort the rows by 'Total USD Size' in descending order
+        trade_rows_interval_sorted = sorted(trade_rows_interval, key=lambda x: x['total_usd_size'], reverse=True)
+
+        # Add rows to the table
+        for row in trade_rows_interval_sorted:
+            trade_table_interval.add_row(
+                row['stars'],
+                row['symbol'],
+                row['trade_type'],
+                row['count'],
+                f"{row['total_usd_size']:,.2f}$",
+                style=row['style']
+            )
+
+        # Trades Sizes Table (Since Start)
+        trades_panel_all = Panel(
+            f"⏱ Total Trades since start: {time_difference} ⏱ \n"
+            f"🎣Total Trades:                 {total_trades_all}\n"
+            f"📈Total Count:                  {trades_long_count_all}              📈{trades_long_count_percentage_all:.2f}%\n"
+            f"📉Total Count:                  {trades_short_count_all}              📉{trades_short_count_percentage_all:.2f}%\n"
+            f"📊Avg. Trades per minute:       {avg_trades_per_minute_all:,.2f}\n"
+            f"🔰Count Spread:                 {format_value(trades_difference_count_all)}\n\n"
+            f"💵Total USD Size:               {total_usd_size_trades_all:,.2f}$\n"
+            f"📈Total USD Size Long:          {total_usd_size_long_all:,.2f}$    📈{total_usd_size_long_percentage_all:.2f}%\n"
+            f"📉Total USD Size Short:         {total_usd_size_short_all:,.2f}$    📉{total_usd_size_short_percentage_all:.2f}%\n"
+            f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_all)}$\n"
+            f"🔰Spread:                       {format_value(usd_size_difference_all)}$",
+            border_style=trades_panel_all_border_color,
+            title="🔸 🔶Trades (Since Start)🔶 🔸"
+        )
+
+        trade_table_all = Table(title="🔍 Trade Sizes (Since Start)")
+        trade_table_all.add_column("Stars")
+        trade_table_all.add_column("Symbol")
+        trade_table_all.add_column("Type")
+        trade_table_all.add_column("Count")
+        trade_table_all.add_column("Total USD Size")
+
+        # Collect and sort rows
+        trade_rows_all = []
+        for stars in stars_count_trades_all:
+            for trade_type in stars_count_trades_all[stars]:
+                data = stars_count_trades_all[stars][trade_type]
+                for symbol in data:
+                    count = data[symbol]['count']
+                    total_usd_size = data[symbol]['total_usd_size']
+                    usd_size_color_type = 'green' if trade_type == '📈 ' else 'red'
+                    formatted_symbol = name_map.get(symbol, symbol)
+                    trade_rows_all.append({
+                        'stars': stars,
+                        'symbol': formatted_symbol.strip(),
+                        'trade_type': trade_type.strip(),
+                        'count': str(count),
+                        'total_usd_size': total_usd_size,
+                        'style': usd_size_color_type
+                    })
+
+        # Sort the rows by 'Total USD Size' in descending order
+        trade_rows_all_sorted = sorted(trade_rows_all, key=lambda x: x['total_usd_size'], reverse=True)
+
+        # Add rows to the table
+        for row in trade_rows_all_sorted:
+            trade_table_all.add_row(
+                row['stars'],
+                row['symbol'],
+                row['trade_type'],
+                row['count'],
+                f"{row['total_usd_size']:,.2f}$",
+                style=row['style']
+            )
+
+        # Update left layout
+        layout["left"].update(
+            Group(
+                trades_panel,
+                trades_panel_all,
+                trade_table_interval,
+                trade_table_all
+            )
+        )
+
+        # Right side: Liquidations
+        liq_panel = Panel(
+            f"⏱ Liquidations Metrics for the last {average_interval} seconds ⏱\n"
+            f"🌊Total Liquidations:           {total_liquidations_in_interval}\n"
+            f"📈Total Count:                  {liquidations_long_count}              📈{liquidations_long_count_percentage:.2f}%\n"
+            f"📉Total Count:                  {liquidations_short_count}              📉{liquidations_short_count_percentage:.2f}%\n"
+            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute:,.2f}\n"
+            f"🔰Count Spread:                 {format_value(liquidations_difference_count)}\n\n"
+            f"💵Total Size:                   {total_usd_size_liquidations:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq:,.2f}$    📈{total_usd_size_long_liq_percentage:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq:,.2f}$    📉{total_usd_size_short_liq_percentage:.2f}%\n"
+            f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_liq)}$\n"
+            f"🔰Spread:                       {format_value(usd_size_difference_liq)}$",
+            border_style=liq_panel_border_color,
+            title="🔹 🔷Liquidations (Interval):🔷 🔹"
+        )
+
+        # Liquidations Sizes Table (Interval)
+        liq_table_interval = Table(title="🔍 Liquidation Sizes (Interval)")
+        liq_table_interval.add_column("Stars")
+        liq_table_interval.add_column("Symbol")
+        liq_table_interval.add_column("Type")
+        liq_table_interval.add_column("Count")
+        liq_table_interval.add_column("Total USD Size")
+
+        # Collect and sort rows
+        liq_rows_interval = []
+        for stars in stars_count_liquidations:
+            for liquidation_type in stars_count_liquidations[stars]:
+                data = stars_count_liquidations[stars][liquidation_type]
+                for symbol in data:
+                    count = data[symbol]['count']
+                    total_usd_size = data[symbol]['total_usd_size']
+                    usd_size_color_type_liq = 'green' if liquidation_type == '📈 ' else 'red'
+                    formatted_symbol = name_map.get(symbol, symbol)
+                    liq_rows_interval.append({
+                        'stars': stars,
+                        'symbol': formatted_symbol.strip(),
+                        'liquidation_type': liquidation_type.strip(),
+                        'count': str(count),
+                        'total_usd_size': total_usd_size,
+                        'style': usd_size_color_type_liq
+                    })
+
+        # Sort the rows by 'Total USD Size' in descending order
+        liq_rows_interval_sorted = sorted(liq_rows_interval, key=lambda x: x['total_usd_size'], reverse=True)
+
+        # Add rows to the table
+        for row in liq_rows_interval_sorted:
+            liq_table_interval.add_row(
+                row['stars'],
+                row['symbol'],
+                row['liquidation_type'],
+                row['count'],
+                f"{row['total_usd_size']:,.2f}$",
+                style=row['style']
+            )
+
+        # Liquidations Sizes Table (Since Start)
+        liq_panel_all = Panel(
+            f"⏱ Total Liquidations since start: {time_difference} ⏱\n"
+            f"🌊Total Liquidations:           {total_liquidations_all}\n"
+            f"📈Total Count:                  {liquidations_long_count_all}              📈{liquidations_long_count_percentage_all:.2f}%\n"
+            f"📉Total Count:                  {liquidations_short_count_all}              📉{liquidations_short_count_percentage_all:.2f}%\n"
+            f"📊Avg. Liquidations per minute: {avg_liquidations_per_minute_all:,.2f}\n"
+            f"🔰Count Spread:                 {format_value(liquidations_difference_count_all)}\n\n"
+            f"💵Total Size:                   {total_usd_size_liquidations_all:,.2f}$\n"
+            f"📈Total Size Long:              {total_usd_size_long_liq_all:,.2f}$    📈{total_usd_size_long_liq_percentage_all:.2f}%\n"
+            f"📉Total Size Short:             {total_usd_size_short_liq_all:,.2f}$    📉{total_usd_size_short_liq_percentage_all:.2f}%\n"
+            f"📊Avg. USD Size per minute:     {format_value(avg_usd_size_per_minute_liq_all)}$\n"
+            f"🔰Spread:                       {format_value(usd_size_difference_liq_all)}$",
+            border_style=liq_panel_all_border_color,
+            title="🔸 🔶Liquidations (Since Start)🔶 🔸"
+        )
+
+        liq_table_all = Table(title="🔍 Liquidation Sizes (Since Start)")
+        liq_table_all.add_column("Stars")
+        liq_table_all.add_column("Symbol")
+        liq_table_all.add_column("Type")
+        liq_table_all.add_column("Count")
+        liq_table_all.add_column("Total USD Size")
+
+        # Collect and sort rows
+        liq_rows_all = []
+        for stars in stars_count_liquidations_all:
+            for liquidation_type in stars_count_liquidations_all[stars]:
+                data = stars_count_liquidations_all[stars][liquidation_type]
+                for symbol in data:
+                    count = data[symbol]['count']
+                    total_usd_size = data[symbol]['total_usd_size']
+                    usd_size_color_type_liq = 'green' if liquidation_type == '📈 ' else 'red'
+                    formatted_symbol = name_map.get(symbol, symbol)
+                    liq_rows_all.append({
+                        'stars': stars,
+                        'symbol': formatted_symbol.strip(),
+                        'liquidation_type': liquidation_type.strip(),
+                        'count': str(count),
+                        'total_usd_size': total_usd_size,
+                        'style': usd_size_color_type_liq
+                    })
+
+        # Sort the rows by 'Total USD Size' in descending order
+        liq_rows_all_sorted = sorted(liq_rows_all, key=lambda x: x['total_usd_size'], reverse=True)
+
+        # Add rows to the table
+        for row in liq_rows_all_sorted:
+            liq_table_all.add_row(
+                row['stars'],
+                row['symbol'],
+                row['liquidation_type'],
+                row['count'],
+                f"{row['total_usd_size']:,.2f}$",
+                style=row['style']
+            )
+
+        # Update right layout
+        layout["right"].update(
+            Group(
+                liq_panel,
+                liq_panel_all,
+                liq_table_interval,
+                liq_table_all
+            )
+        )
+
+    except Exception as e:
+        # Debugging information
+        console.print(f"[red]An error occurred in create_output: {e}[/red]")
+        import traceback
+        traceback.print_exc()
 
 
-    def format_value(self, value):
-        """Helper method to apply color formatting based on positive/negative values."""
-        return f"[green]{value:,.2f}[/green]" if value > 0 else f"[red]{value:,.2f}[/red]"
 
 
 # Process Trade Function for Normal Trades
@@ -714,6 +1000,16 @@ async def process_trade(symbol, price, quantity, trade_time, is_buyer_maker):
         trade_type = '📉 ' if is_buyer_maker else '📈 '
         used_trade_time = format_trade_time(trade_time)
         collect_trade_data(symbol, used_trade_time, trade_type, usd_size, trade_time)
+
+# Process Liquidation Function
+async def process_liquidation(symbol, side, timestamp, usd_size):
+    global liquidation_threshold
+    symbol = symbol.upper()
+    used_trade_time = format_trade_time(timestamp)
+    liquidation_type = '📉 ' if side == 'SELL' else '📈 '
+    if usd_size >= liquidation_threshold:
+        collect_liquidation_data(symbol, used_trade_time, liquidation_type, usd_size, timestamp)
+
 
 # Binance Trade Stream
 async def binance_trade_stream(uri, symbol):
@@ -765,6 +1061,30 @@ async def coinbase_trade_stream(uri):
         except Exception as e:
             console.print(f"[red]An error occurred in coinbase_trade_stream: {e}[/red]")
             await asyncio.sleep(5)
+
+# Binance Liquidation Stream
+async def binance_liquidation(uri):
+    while True:
+        try:
+            async with connect(uri, max_size=None) as websocket:
+                while True:
+                    msg = await websocket.recv()
+                    order_data = json.loads(msg)['o']
+                    symbol = order_data['s'].replace('USDT', '')
+                    side = order_data['S']
+                    timestamp = int(order_data['T'])
+                    filled_quantity = float(order_data['z'])
+                    price = float(order_data['p'])
+                    usd_size = filled_quantity * price
+                    if usd_size >= liquidation_threshold:
+                        await process_liquidation(symbol, side, timestamp, usd_size)
+        except ConnectionClosed:
+            binance_liquidation_stream_conection = '📡❌🛰️'
+            await asyncio.sleep(5)
+        except Exception as e:
+            console.print(f"[red]An error occurred in binance_liquidation: {e}[/red]")
+            await asyncio.sleep(5)
+
 
 # Kraken Trade Stream
 async def kraken_trade_stream(uri):
@@ -856,24 +1176,25 @@ def select_symbols():
 
     # Färbe den ASCII-Text blau-weiß (blau als Textfarbe, weiß als Hintergrund)
     ascii_title = '🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏\n' + pyfiglet.figlet_format(title) + '🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏🃏'
-    print(colored(ascii_title, 'blue', 'on_white', attrs=['bold']))
+    print(colored(ascii_title, 'blue', 'on_light_grey', attrs=['bold']))
 
     # Verwende pyfiglet, um den Titel in ASCII-Kunstform darzustellen
-    print("""📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉
-☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☀️
+    print("""📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📈📉📈📉📈📉📈📉
+☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☁️  ☀️
+
   
-                     💭        💭        💭
-                      💭  💭    💭  💭    💭  💭
-                      ||   💭   ||   💭   ||   💭
-                     _||___||___||___||___||___||_
-            🐳______|   o    o    o   o      🎛️🪟|_______
-            ||  ⚓\\_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-/
-🌊    🌊    ##     \\o»»»o»»»»o»»»»o»»»»o»»»»o»»»»o»»»o/   🌊    🌊    🌊
-~~~~~~~~~~~####~~~~~\\________________________________/~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~####🐟~~~🐟~~~~🐟~~~~~~🐟~~🐟~~~~🐠~~~~🐟~~~~~~~~~~~~~~~~~🐠~~~~
-~~~~~~~~~~##🐠##🐟~~~~~~~~~🐟🐟~~~~🐠~~~~🐟~~~~🐟~~~~🦑~~~~🐟~~~~🐟~~~~~~~~
-~~~~~~~~~~~###🦑~~~~~🐳~~~~🐟~~~~🦑~~~~~~~~~~~~~~🐟~~~~~🐳~~~~🐠~~~~🐟~~~~~~
-📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉
+             💭        💭        💭
+              💭  💭    💭  💭    💭  💭
+              ||   💭   ||   💭   ||   💭
+             _||___||___||___||___||___||_
+       _____|   o    o    o   o      🎛️🪟|_________
+      || ⚓\\_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-/
+     ###    \\o»»»o»»»»o»»»»o»»»»o»»»»o»»»»o»»»o/   🌊    🌊
+~~~~#####~~~~\\________________________________/~~~~~~~~~~~~~~~~
+~~~####🐟#~~🐟~~~~🐟~~~~~~🐟~~🐟~~~~🐠~~~~🐟~~~~~~~~~~~~~~~~~🐠~
+~~~##🐠##🐟~~~~~~~~~🐟🐟~~~~🐠~~~~🐟~~~~🐟~~~~🦑~~~~🐟~~~~🐟~~~~~
+~~~~###🦑~~~~~🐳~~~~🐟~~~~🦑~~~~~~~~~~~~~~🐟~~~~~🐳~~~~🐠~~~~🐟~~~
+📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📉📈📈📉📈📉📈📉📈📉
          """)
     print("🚢Trade Trawler sets sail and gets ready to fish🐟🐠🦑🐳")
     
@@ -945,22 +1266,21 @@ def select_symbols():
     if not bitfinex_symbols_selected:
         console.print("No selected symbols are available on Bitfinex.")
 
-
 async def main():
     """
     Main function that initializes thresholds, selects symbols, and starts WebSocket streams.
     """
-    global trade_threshold 
+    global trade_threshold, liquidation_threshold
 
     # Symbol selection
+
     select_symbols()
 
     # Prompt user for threshold values
-    trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
-    average_interval_1 = int(input("🔧Please enter the first interval over which to calculate averages in seconds: "))
-    average_interval_2 = int(input("🔧Please enter the second interval over which to calculate averages in seconds: "))
-    average_interval_3 = int(input("🔧Please enter the third interval over which to calculate averages in seconds: "))
 
+    trade_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on trades in $: "))
+    liquidation_threshold = float(input("🔧Please enter the threshold value for 'usd_size' on liquidations in $: "))
+    average_interval = int(input("🔧Please enter the interval over which to calculate averages in seconds: "))
     interval = 0.2  # Set interval to 1 second
 
     # Capture the start time in a readable format
@@ -973,32 +1293,42 @@ async def main():
         asyncio.create_task(binance_trade_stream(stream_url, symbol))
 
     asyncio.create_task(coinbase_trade_stream(websocket_url_base_coinbase))
+    asyncio.create_task(binance_liquidation(websocket_url_liq))
     if kraken_symbols_selected:
         asyncio.create_task(kraken_trade_stream(websocket_url_kraken))
 
     if bitfinex_symbols_selected:
         asyncio.create_task(bitfinex_trade_stream(websocket_url_bitfinex))
 
-    # Periodically update the metrics and refresh the app
-    metrics = calculate_metrics(
-        trades_data,
-        trade_threshold,
-        average_interval_1,
-        average_interval_2,
-        average_interval_3,
-        start_timestamp
+    layout = Layout()
+    layout.split_column(
+        Layout(name="header", size=7),
+        Layout(name="body")
+    )
+    layout["body"].split_row(
+        Layout(name="left"),
+        Layout(name="right")
     )
 
-    # Launch the textual app asynchronously
-    app = TradeTrawlerApp(metrics, start_time, trade_threshold)
-    
-    # Use run_async() to run the app without blocking the event loop
-    await app.run_async()
+    # Start the Live display
+    with Live(layout, console=console, refresh_per_second=2, screen=True) as live:
+        while True:
+            await asyncio.sleep(interval)
+            metrics = calculate_metrics(
+                trades_data,
+                liquidations_data,
+                trade_threshold,
+                liquidation_threshold,
+                average_interval,
+                start_timestamp
+            )
+            create_output(layout, metrics, start_time, trade_threshold, liquidation_threshold)
+            live.refresh()
 
 if __name__ == "__main__":
     try:
-        print("⚙️ Program is starting ⚙️")
-        asyncio.run(main())  # Main entry point for running the program
+        print("⚙️ asyncio.run(main()) is running ⚙️")
+        asyncio.run(main())
         print("✅⚙️ Program is done ⚙✅️")
     except Exception as e:
         console.print(f"[red]An error occurred in the main program: {e}[/red]")
