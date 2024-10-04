@@ -24,7 +24,7 @@ pip install conda
 ```
 ```python
 conda create --name Trade_Tools
-conda activate Trade_Tool_Treasury
+conda activate Trade_Tools
 conda install asyncio jsonlib pytz websockets termcolor colorama rich pandas xlsxwriter tabulate pyfiglet
 ```
 If you want to start the Code after a global installation:
