@@ -44,65 +44,6 @@ python <Path_of_the_code>
 
 
 This masterpiece of market visualization allows you to catch every trade, going through Binance, Coinbase, Kraken and Bitfinex, and list them in a table. These trades and liquidations get listed and calculated in real-time. You can specify an interval in which the program should calculate and list the trades and liquidations to get a broader view of long-time and short-time market behavior. The border will be colored green if the spread between long-trades (ask) and short-trades (put) is positive and red if the spread is negative. The same is true for liquidations. The listed trades and liquidations are sorted after the Total-USD-Size. The Parameter "Avg. USD Size per minute" gives information about how much people bought or sold on average each minute and not how much was bought or sold the last minute. I guess the most is self-explanatory. Start the Code and you will be advised and delighted
-
-
-
-
-###  **Trade Magnitudes**                                         
-      
-'⁉️💰🃏💰⁉️'   >= 210,935,000 $                                                                                                                                          
-'  🐳🐳🐳  ' >= 130,365,000 $                                                                        
-'   🐳🐳   ' >= 80,570,000 $                                                                                          
-'    🐳    ' >= 49,795,000 $                                                                                    
-'  🦈🦈🦈  ' >= 30,775,000 $                                                                                          
-'   🦈🦈   ' >= 19,020,000 $                                                                                                      
-'    🦈    ' >= 11,755,000 $                                                                                                                        
-'  🦑🦑🦑  ' >= 7,265,000 $                                                                                                            
-'   🦑🦑   ' >= 4,490,000 $                                                                                                            
-'    🦑    ' >= 2,775,000 $                                                                                                                        
-'  🐡🐡🐡  ' >= 1,715,000 $                                                                                                            
-'   🐡🐡   ' >= 1,060,000 $                                                                                                            
-'    🐡    ' >= 655,000 $                                                                                                
-'🐠🐠🐠🐠🐠' >= 405,000 $                                                                                                                        
-' 🐠🐠🐠🐠 ' >= 250,000 $                                                                                                      
-'  🐠🐠🐠  ' >= 155,000 $                                                                                                                        
-'   🐠🐠   ' >= 95,000 $                                                                                                                  
-'    🐠    ' >= 60,000 $                                                                                                                  
-'🐟🐟🐟🐟🐟' >= 35,000 $                                                                                                                              
-' 🐟🐟🐟🐟 ' >= 25,000 $                                                                                                                                    
-'  🐟🐟🐟  ' >= 15,000 $                                                                                                                                    
-'   🐟🐟   ' >= 10,000 $                                                                                                                                          
-'    🐟    ' >= 5,000 $                                                                                                                                          
-
-
-### **Liquidation Magnitudes**
-
-
-'🌊💰♒💰🌊'  > 46,368,000 $                                                                                                            
- '  ♒♒♒  '   > 28,657,000 $                                                                                                                                                      
-'    ♒♒    ' > 17,711,000 $                                                                                                                        
-'    ♒     ' > 10,946,000 $                                                                                                                        
-'  🌊🌊🌊  ' > 6,765,000 $                                                                                                                              
-'   🌊🌊   ' > 4,181,000 $                                                                                                                              
-'    🌊    ' > 2,584,000 $                                                                                                                              
-'  ⛲⛲⛲  ' > 1,597,000 $                                                                                                                                    
-'   ⛲⛲   ' > 987,000 $                                                                                                                              
-'    ⛲    ' > 610,000 $                                                                                                                                    
-'  🪣🪣🪣  ' > 377,000 $                                                                                                                        
-'   🪣🪣   ' > 233,000 $                                                                                                                                    
-'    🪣    ' > 144,000 $                                                                                                                                          
-'💦💦💦💦💦' > 89,000 $                                                                                                                                          
-' 💦💦💦💦 ' > 55,000 $                                                                                                                                                      
-'  💦💦💦  ' > 34,000 $                                                                                                                                          
-'   💦💦   ' > 21,000 $                                                                                                                        
-'    💦    ' > 13,000 $                                                                                                                  
-'💧💧💧💧💧' > 8,000 $                                                                                                                              
-' 💧💧💧💧 ' > 5,000 $                                                                                                                                          
-'  💧💧💧  ' > 3,000 $                                                                                                                                                      
-'   💧💧   ' > 2,000 $                                                                                                                                    
-'    💧    ' > 1,000 $                                                                                                                                                      
-                                                      
-
                                                                                                           
 
 
@@ -113,9 +54,6 @@ This masterpiece of market visualization allows you to catch every trade, going 
                                                                    
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
 ↪️ You will only see trades that are bigger than the specified value
-                                                                          
-❓"Please enter the threshold value for 'usd_size' on liquidations: "❓                                                                                                                        
-↪️ You will only see liquidations that are bigger than the specified value
                                                                           
 ❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
 ↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get an Overview of all trades and liquidation since starting the program
@@ -296,18 +234,12 @@ This Code provides a Stream for every specified symbol in which trades and liqui
 ❓"Please enter the threshold value for 'usd_size' on trades: "❓                                                                                              
 ↪️ You will only see trades that are bigger than the specified value
                                                                           
-❓"Please enter the threshold value for 'usd_size' on liquidations: "❓                                                                                                                        
-↪️ You will only see liquidations that are bigger than the specified value
-                                                                          
 ❓"Please enter the interval for exportation and calculation in seconds: "❓                                                                                                            
 ↪️ Here you can specify the Period in which the Code should export the data and calculate some Indicators (Total trades/liquidations, Differences, Avg. trades/liquidations, counts and sizes, time since starting the Program etc.). After the specified interval you will get an Overview of all trades and liquidation since starting the program
  
 
 - A **green number** for transactions means a Long-Trade (or Buy) was made
 - A **red number** for transactions means a Short-Trade (or Sell) was made
-
-- A **green number** for liquidations means somebody got liquidated due to rising prices 
-- A **red number** for liquidations means somebody got liquidated due to falling prices
   
 - On the right side of the liquidation and trade screener you can see the cumulative Sum since you started the program
 
@@ -337,15 +269,6 @@ Difference: 1,801,143.23$
 📊 Avg. Trades per minute: 203.00                                                                                                                                                                      
 📊 Avg. USD Size per minute: 1801143.23$                                                                                                                                                                                          
 
-🌊 A total of 0 Liquidations above 10000.0$                                                                                                                                                                                  
-📈Total Count: 0  | 📈Total Size: 0.00$                                                                                                                                                                                    
-📉Total Count: 0 | 📉Total Size: 0.00$                                                                                                                                                              
-🔍 Liquidation Sizes:                                                                                                                                                      
-Difference: 0.00$                                                                                                                                                                  
-📊 Avg. Liquidations per interval: 0.00                                                                                                                                                                                
-📊Avg. USD Size per interval: 0.00$ per minute                                                                                                                                  
-
-
 ### In this Overview you can see different Information:
 
 **🕰️Time Parameters🕰️**
@@ -361,17 +284,6 @@ Difference: 0.00$
 - difference between Long-Trades and Short-Trades
 - the average amount of Trades in a specified interval
 - average USD size of Trades in a specified interval
-
-**🌊Liquidation Parameters🌊**
-- Total Liquidations
-- Total amount of Take-Profit-Liquidations and the total USD size of them
-- Total amount of Stop-Loss-Liquidations and the total USD size of them
-- In which magnitude were the Liquidations where made
-- the difference between Take-Profit-Liquidations and Stop-Loss-Liquidations
-- the average amount of Liquidations in a specified interval
-- average USD size of Liquidations in a specified interval
-
-
 
 ## Code Breakdown (Step by Step):
 
@@ -761,4 +673,4 @@ In summary, funding rates are an important tool for maintaining the balance betw
 ## **🃏Own Opinion🃏**
 
 
-I think these data streams will give you detailed information about the stream of transactions, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier. You will gain a bird's view over the ocean of cryptocurrencies. Swim with the Stream of the big fishes and not based on chart formations. The funding rates are significant if you trade with contracts but give you also information about the behavior in the overall market. This information can also be used to build algorithmic trading bots around it (buy if some 40,000,000$ Whale bought or something like that). Use several different intervals with a different amount of symbols for a perfect Overview of the deep Crypto-Market Sea. If you like what I am doing you can support me by liking my content, by sharing my account and my projects with your friends, or spending a coffee if you like. Happy trading👍
+These data streams will give you detailed information about the stream of transactions, which can affect your trading decisions a lot. Trading with the smart money gets a lot easier. You will gain a bird's view over the ocean of cryptocurrencies. Swim with the Stream of the big fishes and not based on chart formations. The funding rates are significant if you trade with contracts, but they also give you information about the behavior of the overall market. This information can also be used to build algorithmic trading bots around it (buy if some 40,000,000$ Whale bought or something like that). Use several different intervals with a different amount of symbols for a perfect Overview of the deep Crypto-Market Sea. If you like what I am doing you can support me by liking my content, sharing my account and my projects with your friends, or you can pay me a coffee if you like. Happy trading👍
