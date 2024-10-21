@@ -47,7 +47,7 @@ This masterpiece of market visualization allows you to catch every trade, going 
                                                                                                           
 
 
-### At the beginning of the Code you have to set 4 requirements:
+### At the beginning of the Code you have to set 3 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
 ↪️ You can choose cryptocurrencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
@@ -171,62 +171,8 @@ This masterpiece of market visualization allows you to catch every trade, going 
 
 This Code provides a Stream for every specified symbol in which trades and liquidations are displayed if they reach the specified threshold. These trades and liquidations will be saved in an Excel file and calculated for more in-depth comparison and better market data interpretation
 
-###  **Trade Magnitudes**                                         
-      
-'⁉️💰🃏💰⁉️'   >= 210,935,000 $
-'  🐳🐳🐳  ' >= 130,365,000 $
-'   🐳🐳   ' >= 80,570,000 $
-'    🐳    ' >= 49,795,000 $
-'  🦈🦈🦈  ' >= 30,775,000 $
-'   🦈🦈   ' >= 19,020,000 $
-'    🦈    ' >= 11,755,000 $
-'  🦑🦑🦑  ' >= 7,265,000 $
-'   🦑🦑   ' >= 4,490,000 $
-'    🦑    ' >= 2,775,000 $
-'  🐡🐡🐡  ' >= 1,715,000 $
-'   🐡🐡   ' >= 1,060,000 $
-'    🐡    ' >= 655,000 $
-'🐠🐠🐠🐠🐠' >= 405,000 $
-' 🐠🐠🐠🐠 ' >= 250,000 $
-'  🐠🐠🐠  ' >= 155,000 $
-'   🐠🐠   ' >= 95,000 $
-'    🐠    ' >= 60,000 $
-'🐟🐟🐟🐟🐟' >= 35,000 $
-' 🐟🐟🐟🐟 ' >= 25,000 $
-'  🐟🐟🐟  ' >= 15,000 $
-'   🐟🐟   ' >= 10,000 $
-'    🐟    ' >= 5,000 $
 
-
-### **Liquidation Magnitudes**
-
-
-'🌊💰♒💰🌊'  > 46,368,000 $
- '  ♒♒♒  '   > 28,657,000 $
-'    ♒♒    ' > 17,711,000 $
-'    ♒     ' > 10,946,000 $
-'  🌊🌊🌊  ' > 6,765,000 $
-'   🌊🌊   ' > 4,181,000 $
-'    🌊    ' > 2,584,000 $
-'  ⛲⛲⛲  ' > 1,597,000 $
-'   ⛲⛲   ' > 987,000 $
-'    ⛲    ' > 610,000 $
-'  🪣🪣🪣  ' > 377,000 $
-'   🪣🪣   ' > 233,000 $
-'    🪣    ' > 144,000 $
-'💦💦💦💦💦' > 89,000 $
-' 💦💦💦💦 ' > 55,000 $
-'  💦💦💦  ' > 34,000 $
-'   💦💦   ' > 21,000 $
-'    💦    ' > 13,000 $
-'💧💧💧💧💧' > 8,000 $
-' 💧💧💧💧 ' > 5,000 §
-'  💧💧💧  ' > 3,000 $
-'   💧💧   ' > 2,000 $
-'    💧    ' > 1,000 $
-
-
-### At the beginning of the Code you have to set 4 requirements:
+### At the beginning of the Code you have to set 3 requirements:
 
 ❓"Choose Symbols: "❓                                                                                              
 ↪️ You can choose cryptocurrencies from a given list. if you chose every symbol you wanted you can write "done" to go to the next step. If you type "all" you choose all available symbols
